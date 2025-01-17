@@ -1,7 +1,8 @@
 package Test;
 
 import Gates.*;
-import Gate.Input;
+import Gate.OIput;
+import Gate.Fils;
 
 import java.util.ArrayList;
 
@@ -22,10 +23,10 @@ import javafx.stage.Stage;
 
 public class App extends Application{
     Scene scene;
-    private final int height = 200;
-    private final int width = 400;
-    private final int x = 10;
-    private final int y = 10;
+    private final int height = 600;
+    private final int width = 1200;
+    private final int x = 20;
+    private final int y = 20;
     private Shape selectedItem;
     private ArrayList<Shape> shapes;
     private final Rectangle background = new Rectangle(-1, -1, width+1, height+1);
@@ -48,10 +49,11 @@ public class App extends Application{
     @Override
     public void start(Stage window) throws Exception {
         Group layout = new Group();
+        Fils fils = new Fils(layout);
         layout.getChildren().add(background);
         grid(layout);
-        Input in = new Input();
-        in.addPoint(layout);
+        OIput oi = new OIput(fils, null);
+        OIput oi2 = new OIput(60, 80, fils, null);
         scene = new Scene(layout, width, height);
 
         window.setScene(scene);
@@ -75,9 +77,7 @@ public class App extends Application{
                 Shape dot = Line.intersect(line, line2);
                 dot.setFill(Color.PURPLE);
                 layout.getChildren().add(dot);
-                
             }
         }
-
     }
 }

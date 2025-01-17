@@ -23,4 +23,6 @@ public class Fils {
     public OIput removeElement(){
         return fils.pop();
     }
+
+    public Group getGroup(){ return group; } 
 }

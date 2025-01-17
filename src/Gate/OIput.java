@@ -26,26 +26,26 @@ public class OIput {
 
     public OIput(Fils fils, OIput parent){
         this.parent = parent;
-        int pos = 50;
+        int pos = 20;
         this.fils = fils;
         childs = new LinkedList<OIput>();
 
         dx = false;
         dy = false;
 
-        circle = new Circle(0, 0, 5);
+        circle = new Circle(0, 0, 10);
         circle.setCenterX(pos);
         circle.setCenterY(pos);
 
-        circle2 = new Circle(0, 0, 5);
+        circle2 = new Circle(0, 0, 10);
         circle2.setCenterX(pos);
         circle2.setCenterY(pos);
 
         l1 = new Line(-10, -10, -10, -10);
         l2 = new Line(-10, -10, -10, -10);
 
-        l1.setStrokeWidth(5);
-        l2.setStrokeWidth(5);
+        l1.setStrokeWidth(6);
+        l2.setStrokeWidth(6);
 
         circle.setFill(Color.TRANSPARENT);
         circle2.setFill(Color.BLUE);
@@ -71,6 +71,7 @@ public class OIput {
         int r = -10;
         setLineCoord(l1, r, r, r, r);
         setLineCoord(l2, r, r, r, r);
+        fils.getGroup().getChildren().removeAll(l1, l2);
     }
 
     private void setLineCoord(Line l, double startX, double startY, double endX, double endY){
@@ -90,25 +91,31 @@ public class OIput {
             }
             
             if(isL1InParent && isL2InParent){
+                System.out.println("Cas 1");
                 reinitialiseLines();
                 return;
             }
             else if(isL1InParent){
                 // Have to add this func
                 // fixLineLineToAdd
+                if(parent.parent != null && (lineContainsLine(parent.parent.l1, l2) || lineContainsLine(parent.parent.l2, l2))){
+                    reinitialiseLines();
+                    System.out.println("no add");
+                    return;
+                }
                 createPointOnEachLine(l2);
-                System.out.println("L2 Point added!");
+                System.out.println("Cas 2");
             }
             else if(isL2InParent){
                 // fixLineToAdd
                 createPointOnEachLine(l1);
-                System.out.println("L1 Point added!");
+                System.out.println("Cas 3");
 
             }
             else{
                 createPointOnEachLine(l1);
                 createPointOnEachLine(l2);
-                System.out.println("Point added!");
+                System.out.println("Cas 4");
             }
             
             l1.setStroke(Color.BLUE);
@@ -118,20 +125,35 @@ public class OIput {
         }
     }
 
+    private void fixLineToAdd(Line l){
+        boolean isLineX;
+        boolean isLineY;
+
+        if(l.getStartX() == l.getEndX()){
+            isLineX = true;
+            isLineY = false;
+        }
+        else{
+            isLineX = false;
+            isLineY = true;          
+        }
+    }
     /** 
      * returns true if line1 contains line2
      * */
     private boolean lineContainsLine(Line line1, Line line2){
-        // if(line2.getStartX() == line2.getEndX() && line2.getStartY() == line2.getEndY()) return false;
         return line1.contains(new Point2D(line2.getStartX(), line2.getStartY())) && line1.contains(new Point2D(line2.getEndX(), line2.getEndY()));
     }
 
     private double tranformDoubleToInt(double xPoint){
-        int x = 10;
+        int x = 20;
         return Math.floor(xPoint) - Math.floor(xPoint)%x;
     }
 
     private void dragOIput(MouseEvent e, Circle circle, Circle circle2){
+        if(!(fils.getGroup().getChildren().contains(l1) && fils.getGroup().getChildren().contains(l2))){
+            fils.getGroup().getChildren().addAll(l1, l2);
+        }
         double xPoint = e.getX();
         double yPoint = e.getY();
 
@@ -163,7 +185,7 @@ public class OIput {
     }
 
     public void addPoint(Group layout){
-        layout.getChildren().addAll(circle, l1, l2, circle2);
+        layout.getChildren().addAll(circle, circle2);
     }
 
     private void addStroke(Shape sh){
@@ -181,7 +203,7 @@ public class OIput {
      * Adding Fils for a line we created, such that for each point we can drag it.
      */
     private void addFilsInLine(double p1, double p2, double constantCoord, int n){ // the n is for the position of the line
-        int x = 10;
+        int x = 20;
         double start;
         double end;
         if(p1 > p2){

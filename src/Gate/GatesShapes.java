@@ -13,11 +13,11 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeType;
 
 public class GatesShapes {
-    public static final int x = 10;
-    public static final int y = 10;
-    public static final int width = 400;
-    public static final int height = 200;
-    public static final double STROKE_WIDTH = 2.0;
+    public static final int x = Unity.x;
+    public static final int y = Unity.y;
+    public static final int width = Unity.width;
+    public static final int height = Unity.height;
+    public static final double STROKE_WIDTH = Unity.STROKE_WIDTH;
 
     public static void dragItem(MouseEvent e, Shape item){
         // On convertit les coordonnées de la souris par rapport au parent (la fenetre)

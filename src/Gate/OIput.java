@@ -146,7 +146,7 @@ public class OIput {
     }
 
     private double tranformDoubleToInt(double xPoint){
-        int x = 20;
+        int x = Unity.x;
         return Math.floor(xPoint) - Math.floor(xPoint)%x;
     }
 
@@ -189,7 +189,7 @@ public class OIput {
     }
 
     private void addStroke(Shape sh){
-        sh.setStrokeWidth(2);
+        sh.setStrokeWidth(Unity.STROKE_WIDTH);
         sh.setStroke(Color.GREEN);
     }
 
@@ -202,8 +202,9 @@ public class OIput {
     /**
      * Adding Fils for a line we created, such that for each point we can drag it.
      */
-    private void addFilsInLine(double p1, double p2, double constantCoord, int n){ // the n is for the position of the line
-        int x = 20;
+    private void addFilsInLine(double p1, double p2, double constantCoord, int n){ 
+        // the n is for the position of the line
+        int x = Unity.x;
         double start;
         double end;
         if(p1 > p2){

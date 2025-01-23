@@ -3,10 +3,12 @@ package Test;
 import Gates.*;
 import Gate.OIput;
 import Gate.Fils;
+import Gate.Unity;
 
 import java.util.ArrayList;
 
 import Gate.GatesShapes;
+import Gate.Gate;
 import javafx.application.Application;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
@@ -23,10 +25,10 @@ import javafx.stage.Stage;
 
 public class App extends Application{
     Scene scene;
-    private final int height = 600;
-    private final int width = 1200;
-    private final int x = 20;
-    private final int y = 20;
+    private final int height = Unity.height;
+    private final int width = Unity.width;
+    private final int x = Unity.x;
+    private final int y = Unity.y;
     private Shape selectedItem;
     private ArrayList<Shape> shapes;
     private final Rectangle background = new Rectangle(-1, -1, width+1, height+1);
@@ -54,6 +56,7 @@ public class App extends Application{
         grid(layout);
         OIput oi = new OIput(fils, null);
         OIput oi2 = new OIput(60, 80, fils, null);
+        layout.getChildren().add(GatesShapes.andShape());
         scene = new Scene(layout, width, height);
 
         window.setScene(scene);

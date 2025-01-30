@@ -13,7 +13,10 @@ import javafx.scene.shape.Shape;
 
 public class OIput {
     private Fils fils;
-    private Deque <OIput> childs;
+    // childs1 for childs in x coordinate 
+    private Deque <OIput> childs1;
+    // childs2 for childs in y coordinate 
+    private Deque <OIput> childs2;
 
     private OIput parent;
 
@@ -28,7 +31,8 @@ public class OIput {
         this.parent = parent;
         int pos = 20;
         this.fils = fils;
-        childs = new LinkedList<OIput>();
+        childs1 = new LinkedList<OIput>();
+        childs2 = new LinkedList<OIput>();
 
         dx = false;
         dy = false;
@@ -48,7 +52,7 @@ public class OIput {
         l2.setStrokeWidth(6);
 
         circle.setFill(Color.TRANSPARENT);
-        circle2.setFill(Color.BLUE);
+        circle2.setFill(Color.GREEN);
         circle2.setOnMouseDragged(e -> dragOIput(e, circle2, circle));
         circle2.setOnMouseReleased(e -> onRelease());
         circle2.setOnMouseEntered(e -> addStroke(circle2));
@@ -66,12 +70,14 @@ public class OIput {
         circle2.setCenterY(y);
     }
 
-
-    private void reinitialiseLines(){
+    private void reinitialiseLine(Line l){
         int r = -10;
         setLineCoord(l1, r, r, r, r);
-        setLineCoord(l2, r, r, r, r);
-        fils.getGroup().getChildren().removeAll(l1, l2);
+        fils.getGroup().getChildren().remove(l);
+    }
+    private void reinitialiseLines(){
+        reinitialiseLine(l1);
+        reinitialiseLine(l2);
     }
 
     private void setLineCoord(Line l, double startX, double startY, double endX, double endY){
@@ -89,54 +95,127 @@ public class OIput {
                 isL1InParent = lineContainsLine(parent.l1, l1) || lineContainsLine(parent.l2, l1);
                 isL2InParent = lineContainsLine(parent.l1, l2) || lineContainsLine(parent.l2, l2);
             }
-            
+            boolean fixOnL1 = false;
+            boolean fixOnL2 = false;
             if(isL1InParent && isL2InParent){
+                if(l1.getStartX() == parent.l2.getEndX() && l1.getStartY() == parent.l2.getEndY()){
+                    parent.l2.setEndX(l1.getEndX());
+                    parent.l2.setEndY(l1.getEndY());
+                    parent.circle.setCenterX(l1.getEndX());
+                    parent.circle.setCenterY(l1.getEndY());
+
+                    // TO DO
+                }
                 System.out.println("Cas 1");
                 reinitialiseLines();
                 return;
             }
             else if(isL1InParent){
                 // Have to add this func
-                // fixLineLineToAdd
-                if(parent.parent != null && (lineContainsLine(parent.parent.l1, l2) || lineContainsLine(parent.parent.l2, l2))){
+                fixOnL1 = fixLineToAdd(l2, parent.l1);
+                fixOnL2 = fixLineToAdd(l2, parent.l2);
+                
+                if(fixOnL1 || fixOnL2){
+                    System.out.println("Cas 2.1");
+                    parent.createPointOnEachLine(l2);
                     reinitialiseLines();
-                    System.out.println("no add");
-                    return;
                 }
-                createPointOnEachLine(l2);
-                System.out.println("Cas 2");
-            }
-            else if(isL2InParent){
-                // fixLineToAdd
-                createPointOnEachLine(l1);
-                System.out.println("Cas 3");
-
+                else{
+                    createPointOnEachLine(l2);
+                    System.out.println("Cas 2.2");
+                }
             }
             else{
-                createPointOnEachLine(l1);
-                createPointOnEachLine(l2);
-                System.out.println("Cas 4");
+                if(parent != null){
+                    fixOnL1 = fixLineToAdd(l1, parent.l1);
+                    fixOnL2 = fixLineToAdd(l1, parent.l2);
+                }
+
+                if(fixOnL1 || fixOnL2){
+                    parent.createPointOnEachLine(l1);
+                    reinitialiseLine(l1);
+                }
+                else{
+                    createPointOnEachLine(l1);
+                }
+
+                if(parent != null 
+                && parent.l2.getEndX() == parent.l2.getStartX() 
+                && parent.l2.getEndY() == parent.l2.getStartY()){
+                    parent.l2 = l2;
+                    parent.createPointOnEachLine(l2);
+                    l2.setStroke(Color.BLUE);
+                    l2 = new Line();
+                    reinitialiseLine(l2);
+                }else{
+
+                    createPointOnEachLine(l2);
+                }
+                System.out.println("Cas 3");
             }
-            
-            l1.setStroke(Color.BLUE);
-            l2.setStroke(Color.BLUE);
-            circle.setCenterX(l2.getEndX());
-            circle.setCenterY(l2.getEndY());
+
+            if(l1.getStartX() == -10 && l2.getStartX() == -10){
+                reinitialiseParemeters();
+            }
+            else{
+                l1.setStroke(Color.BLUE);
+                l2.setStroke(Color.BLUE);
+                circle.setCenterX(l2.getEndX());
+                circle.setCenterY(l2.getEndY());
+            }
         }
     }
 
-    private void fixLineToAdd(Line l){
-        boolean isLineX;
-        boolean isLineY;
+    private void reinitialiseParemeters(){
+        l1.setStroke(Color.DARKBLUE);
+        l2.setStroke(Color.DARKBLUE);
+        circle.setCenterX(circle2.getCenterX());
+        circle.setCenterY(circle2.getCenterY());
+    }
 
-        if(l.getStartX() == l.getEndX()){
-            isLineX = true;
-            isLineY = false;
+    private int sign(double start, double end){
+        if(end > start) return 1;
+        return -1;
+    }
+
+    // n is for direction to compare x or y ; n = 0, we compare x coordinates
+    // n = 1, we compare y coordinates
+    private boolean areInSameDirection(Line l, Line k, int n){
+        if(n == 0) return sign(l.getStartX(), l.getEndX()) == sign(k.getStartX(), k.getEndX());
+        return sign(l.getStartY(), l.getEndY()) == sign(k.getStartY(), k.getEndY());
+    }
+
+    private boolean fixLineToAdd(Line l, Line lToExtend){
+        if(l.getStartX() == lToExtend.getStartX() 
+        && l.getStartX() == l.getEndX() 
+        && lToExtend.getStartX() == lToExtend.getEndX()){
+            if(areInSameDirection(l, lToExtend, 1)){
+                double start = lToExtend.getEndY();
+                lToExtend.setEndY(l.getEndY());
+                l.setStartY(start);
+                return true;
+            }
+            else{
+                l.setStartY(lToExtend.getStartY());
+                return false;
+            }
         }
-        else{
-            isLineX = false;
-            isLineY = true;          
+        else if(l.getStartY() == lToExtend.getStartY() 
+        && l.getStartY() == l.getEndY() 
+        && lToExtend.getStartY() == lToExtend.getEndY()){
+            if(areInSameDirection(l, lToExtend, 0)){
+                double start = lToExtend.getEndX();
+                lToExtend.setEndX(l.getEndX());
+                l.setStartX(start);
+                return true;
+            }
+            else{
+                l.setStartX(lToExtend.getStartX());
+                return false;
+            }
         }
+        return false;
+
     }
     /** 
      * returns true if line1 contains line2
@@ -204,17 +283,10 @@ public class OIput {
      */
     private void addFilsInLine(double p1, double p2, double constantCoord, int n){ 
         // the n is for the position of the line
-        int x = Unity.x;
-        double start;
-        double end;
-        if(p1 > p2){
-            start = p2;
-            end = p1;
-        } 
-        else{
-            start = p1;
-            end = p2;
-        }
+        // n = 0 , x is constant else y is constant
+        int x = sign(p1, p2) * Unity.x;
+        int distance = sign(p1, p2)*(int)(p2-p1);
+        double start = p1;
 
         double xCord, yCord;
         if(n == 0){
@@ -226,15 +298,9 @@ public class OIput {
             yCord = constantCoord;
         }
         
-        while(start <= end){
-            OIput element;
-            if(n == 0){
-                element = new OIput(xCord, yCord, fils, this);
-            }
-            else{
-                element = new OIput(xCord, yCord, fils, this);
-            }
-
+        for(int i = 0; i <= distance; i += Unity.x) {
+            OIput element = new OIput(xCord, yCord, fils, this);
+            
             if(parent != null && (parent.l1.contains(xCord, yCord) || parent.l2.contains(xCord, yCord))
             && (parent.l2.getEndX() != xCord || parent.l2.getEndY() != yCord)){
                 element.circle2.setFill(Color.BLUE);
@@ -243,9 +309,14 @@ public class OIput {
                 element.circle2.setFill(Color.TRANSPARENT);
             }
 
-            if(n == 0) yCord += x;
-            else xCord += x;
-            childs.push(element);
+            if(n == 0){
+                yCord += x;
+                childs1.push(element);
+            }
+            else{
+                xCord += x;
+                childs2.push(element);
+            }
             start += x;
         }
     }

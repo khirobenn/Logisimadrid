@@ -20,7 +20,7 @@ public class OIput {
     private Deque <OIput> childs2;
 
     private OIput parent;
-
+    private boolean output;
     // used for connected fils
     private Deque <OIput> connected;
 
@@ -36,6 +36,12 @@ public class OIput {
 
     public OIput(Fils fils, OIput parent){
         this.parent = parent;
+        if(parent != null){
+            output = parent.output;
+        }
+        else{
+            output = false;
+        }
         int pos = 20;
         this.fils = fils;
         childs1 = new LinkedList<OIput>();
@@ -76,6 +82,20 @@ public class OIput {
 
         circle.setCenterY(y);
         circle2.setCenterY(y);
+    }
+
+    public boolean getOutput(){
+        return output;
+    }
+
+    public void setOutput(boolean value){ output = value; }
+
+    public void changePlaceForPoints(double x, double y){
+        circle.setCenterX(x);
+        circle2.setCenterX(x);
+        circle.setCenterY(y);
+        circle2.setCenterY(y);
+        System.out.println(y);
     }
 
     private void reinitialiseLine(Line l){
@@ -237,10 +257,6 @@ public class OIput {
         return line1.contains(new Point2D(line2.getStartX(), line2.getStartY())) && line1.contains(new Point2D(line2.getEndX(), line2.getEndY()));
     }
 
-    private double tranformDoubleToInt(double xPoint){
-        int x = Unity.x;
-        return Math.floor(xPoint) - Math.floor(xPoint)%x;
-    }
 
     private void dragOIput(MouseEvent e, Circle circle, Circle circle2){
         if(!(fils.getGroup().getChildren().contains(l1) && fils.getGroup().getChildren().contains(l2))){
@@ -249,8 +265,8 @@ public class OIput {
         double xPoint = e.getX();
         double yPoint = e.getY();
 
-        xPoint = tranformDoubleToInt(xPoint);
-        yPoint = tranformDoubleToInt(yPoint);
+        xPoint = Unity.tranformDoubleToInt(xPoint);
+        yPoint = Unity.tranformDoubleToInt(yPoint);
 
         if(xPoint == circle.getCenterX() && yPoint != circle.getCenterY()) dy = true;
         else if(xPoint != circle.getCenterX() && yPoint == circle.getCenterY()) dx = true;

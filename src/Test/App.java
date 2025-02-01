@@ -54,9 +54,7 @@ public class App extends Application{
         Fils fils = new Fils(layout);
         layout.getChildren().add(background);
         grid(layout);
-        OIput oi = new OIput(fils, null);
-        OIput oi2 = new OIput(60, 80, fils, null);
-        layout.getChildren().add(GatesShapes.andShape());
+        Gate or = new Or(2, fils, layout);
         scene = new Scene(layout, width, height);
 
         window.setScene(scene);

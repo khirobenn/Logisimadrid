@@ -1,6 +1,7 @@
 package Gate;
 
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import javafx.geometry.Point2D;
@@ -20,9 +21,15 @@ public class OIput {
 
     private OIput parent;
 
+    // used for connected fils
+    private Deque <OIput> connected;
+
     private Line l1;
     private Line l2;
+
+    //used as the end point of OIput
     private Circle circle;
+    //used as the start point of OIput
     private Circle circle2;
 
     private boolean dx, dy;
@@ -33,6 +40,7 @@ public class OIput {
         this.fils = fils;
         childs1 = new LinkedList<OIput>();
         childs2 = new LinkedList<OIput>();
+        connected = new LinkedList<OIput>();
 
         dx = false;
         dy = false;
@@ -125,6 +133,9 @@ public class OIput {
                     System.out.println("Cas 2.2");
                 }
             }
+            else if(isL2InParent){
+                
+            }
             else{
                 if(parent != null){
                     fixOnL1 = fixLineToAdd(l1, parent.l1);
@@ -164,6 +175,8 @@ public class OIput {
                 circle.setCenterY(l2.getEndY());
             }
         }
+
+        searchConnected();
     }
 
     private void reinitialiseParemeters(){
@@ -330,6 +343,19 @@ public class OIput {
         }
         else if(l.getEndY() == l.getStartY()){
             addFilsInLine(l.getStartX(), l.getEndX(), l.getEndY(), 1);
+        }
+    }
+
+    private void searchConnected(){
+        Deque <OIput> list = fils.getFilsList();
+        for(OIput elem : list){
+            if( elem != this &&
+                (elem.l1.contains(new Point2D(circle.getCenterX(), circle.getCenterY())) 
+                || elem.l2.contains(new Point2D(circle.getCenterX(), circle.getCenterY())))){
+                elem.connected.add(this);
+                connected.add(elem);
+                System.out.println("Connection added");
+            }
         }
     }
 }

@@ -25,4 +25,5 @@ public class Fils {
     }
 
     public Group getGroup(){ return group; } 
+    public Deque <OIput> getFilsList(){ return fils; }
 }

@@ -12,6 +12,8 @@ public class Xnor extends Gate {
     public Xnor(int nb,  Fils fils, Group layout){
         super("XNOR", nb, fils, layout);
         setShape(GatesShapes.xnorShape());
+        addShapeToGroup();
+        addPoints();
     }
 
     @Override

@@ -12,6 +12,8 @@ public class Nand extends Gate{
     public Nand(int nb, Fils fils, Group layout){
         super("NAND", nb, fils, layout);
         setShape(GatesShapes.nandShape());
+        addShapeToGroup();
+        addPoints();
 
     }
 

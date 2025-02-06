@@ -20,6 +20,8 @@ public class OIput {
     private Deque <OIput> childs2;
 
     private OIput parent;
+
+    private boolean isOutPutSet;
     private boolean output;
     // used for connected fils
     private Deque <OIput> connected;
@@ -42,6 +44,7 @@ public class OIput {
         else{
             output = false;
         }
+        isOutPutSet = false;
         int pos = 20;
         this.fils = fils;
         childs1 = new LinkedList<OIput>();
@@ -84,11 +87,29 @@ public class OIput {
         circle2.setCenterY(y);
     }
 
+    private void recurseGetOutput(Deque<OIput> l, OIput oi){
+        for(OIput elem : oi.connected){
+            if(!l.contains(elem)){
+                l.add(oi);
+                recurseGetOutput(l, elem);
+                output = elem.output;
+                isOutPutSet = true;
+            }
+        }
+    }
     public boolean getOutput(){
+        if(!isOutPutSet)
+            recurseGetOutput(new LinkedList<OIput>() , this);
         return output;
     }
 
-    public void setOutput(boolean value){ output = value; }
+    public void setOutput(boolean value){ 
+        output = value; 
+        for(OIput oiput : connected){
+            oiput.output = value;
+        }
+        isOutPutSet = true;
+    }
 
     public void changePlaceForPoints(double x, double y){
         circle.setCenterX(x);
@@ -363,15 +384,35 @@ public class OIput {
     }
 
     private void searchConnected(){
+        Point2D point = new Point2D(circle.getCenterX(), circle.getCenterY());
         Deque <OIput> list = fils.getFilsList();
         for(OIput elem : list){
             if( elem != this &&
-                (elem.l1.contains(new Point2D(circle.getCenterX(), circle.getCenterY())) 
-                || elem.l2.contains(new Point2D(circle.getCenterX(), circle.getCenterY())))){
+                (elem.l1.contains(point) 
+                || elem.l2.contains(point)
+                || elem.circle.contains(point)
+                || elem.circle2.contains(point))){
                 elem.connected.add(this);
                 connected.add(elem);
                 System.out.println("Connection added");
             }
         }
     }
+
+    public void changeColor(Color clr){
+        circle2.setFill(clr);
+        l1.setFill(clr);
+        l2.setFill(clr);
+    }
+
+    private void setResultForChilds(){
+        for(OIput o : childs1){
+            o.setOutput(output);
+        }
+        
+        for(OIput o : childs2){
+            o.setOutput(output);
+        }
+    }
+    
 }

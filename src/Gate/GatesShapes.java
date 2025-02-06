@@ -125,6 +125,12 @@ public class GatesShapes {
         return sh;
     }
 
+    public static Shape variable(){
+        Circle circle = new Circle(Unity.width/2, Unity.height/2, Unity.x * 3);
+        // Circle circle = new Circle(Unity.x, Unity.y, Unity.y * 3);
+        return circle;
+    }
+
     public static void rotate(Shape item){
         if(item != null) item.setRotate(item.getRotate() + 90);
     }

@@ -3,8 +3,8 @@ package Gate;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
-import Gates.Variable;
 
 public abstract class Gate {
     private String name;
@@ -40,9 +40,21 @@ public abstract class Gate {
 
     public void setOutput(boolean value){
         output.setOutput(value);
+        if(value == true){
+            System.out.println("VRAI");
+            changeOutputColor(Color.GREENYELLOW);
+        }
+        else{
+            System.out.println("FAUX");
+            changeOutputColor(Color.RED);
+        }
     }
     public void setShape(Shape shape){
         this.shape = shape;
+    }
+
+    public void changeOutputColor(Color clr){
+        output.changeColor(clr);
     }
 
     public void setIHaveOutput(boolean value){
@@ -78,9 +90,11 @@ public abstract class Gate {
     public void addPoints(){
         int distance = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY());
         output = new OIput(shape.getLayoutBounds().getMaxX() + shape.getLayoutX(), shape.getLayoutY() + distance/2, fils, null);
-        distance /= inputs.length + 1;
-        for(int i = 1; i < inputs.length+1; i++){
-            inputs[i-1] = new OIput(shape.getLayoutX(), shape.getLayoutY() + i*distance, fils, null);
+        if(inputs != null){
+            distance /= inputs.length + 1;
+            for(int i = 1; i < inputs.length+1; i++){
+                inputs[i-1] = new OIput(shape.getLayoutX(), shape.getLayoutY() + i*distance, fils, null);
+            }   
         }
 
     }
@@ -112,9 +126,11 @@ public abstract class Gate {
     private void updatePoints(){
         int distance = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY());
         output.changePlaceForPoints(shape.getLayoutBounds().getMaxX() + shape.getLayoutX(), shape.getLayoutY() + distance/2);
-        distance /= inputs.length + 1;
-        for(int i = 1; i < inputs.length+1; i++){
-            inputs[i-1].changePlaceForPoints(shape.getLayoutX(), shape.getLayoutY() + i*distance);
+        if(inputs != null){
+            distance /= inputs.length + 1;
+            for(int i = 1; i < inputs.length+1; i++){
+                inputs[i-1].changePlaceForPoints(shape.getLayoutX(), shape.getLayoutY() + i*distance);
+            }
         }
     }
 }

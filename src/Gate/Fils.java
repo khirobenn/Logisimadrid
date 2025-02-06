@@ -26,4 +26,9 @@ public class Fils {
 
     public Group getGroup(){ return group; } 
     public Deque <OIput> getFilsList(){ return fils; }
+    public void setOutputToFils(){
+        for(OIput oi : fils){
+            oi.setOutput(false);
+        }
+    }
 }

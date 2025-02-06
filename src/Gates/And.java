@@ -12,6 +12,8 @@ public class And extends Gate {
     public And(int nb, Fils fils, Group layout){
         super("AND", nb, fils, layout);
         setShape(GatesShapes.andShape());
+        addShapeToGroup();
+        addPoints();
     }
 
     @Override

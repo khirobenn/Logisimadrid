@@ -50,12 +50,15 @@ public class App extends Application{
         Fils fils = new Fils(layout);
         layout.getChildren().add(background);
         grid(layout);
-        Gate or = new Or(2, fils, layout);
+        Gate or = new And(2, fils, layout);
         Gate variable = new Variable(fils, layout);
         Button btn = new Button("Resultat");
         gates.add(or);
         gates.add(variable);
         variables.add(variable);
+        Gate variable2 = new Variable(fils, layout);
+        gates.add(variable2);
+        variables.add(variable2);
         btn.setOnMouseClicked(e -> setResult(or));
         layout.getChildren().add(btn);
         scene = new Scene(layout, width, height);

@@ -30,5 +30,7 @@ public class Fils {
         for(OIput oi : fils){
             oi.setOutput(false);
         }
-    }
+    } 
+
+    
 }

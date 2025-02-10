@@ -214,6 +214,7 @@ public class OIput {
                 l2.setStroke(Color.BLUE);
                 circle.setCenterX(l2.getEndX());
                 circle.setCenterY(l2.getEndY());
+                System.out.println("end cirlce changed");
             }
         }
 
@@ -383,20 +384,50 @@ public class OIput {
         }
     }
 
+    private void printPoints(){
+        Point2D point2 = new Point2D(circle2.getCenterX(), circle2.getCenterY());
+        Point2D point = new Point2D(circle.getCenterX(), circle.getCenterY());
+        System.out.println("Point début : " + point2);
+        System.out.println("Point final : " + point);
+    }
+
+    private boolean isPointFixe(){
+        Point2D point2 = new Point2D(circle2.getCenterX(), circle2.getCenterY());
+        Point2D point = new Point2D(circle.getCenterX(), circle.getCenterY());
+        
+        return point.getX() == point2.getX() && point.getY() == point2.getY();
+    }
+
     private void searchConnected(){
         Point2D point = new Point2D(circle.getCenterX(), circle.getCenterY());
+        printPoints();
+        int i = 0;
         Deque <OIput> list = fils.getFilsList();
+        System.out.println(list);
+        System.out.println(list.size());
         for(OIput elem : list){
-            if( elem != this &&
-                (elem.l1.contains(point) 
-                || elem.l2.contains(point)
-                || elem.circle.contains(point)
-                || elem.circle2.contains(point))){
+            if( elem != this && 
+            !connected.contains(elem) && 
+            // !elem.isPointFixe() &&
+            (elem.l1.contains(point) 
+            || elem.l2.contains(point)
+            || elem.circle.contains(point)
+            || elem.circle2.contains(point))){
+                if(elem.l1.contains(point)) System.out.println("in L1");
+                if(elem.l2.contains(point)) System.out.println("in L2");
+                if(elem.circle.contains(point)) System.out.println("in circle");
+                if(elem.circle2.contains(point)) System.out.println("in circle2");
                 elem.connected.add(this);
                 connected.add(elem);
+                System.out.println("this : " + this);
+                elem.printPoints();
+                System.out.println("elem : " + elem);
                 System.out.println("Connection added");
+                i++;
             }
         }
+        System.out.println("added : " + i);
+
     }
 
     public void changeColor(Color clr){
@@ -409,6 +440,7 @@ public class OIput {
         for(OIput o : childs1){
             o.setOutput(output);
         }
+        
         
         for(OIput o : childs2){
             o.setOutput(output);

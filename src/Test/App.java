@@ -51,12 +51,18 @@ public class App extends Application{
         layout.getChildren().add(background);
         grid(layout);
         Gate or = new Or(2, fils, layout);
+        Gate or2 = new Or(2, fils, layout);
+        Gate and = new And(2, fils, layout);
         Gate variable = new Variable(fils, layout);
         Button btn = new Button("Resultat");
         gates.add(or);
-        gates.add(variable);
+        gates.add(or2);
+        gates.add(and);
         variables.add(variable);
-        btn.setOnMouseClicked(e -> setResult(or));
+        Gate variable2 = new Variable(fils, layout);
+        gates.add(variable2);
+        variables.add(variable2);
+        btn.setOnMouseClicked(e -> setResult(gates));
         layout.getChildren().add(btn);
         scene = new Scene(layout, width, height);
 
@@ -64,11 +70,13 @@ public class App extends Application{
         window.show();
     }
 
-    private void setResult(Gate gate){
+    private void setResult(Set<Gate> gates){
         for(Gate varia : variables){
             varia.setOutput(varia.getOutput());
         }
-        System.out.println(gate.getOutput());
+        for(Gate gate : gates){
+            gate.getOutput();
+        }
     }
 
     // private void addShape(Shape item){

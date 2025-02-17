@@ -39,15 +39,14 @@ public abstract class Gate {
     }
 
     public void setOutput(boolean value){
-        output.setOutput(value);
+        //TO DO recurse here
         if(value == true){
-            System.out.println("VRAI");
             changeOutputColor(Color.GREENYELLOW);
         }
         else{
-            System.out.println("FAUX");
             changeOutputColor(Color.RED);
         }
+        output.setOutput(value);
     }
     public void setShape(Shape shape){
         this.shape = shape;
@@ -82,7 +81,7 @@ public abstract class Gate {
     }
 
     public void changeOutput(){
-        check();
+        // check();
         evaluateOutput();
     }
 

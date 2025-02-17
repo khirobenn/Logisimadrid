@@ -1,9 +1,4 @@
 package Gate;
-
-import java.lang.classfile.components.ClassPrinter.Node;
-
-import javafx.geometry.Point2D;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
@@ -29,7 +24,6 @@ public class GatesShapes {
         andGate.setStrokeWidth(STROKE_WIDTH);
         andGate.setLayoutX(0);
         andGate.setLayoutY(0);
-        System.out.println(new Point2D(andGate.getLayoutX(), andGate.getLayoutY()) + " | " + andGate.localToParent(0, 0));
         return andGate;
     }
 
@@ -51,12 +45,8 @@ public class GatesShapes {
 
     public static Shape orShape(){
         QuadCurve quad = new QuadCurve(0, 0, 1.5*x, 3*y, 0, 6*y);
-
         QuadCurve quad2 = new QuadCurve(0, 0, 12*x, 3*y, 0, 6*y);
-
         Shape orGate = Shape.subtract(quad2, quad);
-
-
         orGate.setStroke(Color.BLACK);
         orGate.setFill(Color.TRANSPARENT);
         return orGate;
@@ -65,7 +55,6 @@ public class GatesShapes {
     public static Shape norShape(){
         Shape or = orShape();
         Circle circle = new Circle(6.5*x, 3*y, 0.5*x);
-
         Shape sh = Shape.union(or, circle);
         sh.setFill(Color.TRANSPARENT);
         sh.setStroke(Color.BLACK);
@@ -75,7 +64,6 @@ public class GatesShapes {
     
     public static Shape xorShape(){
         QuadCurve quad = new QuadCurve(x, 0, 4*x, 3*y, x, 6*y);
-
         QuadCurve quad2 = new QuadCurve(x, 0, 12*x, 3*y, x, 6*y);
 
         Shape shape = Shape.subtract(quad2, quad);
@@ -99,8 +87,8 @@ public class GatesShapes {
     public static Shape xnorShape(){
         Shape xor = xorShape();
         Circle circle = new Circle(7*x, 3*y, 0.5*x);
-
         Shape sh = Shape.union(xor, circle);
+
         sh.setFill(Color.TRANSPARENT);
         sh.setStroke(Color.BLACK);
 
@@ -115,13 +103,11 @@ public class GatesShapes {
         3.0*x, 2.0*y });
 
         Circle circle = new Circle(3.5*x, 2*y, 0.5*x);
-
         Shape sh = Shape.union(lines, circle);
         
         sh.setFill(Color.TRANSPARENT);
         sh.setStroke(Color.BLACK);
 
-        System.out.println(sh.getLayoutBounds());
         return sh;
     }
 

@@ -4,12 +4,16 @@ import Gate.Fils;
 import Gate.Gate;
 import Gate.GatesShapes;
 import javafx.scene.Group;
+import javafx.scene.shape.Shape;
 
 public class Not extends Gate {
-    public Not(Fils fils, Group layout){
+    public Not(Fils fils, Group layout, double x, double y){
         super("NOT", 1, fils, layout);
-        setShape(GatesShapes.notShape());
+        Shape sh = GatesShapes.notShape();
+        setShape(sh);
         addShapeToGroup();
+        sh.setLayoutX(x);
+        sh.setLayoutY(y);
         addPoints();
     }
 

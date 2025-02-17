@@ -1,7 +1,6 @@
 package Gate;
 
 import java.util.Deque;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import javafx.geometry.Point2D;
@@ -14,11 +13,7 @@ import javafx.scene.shape.Shape;
 
 public class OIput {
     private Fils fils;
-    // childs1 for childs in x coordinate 
-    private Deque <OIput> childs1;
-    // childs2 for childs in y coordinate 
-    private Deque <OIput> childs2;
-
+    private Gate gate;
     private OIput parent;
 
     private boolean isOutPutSet;
@@ -36,8 +31,9 @@ public class OIput {
 
     private boolean dx, dy;
 
-    public OIput(Fils fils, OIput parent){
+    public OIput(Fils fils, OIput parent, Gate gate){
         this.parent = parent;
+        this.gate = gate;
         if(parent != null){
             output = parent.output;
         }
@@ -47,8 +43,6 @@ public class OIput {
         isOutPutSet = false;
         int pos = 20;
         this.fils = fils;
-        childs1 = new LinkedList<OIput>();
-        childs2 = new LinkedList<OIput>();
         connected = new LinkedList<OIput>();
 
         dx = false;
@@ -78,8 +72,8 @@ public class OIput {
         fils.addElement(this);
     }
 
-    public OIput(double x, double y, Fils fils, OIput parent){
-        this(fils, parent);
+    public OIput(double x, double y, Fils fils, OIput parent, Gate gate){
+        this(fils, parent, gate);
         circle.setCenterX(x);
         circle2.setCenterX(x);
 
@@ -87,28 +81,61 @@ public class OIput {
         circle2.setCenterY(y);
     }
 
+    private void recurseSetOutput(Deque<OIput> l, OIput oi){
+        for(OIput elem : oi.connected){
+            if(!l.contains(elem)){
+                l.add(oi);
+                elem.output = output;
+                if(output){
+                    System.out.println("GREEEN HHHHH");
+                    elem.changeColor(Color.GREENYELLOW);
+                }
+                else{
+                    elem.changeColor(Color.GREEN);
+                    System.out.println("REED HHHHH");
+                }
+                elem.isOutPutSet = true;
+                recurseSetOutput(l, elem);
+            }
+        }
+    }
+
     private void recurseGetOutput(Deque<OIput> l, OIput oi){
         for(OIput elem : oi.connected){
             if(!l.contains(elem)){
                 l.add(oi);
                 recurseGetOutput(l, elem);
-                output = elem.output;
+                if(elem.gate != null) output = elem.gate.getOutput();
+                else output = elem.output;
+                if(output){
+                    System.out.println("GREEEN HHHHH");
+                    changeColor(Color.GREENYELLOW);
+                }
+                else{
+                    changeColor(Color.GREEN);
+                    System.out.println("REED HHHHH");
+                }
                 isOutPutSet = true;
             }
         }
     }
+    
     public boolean getOutput(){
-        if(!isOutPutSet)
+        if(!isOutPutSet){
             recurseGetOutput(new LinkedList<OIput>() , this);
+        }
         return output;
     }
 
-    public void setOutput(boolean value){ 
-        output = value; 
-        for(OIput oiput : connected){
-            oiput.output = value;
-        }
+    // public void setOutput(boolean value){ 
+    //     output = value; 
+    //     recurseGetOutput(new LinkedList<OIput>(), this);
+    // }
+
+    public void setOutput(boolean value){
+        output = value;
         isOutPutSet = true;
+        recurseSetOutput(new LinkedList<OIput>(), this);
     }
 
     public void changePlaceForPoints(double x, double y){
@@ -155,7 +182,6 @@ public class OIput {
 
                     // TO DO
                 }
-                System.out.println("Cas 1");
                 reinitialiseLines();
                 return;
             }
@@ -165,13 +191,11 @@ public class OIput {
                 fixOnL2 = fixLineToAdd(l2, parent.l2);
                 
                 if(fixOnL1 || fixOnL2){
-                    System.out.println("Cas 2.1");
                     parent.createPointOnEachLine(l2);
                     reinitialiseLines();
                 }
                 else{
                     createPointOnEachLine(l2);
-                    System.out.println("Cas 2.2");
                 }
             }
             else if(isL2InParent){
@@ -203,7 +227,6 @@ public class OIput {
 
                     createPointOnEachLine(l2);
                 }
-                System.out.println("Cas 3");
             }
 
             if(l1.getStartX() == -10 && l2.getStartX() == -10){
@@ -214,7 +237,6 @@ public class OIput {
                 l2.setStroke(Color.BLUE);
                 circle.setCenterX(l2.getEndX());
                 circle.setCenterY(l2.getEndY());
-                System.out.println("end cirlce changed");
             }
         }
 
@@ -270,7 +292,6 @@ public class OIput {
             }
         }
         return false;
-
     }
     /** 
      * returns true if line1 contains line2
@@ -350,7 +371,7 @@ public class OIput {
         }
         
         for(int i = 0; i <= distance; i += Unity.x) {
-            OIput element = new OIput(xCord, yCord, fils, this);
+            OIput element = new OIput(xCord, yCord, fils, this, null);
             
             if(parent != null && (parent.l1.contains(xCord, yCord) || parent.l2.contains(xCord, yCord))
             && (parent.l2.getEndX() != xCord || parent.l2.getEndY() != yCord)){
@@ -362,12 +383,13 @@ public class OIput {
 
             if(n == 0){
                 yCord += x;
-                childs1.push(element);
             }
             else{
                 xCord += x;
-                childs2.push(element);
             }
+            connected.push(element);
+            element.connected.push(this);
+
             start += x;
         }
     }
@@ -384,27 +406,16 @@ public class OIput {
         }
     }
 
-    private void printPoints(){
-        Point2D point2 = new Point2D(circle2.getCenterX(), circle2.getCenterY());
-        Point2D point = new Point2D(circle.getCenterX(), circle.getCenterY());
-        System.out.println("Point début : " + point2);
-        System.out.println("Point final : " + point);
-    }
-
-    private boolean isPointFixe(){
-        Point2D point2 = new Point2D(circle2.getCenterX(), circle2.getCenterY());
-        Point2D point = new Point2D(circle.getCenterX(), circle.getCenterY());
+    // private boolean isPointFixe(){
+    //     Point2D point2 = new Point2D(circle2.getCenterX(), circle2.getCenterY());
+    //     Point2D point = new Point2D(circle.getCenterX(), circle.getCenterY());
         
-        return point.getX() == point2.getX() && point.getY() == point2.getY();
-    }
+    //     return point.getX() == point2.getX() && point.getY() == point2.getY();
+    // }
 
     private void searchConnected(){
         Point2D point = new Point2D(circle.getCenterX(), circle.getCenterY());
-        printPoints();
-        int i = 0;
         Deque <OIput> list = fils.getFilsList();
-        System.out.println(list);
-        System.out.println(list.size());
         for(OIput elem : list){
             if( elem != this && 
             !connected.contains(elem) && 
@@ -413,38 +424,17 @@ public class OIput {
             || elem.l2.contains(point)
             || elem.circle.contains(point)
             || elem.circle2.contains(point))){
-                if(elem.l1.contains(point)) System.out.println("in L1");
-                if(elem.l2.contains(point)) System.out.println("in L2");
-                if(elem.circle.contains(point)) System.out.println("in circle");
-                if(elem.circle2.contains(point)) System.out.println("in circle2");
                 elem.connected.add(this);
                 connected.add(elem);
-                System.out.println("this : " + this);
-                elem.printPoints();
-                System.out.println("elem : " + elem);
-                System.out.println("Connection added");
-                i++;
             }
         }
-        System.out.println("added : " + i);
-
     }
 
     public void changeColor(Color clr){
-        circle2.setFill(clr);
-        l1.setFill(clr);
-        l2.setFill(clr);
-    }
-
-    private void setResultForChilds(){
-        for(OIput o : childs1){
-            o.setOutput(output);
+        if(!(circle2.getFill() == Color.TRANSPARENT)){
+            circle2.setFill(clr);
         }
-        
-        
-        for(OIput o : childs2){
-            o.setOutput(output);
-        }
-    }
-    
+        l1.setStroke(clr);
+        l2.setStroke(clr);
+    }    
 }

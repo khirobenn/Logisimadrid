@@ -4,15 +4,19 @@ import Gate.Gate;
 import Gate.GatesShapes;
 import Gate.OIput;
 import javafx.scene.Group;
+import javafx.scene.shape.Shape;
 public class Nand extends Gate{
     /**
      * @param nb
      * @requires nb >= 2
      */
-    public Nand(int nb, Fils fils, Group layout){
+    public Nand(int nb, Fils fils, Group layout, double x, double y){
         super("NAND", nb, fils, layout);
-        setShape(GatesShapes.nandShape());
+        Shape sh = GatesShapes.nandShape();
+        setShape(sh);
         addShapeToGroup();
+        sh.setLayoutX(x);
+        sh.setLayoutY(y);
         addPoints();
 
     }

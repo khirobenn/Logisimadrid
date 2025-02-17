@@ -4,15 +4,19 @@ import Gate.Gate;
 import Gate.GatesShapes;
 import Gate.OIput;
 import javafx.scene.Group;
+import javafx.scene.shape.Shape;
 public class Nor extends Gate{
     /**
      * @param nb
      * @requires nb >= 2
      */
-    public Nor(int nb, Fils fils, Group layout){
+    public Nor(int nb, Fils fils, Group layout, double x, double y){
         super("NOR", nb, fils, layout);
-        setShape(GatesShapes.norShape());
+        Shape sh = GatesShapes.norShape();
+        setShape(sh);
         addShapeToGroup();
+        sh.setLayoutX(x);
+        sh.setLayoutY(y);
         addPoints();
     }
 

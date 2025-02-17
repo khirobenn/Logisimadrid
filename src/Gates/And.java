@@ -4,15 +4,19 @@ import Gate.Gate;
 import Gate.GatesShapes;
 import Gate.OIput;
 import javafx.scene.Group;
+import javafx.scene.shape.Shape;
 public class And extends Gate {
     /**
      * @param nb
      * @requires nb >= 2
      */
-    public And(int nb, Fils fils, Group layout){
+    public And(int nb, Fils fils, Group layout, double x, double y){
         super("AND", nb, fils, layout);
-        setShape(GatesShapes.andShape());
+        Shape sh = GatesShapes.andShape();
+        setShape(sh);
         addShapeToGroup();
+        sh.setLayoutX(x);
+        sh.setLayoutY(y);
         addPoints();
     }
 

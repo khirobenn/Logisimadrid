@@ -39,15 +39,14 @@ public abstract class Gate {
     }
 
     public void setOutput(boolean value){
-        output.setOutput(value);
+        // if(iHaveOutput) return;
         if(value == true){
-            System.out.println("VRAI");
             changeOutputColor(Color.GREENYELLOW);
         }
         else{
-            System.out.println("FAUX");
             changeOutputColor(Color.RED);
         }
+        output.setOutput(value);
     }
     public void setShape(Shape shape){
         this.shape = shape;
@@ -82,18 +81,18 @@ public abstract class Gate {
     }
 
     public void changeOutput(){
-        check();
+        // check();
         evaluateOutput();
     }
 
     public abstract void evaluateOutput();
     public void addPoints(){
         int distance = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY());
-        output = new OIput(shape.getLayoutBounds().getMaxX() + shape.getLayoutX(), shape.getLayoutY() + distance/2, fils, null);
+        output = new OIput(shape.getLayoutBounds().getMaxX() + shape.getLayoutX(), shape.getLayoutY() + distance/2, fils, null, this);
         if(inputs != null){
             distance /= inputs.length + 1;
             for(int i = 1; i < inputs.length+1; i++){
-                inputs[i-1] = new OIput(shape.getLayoutX(), shape.getLayoutY() + i*distance, fils, null);
+                inputs[i-1] = new OIput(shape.getLayoutX(), shape.getLayoutY() + i*distance, fils, null, null);
             }   
         }
 

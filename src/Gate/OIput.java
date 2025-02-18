@@ -63,7 +63,7 @@ public class OIput {
         l2.setStrokeWidth(6);
 
         circle.setFill(Color.TRANSPARENT);
-        circle2.setFill(Color.GREEN);
+        circle2.setFill(Unity.OFF);
         circle2.setOnMouseDragged(e -> dragOIput(e, circle2, circle));
         circle2.setOnMouseReleased(e -> onRelease());
         circle2.setOnMouseEntered(e -> addStroke(circle2));
@@ -87,12 +87,10 @@ public class OIput {
                 l.add(oi);
                 elem.output = output;
                 if(output){
-                    System.out.println("GREEEN HHHHH");
-                    elem.changeColor(Color.GREENYELLOW);
+                    elem.changeColor(Unity.ON);
                 }
                 else{
-                    elem.changeColor(Color.GREEN);
-                    System.out.println("REED HHHHH");
+                    elem.changeColor(Unity.OFF);
                 }
                 elem.isOutPutSet = true;
                 recurseSetOutput(l, elem);
@@ -108,12 +106,10 @@ public class OIput {
                 if(elem.gate != null) output = elem.gate.getOutput();
                 else output = elem.output;
                 if(output){
-                    System.out.println("GREEEN HHHHH");
-                    changeColor(Color.GREENYELLOW);
+                    changeColor(Unity.ON);
                 }
                 else{
-                    changeColor(Color.GREEN);
-                    System.out.println("REED HHHHH");
+                    changeColor(Unity.OFF);
                 }
                 isOutPutSet = true;
             }
@@ -126,11 +122,6 @@ public class OIput {
         }
         return output;
     }
-
-    // public void setOutput(boolean value){ 
-    //     output = value; 
-    //     recurseGetOutput(new LinkedList<OIput>(), this);
-    // }
 
     public void setOutput(boolean value){
         output = value;
@@ -147,7 +138,6 @@ public class OIput {
         circle2.setCenterX(x);
         circle.setCenterY(y);
         circle2.setCenterY(y);
-        System.out.println(y);
     }
 
     private void reinitialiseLine(Line l){
@@ -237,8 +227,10 @@ public class OIput {
                 reinitialiseParemeters();
             }
             else{
-                l1.setStroke(Color.BLUE);
-                l2.setStroke(Color.BLUE);
+                if(l1.getStroke() == Color.BLACK){
+                    l1.setStroke(Color.BLUE);
+                    l2.setStroke(Color.BLUE);
+                }
                 circle.setCenterX(l2.getEndX());
                 circle.setCenterY(l2.getEndY());
             }
@@ -345,7 +337,7 @@ public class OIput {
 
     private void addStroke(Shape sh){
         sh.setStrokeWidth(Unity.STROKE_WIDTH);
-        sh.setStroke(Color.GREEN);
+        sh.setStroke(Unity.OFF);
     }
 
     private void removeStroke(Shape sh){
@@ -440,5 +432,9 @@ public class OIput {
         }
         l1.setStroke(clr);
         l2.setStroke(clr);
-    }    
+    }
+
+    public int getConnectedNb(){
+        return connected.size();
+    }
 }

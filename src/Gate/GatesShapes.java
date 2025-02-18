@@ -6,6 +6,7 @@ import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeType;
+import javafx.scene.text.Text;
 
 public class GatesShapes {
     public static final int x = Unity.x;
@@ -24,6 +25,7 @@ public class GatesShapes {
         andGate.setStrokeWidth(STROKE_WIDTH);
         andGate.setLayoutX(0);
         andGate.setLayoutY(0);
+        andGate.setStrokeWidth(3);
         return andGate;
     }
 
@@ -40,6 +42,7 @@ public class GatesShapes {
         sh.setOnMouseClicked(e -> {
             
         });
+        sh.setStrokeWidth(3);
         return sh;
     }
 
@@ -49,6 +52,7 @@ public class GatesShapes {
         Shape orGate = Shape.subtract(quad2, quad);
         orGate.setStroke(Color.BLACK);
         orGate.setFill(Color.TRANSPARENT);
+        orGate.setStrokeWidth(3);
         return orGate;
     }
 
@@ -58,6 +62,7 @@ public class GatesShapes {
         Shape sh = Shape.union(or, circle);
         sh.setFill(Color.TRANSPARENT);
         sh.setStroke(Color.BLACK);
+        sh.setStrokeWidth(3);
 
         return sh;
     }
@@ -80,6 +85,7 @@ public class GatesShapes {
         Shape sh2 = Shape.subtract(sh, quad4);
         sh2.setStroke(Color.BLACK);
         sh2.setFill(Color.TRANSPARENT);
+        sh2.setStrokeWidth(3);
 
         return sh2;
     }
@@ -91,6 +97,7 @@ public class GatesShapes {
 
         sh.setFill(Color.TRANSPARENT);
         sh.setStroke(Color.BLACK);
+        sh.setStrokeWidth(3);
 
         return sh;
     }
@@ -107,14 +114,25 @@ public class GatesShapes {
         
         sh.setFill(Color.TRANSPARENT);
         sh.setStroke(Color.BLACK);
+        sh.setStrokeWidth(3);
 
         return sh;
     }
 
     public static Shape variable(){
-        Circle circle = new Circle(Unity.width/2, Unity.height/2, Unity.x * 3);
-        // Circle circle = new Circle(Unity.x, Unity.y, Unity.y * 3);
-        return circle;
+        Polygon sh = new Polygon();
+        sh.getPoints().addAll(new Double[]{
+            0.0, 0.0,
+            2*(double)Unity.x, 0.0,
+            3*(double)Unity.x, (double)Unity.y,
+            2*(double)Unity.x, 2*(double)Unity.y,
+            0.0, 2*(double)Unity.y
+        });
+        sh.setFill(Color.TRANSPARENT);
+        sh.setStroke(Color.BLACK);
+        sh.setStrokeWidth(3);
+        Text txt = new Text("0");
+        return sh;
     }
 
     public static void rotate(Shape item){

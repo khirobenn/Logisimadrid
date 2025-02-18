@@ -25,8 +25,6 @@ public class App extends Application{
     private final int x = Unity.x;
     private final int y = Unity.y;
     private Shape selectedItem;
-    private Set<Gate> gates;
-    private Set<Gate> variables;
     private final Rectangle background = new Rectangle(-1, -1, width+1, height+1);
 
     public static void main(String[] args) throws Exception {
@@ -35,10 +33,8 @@ public class App extends Application{
     
     @Override
     public void init() throws Exception{
-        gates = new HashSet<Gate>();
-        variables = new HashSet<Gate>();
-        background.setFill(Color.PURPLE);
-        background.setOpacity(0.2);
+        background.setFill(Color.WHITE);
+        // background.setOpacity(1);
         background.setOnMouseClicked(e -> selectedItem = null);
 
         super.init();
@@ -54,39 +50,38 @@ public class App extends Application{
         Gate or2 = new Or(2, fils, layout, Unity.width - 600, 400);
         Gate or3 = new Or(2, fils, layout, Unity.width - 200, 200);
         Gate and = new And(2, fils, layout, Unity.width - 400, 200);
-        Gate variable = new Variable(fils, layout, -200, -100);
-        Button btn = new Button("Resultat");
-        gates.add(or);
-        gates.add(or3);
-        gates.add(or2);
-        gates.add(and);
-        variables.add(variable);
-        Gate variable2 = new Variable(fils, layout, -200, 200);
-        variables.add(variable2);
-        btn.setOnMouseClicked(e -> setResult(gates));
-        layout.getChildren().add(btn);
+        Gate not = new Not(fils, layout, 0, 0);
+        Gate variable = new Variable(fils, layout, 0, 100);
+        fils.addGate(or);
+        fils.addGate(not);
+        fils.addGate(or3);
+        fils.addGate(or2);
+        fils.addGate(and);
+        fils.addVariable(variable);
+        Gate variable2 = new Variable(fils, layout, 0, 200);
+        fils.addVariable(variable2);
         scene = new Scene(layout, width, height);
 
         window.setScene(scene);
         window.show();
     }
 
-    private void setResult(Set<Gate> gates){
-        for(Gate varia : variables){
-            varia.setOutput(varia.getOutput());
-        }
-        for(Gate gate : gates){
-            gate.getOutput();
-        }
+    // private void setResult(Set<Gate> gates){
+    //     for(Gate varia : variables){
+    //         varia.setOutput(varia.getOutput());
+    //     }
+    //     for(Gate gate : gates){
+    //         gate.getOutput();
+    //     }
         
-        reinitialiseOI(gates);
-    }
+    //     reinitialiseOI(gates);
+    // }
 
-    private void reinitialiseOI(Set<Gate> gates){
-        for(Gate gate : gates){
-            gate.reinitialiseOutput();
-        }
-    }
+    // private void reinitialiseOI(Set<Gate> gates){
+    //     for(Gate gate : gates){
+    //         gate.reinitialiseOutput();
+    //     }
+    // }
 
     // private void addShape(Shape item){
     //     item.setOnMouseClicked(e -> selectedItem = item);

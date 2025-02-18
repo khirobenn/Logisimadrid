@@ -9,14 +9,15 @@ public class Variable extends Gate {
         super("VARIABLE", fils, layout);
         setIHaveOutput(true);
         Shape sh = GatesShapes.variable();
-        sh.setOnMouseClicked(e -> setOutput(!getOutput()));
+        sh.setOnMouseClicked(e -> fils.eval(this));
         setShape(sh);
         addShapeToGroup();
         sh.setLayoutX(x);
         sh.setLayoutY(y);
         addPoints();
-        
         setOutput(value);
+        setText("0");
+        getText().setOnMouseClicked(e -> fils.eval(this));
     }
 
     public Variable(Fils fils, Group layout, double x, double y){

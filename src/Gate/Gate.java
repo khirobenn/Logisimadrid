@@ -5,6 +5,8 @@ import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 public abstract class Gate {
     private String name;
@@ -12,6 +14,7 @@ public abstract class Gate {
     private OIput output;
     private boolean iHaveOutput;
     private Shape shape;
+    private Text text;
     Fils fils;
     Group layout;
 
@@ -20,6 +23,10 @@ public abstract class Gate {
         this.name = name;
         this.iHaveOutput = false;
         this.fils = fils;
+        if(name == "Variable"){
+            text = new Text("0");
+        }
+        else text = null;
     }
 
     public Gate(String name, int nb, Fils fils, Group layout){
@@ -29,6 +36,20 @@ public abstract class Gate {
         this.inputs = new OIput[nb];
         this.fils = fils;
     }
+
+    public void setText(String text){
+        if(this.text == null){
+            this.text = new Text(text);
+            this.text.setFont(new Font(20));
+            this.text.setLayoutX(shape.getLayoutBounds().getMaxX() / 2 + shape.getLayoutX());
+            this.text.setLayoutY(shape.getLayoutBounds().getMaxY() / 2 + shape.getLayoutY());
+            layout.getChildren().add(this.text);
+            System.out.println("Text added");
+        }
+        else this.text.setText(text);
+    }
+
+    public Text getText(){return text;}
 
     public String getName(){
         return name;
@@ -41,10 +62,22 @@ public abstract class Gate {
     public void setOutput(boolean value){
         // if(iHaveOutput) return;
         if(value == true){
-            changeOutputColor(Color.GREENYELLOW);
+            changeOutputColor(Unity.ON);
+            if(text != null){
+                text.setText("1");
+                text.setFill(Unity.ON);
+                text.setStroke(Unity.ON);
+                text.setStrokeWidth(2);
+            }
         }
         else{
-            changeOutputColor(Color.RED);
+            changeOutputColor(Unity.OFF);
+            if(text != null){
+                text.setText("0");
+                text.setFill(Unity.OFF);
+                text.setStroke(Unity.OFF);
+                text.setStrokeWidth(2);
+            }
         }
         output.setOutput(value);
     }
@@ -60,12 +93,13 @@ public abstract class Gate {
         iHaveOutput = value;
     }
 
-    private void check(){
+    private boolean checkIfIsConnected(){
         for(int i=0; i < inputs.length; i++){
-            if(inputs[i] == null){
-                // TO DO
+            if(inputs[i].getConnectedNb() != 0){
+                return true;
             }
         }
+        return false;
     }
 
     public boolean getOutput(){
@@ -113,11 +147,19 @@ public abstract class Gate {
 
         // On vérifie que l'objet ne dépasse pas la fenetre
         // On note que setLayout, définit les coordonnées par rapport au parent
-        if(mouseCoord.getX() >= 0 && mouseCoord.getX() + shape.boundsInParentProperty().getValue().getWidth() <= Unity.width)
+        if(mouseCoord.getX() >= 0 && mouseCoord.getX() + shape.boundsInParentProperty().getValue().getWidth() <= Unity.width){
             shape.setLayoutX(mouseCoord.getX());
-
-        if(mouseCoord.getY() >= 0 && mouseCoord.getY() + shape.boundsInParentProperty().getValue().getHeight() <= Unity.height)
+            if(text != null){
+                text.setLayoutX(shape.getLayoutBounds().getMaxX() / 2 + shape.getLayoutX());
+            }
+        }
+        
+        if(mouseCoord.getY() >= 0 && mouseCoord.getY() + shape.boundsInParentProperty().getValue().getHeight() <= Unity.height){
             shape.setLayoutY(mouseCoord.getY());
+            if(text != null){
+                text.setLayoutY(shape.getLayoutBounds().getMaxY() / 2 + shape.getLayoutY());
+            }
+        }
         
         updatePoints();
     }
@@ -134,7 +176,7 @@ public abstract class Gate {
     }
 
     public void reinitialiseOutput(){
-        if(name != "Variable"){
+        if(!name.equals("VARIABLE")){
             iHaveOutput = false;
             output.reinitialiseOutput();
             for(OIput oi : inputs){

@@ -1,5 +1,7 @@
 package Gate;
 
+import javafx.scene.paint.Color;
+
 public class Unity {
     public static final int x = 20;
     public static final int y = 20;
@@ -10,4 +12,6 @@ public class Unity {
         int x = Unity.x;
         return (int) (Math.floor(xPoint) - Math.floor(xPoint)%x);
     }
+    public static Color ON = Color.rgb(122, 240, 5);
+    public static Color OFF = Color.rgb(0, 153, 0);
 }

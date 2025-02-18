@@ -138,6 +138,10 @@ public class OIput {
         recurseSetOutput(new LinkedList<OIput>(), this);
     }
 
+    public void reinitialiseOutput(){
+        isOutPutSet = false;
+    }
+
     public void changePlaceForPoints(double x, double y){
         circle.setCenterX(x);
         circle2.setCenterX(x);

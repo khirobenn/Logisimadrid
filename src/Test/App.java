@@ -78,6 +78,14 @@ public class App extends Application{
         for(Gate gate : gates){
             gate.getOutput();
         }
+        
+        reinitialiseOI(gates);
+    }
+
+    private void reinitialiseOI(Set<Gate> gates){
+        for(Gate gate : gates){
+            gate.reinitialiseOutput();
+        }
     }
 
     // private void addShape(Shape item){

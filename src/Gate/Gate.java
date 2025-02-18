@@ -132,4 +132,14 @@ public abstract class Gate {
             }
         }
     }
+
+    public void reinitialiseOutput(){
+        if(name != "Variable"){
+            iHaveOutput = false;
+            output.reinitialiseOutput();
+            for(OIput oi : inputs){
+                oi.reinitialiseOutput();
+            }
+        }
+    }
 }

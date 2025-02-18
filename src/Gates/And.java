@@ -3,9 +3,7 @@ import Gate.Fils;
 import Gate.Gate;
 import Gate.GatesShapes;
 import Gate.OIput;
-import javafx.scene.Group;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Shape;
 public class And extends Gate {
     /**

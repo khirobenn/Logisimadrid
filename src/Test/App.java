@@ -1,22 +1,22 @@
 package Test;
 
 import Gates.*;
+
+import java.util.Arrays;
+import java.util.List;
+
 import Gate.Fils;
 import Gate.Unity;
 
 import Gate.Gate;
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.layout.Background;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -26,22 +26,25 @@ public class App extends Application{
     Scene scene;
     private double widthOfButton = Unity.x*5;
     // private final int height = Unity.height;
-    private final int height = Unity.height;
+    private final int height = 1080;
     // private final int width = Unity.width;
-    private final int width = Unity.width;
+    private final int width = 1980;
     private final int x = Unity.x;
     private final int y = Unity.y;
     private Shape selectedItem;
     private final Rectangle background = new Rectangle(-1, -1, width+1, height+1);
-    private Button[] buttons = { 
-        new Button("AND"),
-        new Button("OR"),
-        new Button("XOR"),
-        new Button("NAND"),
-        new Button("NOR"),
-        new Button("XNOR"),
-        new Button("NOT")
-    };
+
+    private int nbOfButtonSelected = -1;
+    private List <Button> buttons = Arrays.asList(new Button[]{ 
+        createButton("AND"),
+        createButton("OR"),
+        createButton("XOR"),
+        createButton("NAND"),
+        createButton("NOR"),
+        createButton("XNOR"),
+        createButton("NOT"),
+        createButton("VARIABLE"),
+    });
 
     public static void main(String[] args) throws Exception {
         launch(args);
@@ -50,8 +53,6 @@ public class App extends Application{
     @Override
     public void init() throws Exception{
         background.setFill(Color.BLACK);
-        // background.setOnMouseClicked(e -> selectedItem = null);
-
         super.init();
     }
 
@@ -59,33 +60,106 @@ public class App extends Application{
     public void start(Stage window) throws Exception {
         Pane sp = new Pane();
         grid(sp);
-        sp.setMinSize(width, height);
-    
+        sp.setMinSize(Unity.width - widthOfButton, Unity.height);
+        sp.setMaxSize(width - widthOfButton, height);
         Fils fils = new Fils(sp);
+        
+        sp.setOnMouseClicked(e -> addItem(e, fils, sp));
 
         VBox hb = new VBox();
+        hb.setStyle("-fx-background-color: black");
         hb.setPrefWidth(widthOfButton);
-        
+        int i;
         for(Button btn : buttons){
+            btn.setOnMouseClicked(e -> setNbOfGateSelected(btn));
             btn.setPrefWidth(widthOfButton);
             hb.getChildren().add(btn);
         }
 
-
-
-        
         BorderPane border = new BorderPane();
         border.setLeft(hb);
         border.setCenter(sp);
-        
-        Gate variable2 = new Variable(fils, sp, 0, 200);
-        fils.addVariable(variable2);
 
-
-        scene = new Scene(border, width, height);
+        scene = new Scene(border, Unity.width, Unity.height);
 
         window.setScene(scene);
         window.show();
+    }
+
+    private void addItem(MouseEvent e, Fils fils, Pane pane){
+        double x = Unity.tranformDoubleToInt(e.getX());
+        double y = Unity.tranformDoubleToInt(e.getY());
+        Gate gate;
+        switch (nbOfButtonSelected) {
+            case 0:
+                gate = new And(2, fils, pane, x, y);
+                fils.addGate(gate);
+            break;
+    
+            case 1:
+                gate = new Or(2, fils, pane, x, y);
+                fils.addGate(gate);
+            break;
+            case 2:
+                gate = new Xor(2, fils, pane, x, y);
+                fils.addGate(gate);
+                
+            break;
+            
+            case 3:
+                gate = new Nand(2, fils, pane, x, y);
+                fils.addGate(gate);
+            break;
+            
+            case 4:
+                gate = new Nor(2, fils, pane, x, y);
+                fils.addGate(gate);
+            break;
+            
+            case 5:
+                gate = new Xnor(2, fils, pane, x, y);
+                fils.addGate(gate);
+            break;
+            
+            case 6:
+                gate = new Not(fils, pane, x, y);
+                fils.addGate(gate);
+            break;
+
+            case 7:
+                gate = new Variable(fils, pane, x, y);
+                fils.addVariable(gate);
+            default:
+                break;
+        }
+
+        if(nbOfButtonSelected >= 0){
+            buttons.get(nbOfButtonSelected).setStyle("-fx-background-color : black; -fx-text-fill: white");
+        }
+        nbOfButtonSelected = -1;
+    }
+
+    private void setNbOfGateSelected(Button i){
+        int tmp = buttons.indexOf(i);
+        if(tmp == nbOfButtonSelected){
+            nbOfButtonSelected = -1;
+            i.setStyle("-fx-background-color : black; -fx-text-fill: white");
+
+        }
+        else{
+            if(nbOfButtonSelected >= 0){
+                buttons.get(nbOfButtonSelected).setStyle("-fx-background-color : black; -fx-text-fill: white");
+            }
+            nbOfButtonSelected = tmp;
+            i.setStyle("-fx-background-color : white; -fx-text-fill: black");
+        }
+        System.out.println(nbOfButtonSelected);
+    }
+
+    private Button createButton(String str){
+        Button btn = new Button(str);
+        btn.setStyle("-fx-background-color : black; -fx-text-fill: white");
+        return btn;
     }
 
     private void grid(Pane layout){

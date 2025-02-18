@@ -6,7 +6,6 @@ import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeType;
-import javafx.scene.text.Text;
 
 public class GatesShapes {
     public static final int x = Unity.x;
@@ -131,7 +130,6 @@ public class GatesShapes {
         sh.setFill(Color.TRANSPARENT);
         sh.setStroke(Color.BLACK);
         sh.setStrokeWidth(3);
-        Text txt = new Text("0");
         return sh;
     }
 

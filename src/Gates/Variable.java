@@ -2,9 +2,7 @@ package Gates;
 import Gate.Fils;
 import Gate.Gate;
 import Gate.GatesShapes;
-import javafx.scene.Group;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Shape;
 public class Variable extends Gate {
     public Variable(boolean value, Fils fils, Pane layout, double x, double y){

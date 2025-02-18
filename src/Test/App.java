@@ -1,20 +1,18 @@
 package Test;
 
 import Gates.*;
-import Gate.Input;
+import Gate.Fils;
+import Gate.Unity;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
-import Gate.GatesShapes;
+import Gate.Gate;
 import javafx.application.Application;
-import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -22,12 +20,13 @@ import javafx.stage.Stage;
 
 public class App extends Application{
     Scene scene;
-    private final int height = 200;
-    private final int width = 400;
-    private final int x = 10;
-    private final int y = 10;
+    private final int height = Unity.height;
+    private final int width = Unity.width;
+    private final int x = Unity.x;
+    private final int y = Unity.y;
     private Shape selectedItem;
-    private ArrayList<Shape> shapes;
+    private Set<Gate> gates;
+    private Set<Gate> variables;
     private final Rectangle background = new Rectangle(-1, -1, width+1, height+1);
 
     public static void main(String[] args) throws Exception {
@@ -36,8 +35,8 @@ public class App extends Application{
     
     @Override
     public void init() throws Exception{
-        shapes = new ArrayList<Shape>();
-
+        gates = new HashSet<Gate>();
+        variables = new HashSet<Gate>();
         background.setFill(Color.PURPLE);
         background.setOpacity(0.2);
         background.setOnMouseClicked(e -> selectedItem = null);
@@ -48,36 +47,55 @@ public class App extends Application{
     @Override
     public void start(Stage window) throws Exception {
         Group layout = new Group();
+        Fils fils = new Fils(layout);
         layout.getChildren().add(background);
         grid(layout);
-        Input in = new Input();
-        in.addPoint(layout);
+        Gate or = new Or(2, fils, layout, Unity.width - 600, 0);
+        Gate or2 = new Or(2, fils, layout, Unity.width - 600, 400);
+        Gate or3 = new Or(2, fils, layout, Unity.width - 200, 200);
+        Gate and = new And(2, fils, layout, Unity.width - 400, 200);
+        Gate variable = new Variable(fils, layout, -200, -100);
+        Button btn = new Button("Resultat");
+        gates.add(or);
+        gates.add(or3);
+        gates.add(or2);
+        gates.add(and);
+        variables.add(variable);
+        Gate variable2 = new Variable(fils, layout, -200, 200);
+        variables.add(variable2);
+        btn.setOnMouseClicked(e -> setResult(gates));
+        layout.getChildren().add(btn);
         scene = new Scene(layout, width, height);
 
         window.setScene(scene);
         window.show();
     }
 
-    
-    private void addShape(Shape item){
-        item.setOnMouseClicked(e -> selectedItem = item);
-        shapes.add(item);
+    private void setResult(Set<Gate> gates){
+        for(Gate varia : variables){
+            varia.setOutput(varia.getOutput());
+        }
+        for(Gate gate : gates){
+            gate.getOutput();
+        }
     }
+
+    // private void addShape(Shape item){
+    //     item.setOnMouseClicked(e -> selectedItem = item);
+    //     shapes.add(item);
+    // }
 
     private void grid(Group layout){
         for(int i = 0; i*x <= width; i++ ){
             for(int j = 0; j*y <= height; j++ ){
                 Line line = new Line(i*x, 0, i*x, height);
                 line.setFill(Color.GRAY);
-    
                 Line line2 = new Line(0, j*y, width, j*y);
                 line2.setFill(Color.GRAY);
                 Shape dot = Line.intersect(line, line2);
                 dot.setFill(Color.PURPLE);
                 layout.getChildren().add(dot);
-                
             }
         }
-
     }
 }

@@ -1,8 +1,8 @@
 package Gate;
 
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
@@ -16,9 +16,9 @@ public abstract class Gate {
     private Shape shape;
     private Text text;
     Fils fils;
-    Group layout;
+    Pane layout;
 
-    public Gate(String name, Fils fils, Group layout){
+    public Gate(String name, Fils fils, Pane layout){
         this.layout = layout;
         this.name = name;
         this.iHaveOutput = false;
@@ -29,7 +29,7 @@ public abstract class Gate {
         else text = null;
     }
 
-    public Gate(String name, int nb, Fils fils, Group layout){
+    public Gate(String name, int nb, Fils fils, Pane layout){
         this.layout = layout;
         this.name = name;
         this.iHaveOutput = false;
@@ -106,17 +106,20 @@ public abstract class Gate {
         if(iHaveOutput)
             return output.getOutput();
 
-        changeOutput();
-        return getOutput();
+        if(changeOutput()) return getOutput();
+        return output.getOutput();
     }
 
     public void setInput(int n, OIput gate){
         inputs[n] = gate;
     }
 
-    public void changeOutput(){
-        // check();
-        evaluateOutput();
+    public boolean changeOutput(){
+        if(checkIfIsConnected()){
+            evaluateOutput();
+            return true;
+        }
+        return false;
     }
 
     public abstract void evaluateOutput();

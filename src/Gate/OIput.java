@@ -4,8 +4,8 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -143,7 +143,7 @@ public class OIput {
     private void reinitialiseLine(Line l){
         int r = -10;
         setLineCoord(l1, r, r, r, r);
-        fils.getGroup().getChildren().remove(l);
+        fils.getPane().getChildren().remove(l);
     }
     private void reinitialiseLines(){
         reinitialiseLine(l1);
@@ -298,8 +298,8 @@ public class OIput {
 
 
     private void dragOIput(MouseEvent e, Circle circle, Circle circle2){
-        if(!(fils.getGroup().getChildren().contains(l1) && fils.getGroup().getChildren().contains(l2))){
-            fils.getGroup().getChildren().addAll(l1, l2);
+        if(!(fils.getPane().getChildren().contains(l1) && fils.getPane().getChildren().contains(l2))){
+            fils.getPane().getChildren().addAll(l1, l2);
         }
         double xPoint = e.getX();
         double yPoint = e.getY();
@@ -331,7 +331,7 @@ public class OIput {
         circle2.setCenterY(yPoint);
     }
 
-    public void addPoint(Group layout){
+    public void addPoint(Pane layout){
         layout.getChildren().addAll(circle, circle2);
     }
 
@@ -401,13 +401,6 @@ public class OIput {
             addFilsInLine(l.getStartX(), l.getEndX(), l.getEndY(), 1);
         }
     }
-
-    // private boolean isPointFixe(){
-    //     Point2D point2 = new Point2D(circle2.getCenterX(), circle2.getCenterY());
-    //     Point2D point = new Point2D(circle.getCenterX(), circle.getCenterY());
-        
-    //     return point.getX() == point2.getX() && point.getY() == point2.getY();
-    // }
 
     private void searchConnected(){
         Point2D point = new Point2D(circle.getCenterX(), circle.getCenterY());

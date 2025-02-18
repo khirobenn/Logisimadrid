@@ -6,15 +6,16 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import javafx.scene.Group;
+import javafx.scene.layout.Pane;
 
 public class Fils {
     
-    private Group group;
+    private Pane group;
     private Deque <OIput> fils;
     private Set<Gate> variables;
     private Set<Gate> gates;
 
-    public Fils(Group group){
+    public Fils(Pane group){
         this.group = group;
         fils = new LinkedList<OIput>();
         variables = new HashSet<Gate>();
@@ -30,7 +31,7 @@ public class Fils {
         return fils.pop();
     }
 
-    public Group getGroup(){ return group; } 
+    public Pane getPane(){ return group; } 
     public Deque <OIput> getFilsList(){ return fils; }
     public void setOutputToFils(){
         for(OIput oi : fils){
@@ -47,7 +48,9 @@ public class Fils {
     }
 
     public void eval(Gate variableClicked){
-        variableClicked.setOutput(!variableClicked.getOutput());
+        if(variableClicked != null){
+            variableClicked.setOutput(!variableClicked.getOutput());
+        }
         for(Gate varia : variables){
             varia.setOutput(varia.getOutput());
         }

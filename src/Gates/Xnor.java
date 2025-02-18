@@ -4,13 +4,15 @@ import Gate.Gate;
 import Gate.GatesShapes;
 import Gate.OIput;
 import javafx.scene.Group;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Shape;
 public class Xnor extends Gate {
     /**
      * @param nb
      * @requires nb >= 2
      */
-    public Xnor(int nb,  Fils fils, Group layout, double x, double y){
+    public Xnor(int nb,  Fils fils, Pane layout, double x, double y){
         super("XNOR", nb, fils, layout);
         Shape sh = GatesShapes.xnorShape();
         setShape(sh);

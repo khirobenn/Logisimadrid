@@ -3,9 +3,11 @@ import Gate.Fils;
 import Gate.Gate;
 import Gate.GatesShapes;
 import javafx.scene.Group;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Shape;
 public class Variable extends Gate {
-    public Variable(boolean value, Fils fils, Group layout, double x, double y){
+    public Variable(boolean value, Fils fils, Pane layout, double x, double y){
         super("VARIABLE", fils, layout);
         setIHaveOutput(true);
         Shape sh = GatesShapes.variable();
@@ -20,7 +22,7 @@ public class Variable extends Gate {
         getText().setOnMouseClicked(e -> fils.eval(this));
     }
 
-    public Variable(Fils fils, Group layout, double x, double y){
+    public Variable(Fils fils, Pane layout, double x, double y){
         this(false, fils, layout, x, y);
     }
 

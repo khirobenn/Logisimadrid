@@ -92,7 +92,7 @@ public class OIput {
                         elem.output = QuadBool.ERROR;
                         changeColor(Unity.ERR);
 
-                    }else  elem.output = output;
+                    }else  elem.output = output;    
                 }
                 else elem.output = output;
           

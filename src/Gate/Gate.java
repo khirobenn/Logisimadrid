@@ -103,6 +103,7 @@ public abstract class Gate {
 
     public void setIHaveOutput(boolean value){
         iHaveOutput = value;
+        output.setIsOutputSet(value);
     }
 
     private boolean checkIfIsConnected(){

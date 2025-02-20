@@ -57,12 +57,20 @@ public class Fils {
             gate.getOutput();
         }
         
-        reinitialiseOI(gates);
+        reinitialiseOI();
     }
 
-    private void reinitialiseOI(Set<Gate> gates){
+    private void reinitialiseOI(){
+        for(OIput oi : fils){
+            oi.reinitialiseOutput();
+        }
+
         for(Gate gate : gates){
-            gate.reinitialiseOutput();
+            gate.setIHaveOutput(false);
+        }
+
+        for(Gate var : variables){
+            var.setIHaveOutput(true);
         }
     }
     

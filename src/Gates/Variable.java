@@ -8,17 +8,17 @@ import javafx.scene.shape.Shape;
 public class Variable extends Gate {
     public Variable(QuadBool value, Fils fils, Pane layout, double x, double y){
         super("VARIABLE", fils, layout);
-        setIHaveOutput(true);
         Shape sh = GatesShapes.variable();
         sh.setOnMouseClicked(e -> fils.eval(this));
         setShape(sh);
         addShapeToGroup();
         sh.setLayoutX(x);
         sh.setLayoutY(y);
-        addPoints();
-        setOutput(value);
         setText("0");
         getText().setOnMouseClicked(e -> fils.eval(this));
+        addPoints();
+        setIHaveOutput(true);
+        setOutput(value);
     }
 
     public Variable(Fils fils, Pane layout, double x, double y){

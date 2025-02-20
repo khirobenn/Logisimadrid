@@ -85,9 +85,18 @@ public class OIput {
         for(OIput elem : oi.connected){
             if(!l.contains(elem)){
                 l.add(oi);
-                elem.output = output;
-                if(null==output)elem.changeColor(Unity.NOTH);
-                else switch (output) {
+                if(elem.isOutPutSet){
+                    if((elem.output == QuadBool.FALSE && output == QuadBool.TRUE) ||
+                    (elem.output == QuadBool.TRUE && output == QuadBool.FALSE)){
+                        output = QuadBool.ERROR;
+                        elem.output = QuadBool.ERROR;
+                        changeColor(Unity.ERR);
+
+                    }else  elem.output = output;
+                }
+                else elem.output = output;
+          
+                switch (output) {
                     case TRUE -> elem.changeColor(Unity.ON);
                     case FALSE -> elem.changeColor(Unity.OFF);
                     case ERROR -> elem.changeColor(Unity.ERR);
@@ -107,8 +116,7 @@ public class OIput {
                 recurseGetOutput(l, elem);
                 if(elem.gate != null) output = elem.gate.getOutput();
                 else output = elem.output;
-                if(null==output)elem.changeColor(Unity.NOTH);
-                else switch (output) {
+                switch (output) {
                     case TRUE -> elem.changeColor(Unity.ON);
                     case FALSE -> elem.changeColor(Unity.OFF);
                     case ERROR -> elem.changeColor(Unity.ERR);
@@ -134,6 +142,10 @@ public class OIput {
 
     public void reinitialiseOutput(){
         isOutPutSet = false;
+    }
+
+    public void setIsOutputSet(boolean value){
+        isOutPutSet = value;
     }
 
     public void changePlaceForPoints(double x, double y){
@@ -240,6 +252,7 @@ public class OIput {
         }
 
         searchConnected();
+        fils.eval(null);
     }
 
     private void reinitialiseParemeters(){

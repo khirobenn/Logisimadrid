@@ -1,5 +1,6 @@
 package Gate;
 
+import Gates.NotQuad;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -33,7 +34,7 @@ public class Fils {
     public Deque <OIput> getFilsList(){ return fils; }
     public void setOutputToFils(){
         for(OIput oi : fils){
-            oi.setOutput(false);
+            oi.setOutput(QuadBool.FALSE);
         }
     }
 
@@ -47,7 +48,7 @@ public class Fils {
 
     public void eval(Gate variableClicked){
         if(variableClicked != null){
-            variableClicked.setOutput(!variableClicked.getOutput());
+            variableClicked.setOutput(NotQuad.Not(variableClicked.getOutput()));
         }
         for(Gate varia : variables){
             varia.setOutput(varia.getOutput());

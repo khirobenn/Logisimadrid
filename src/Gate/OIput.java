@@ -17,7 +17,7 @@ public class OIput {
     private OIput parent;
 
     private boolean isOutPutSet;
-    private boolean output;
+    private QuadBool output;
     // used for connected fils
     private Deque <OIput> connected;
 
@@ -38,7 +38,7 @@ public class OIput {
             output = parent.output;
         }
         else{
-            output = false;
+            output = QuadBool.FALSE;
         }
         isOutPutSet = false;
         int pos = 20;
@@ -86,12 +86,14 @@ public class OIput {
             if(!l.contains(elem)){
                 l.add(oi);
                 elem.output = output;
-                if(output){
-                    elem.changeColor(Unity.ON);
+                if(null==output)elem.changeColor(Unity.NOTH);
+                else switch (output) {
+                    case TRUE -> elem.changeColor(Unity.ON);
+                    case FALSE -> elem.changeColor(Unity.OFF);
+                    case ERROR -> elem.changeColor(Unity.ERR);
+                    default -> elem.changeColor(Unity.NOTH);
                 }
-                else{
-                    elem.changeColor(Unity.OFF);
-                }
+                
                 elem.isOutPutSet = true;
                 recurseSetOutput(l, elem);
             }
@@ -105,25 +107,26 @@ public class OIput {
                 recurseGetOutput(l, elem);
                 if(elem.gate != null) output = elem.gate.getOutput();
                 else output = elem.output;
-                if(output){
-                    changeColor(Unity.ON);
-                }
-                else{
-                    changeColor(Unity.OFF);
+                if(null==output)elem.changeColor(Unity.NOTH);
+                else switch (output) {
+                    case TRUE -> elem.changeColor(Unity.ON);
+                    case FALSE -> elem.changeColor(Unity.OFF);
+                    case ERROR -> elem.changeColor(Unity.ERR);
+                    default -> elem.changeColor(Unity.NOTH);
                 }
                 isOutPutSet = true;
             }
         }
     }
     
-    public boolean getOutput(){
+    public QuadBool getOutput(){
         if(!isOutPutSet){
             recurseGetOutput(new LinkedList<OIput>() , this);
         }
         return output;
     }
 
-    public void setOutput(boolean value){
+    public void setOutput(QuadBool value){
         output = value;
         isOutPutSet = true;
         recurseSetOutput(new LinkedList<OIput>(), this);
@@ -371,7 +374,7 @@ public class OIput {
             
             if(parent != null && (parent.l1.contains(xCord, yCord) || parent.l2.contains(xCord, yCord))
             && (parent.l2.getEndX() != xCord || parent.l2.getEndY() != yCord)){
-                element.circle2.setFill(Color.BLUE);
+                element.circle2.setFill(circle2.getFill());
             }
             else{
                 element.circle2.setFill(Color.TRANSPARENT);

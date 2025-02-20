@@ -1,5 +1,6 @@
 package Gate;
 
+import Gate.Unity;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -7,6 +8,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javax.lang.model.util.ElementScanner14;
 
 public abstract class Gate {
     private String name;
@@ -49,7 +51,10 @@ public abstract class Gate {
         else this.text.setText(text);
     }
 
-    public Text getText(){return text;}
+    public Text getText(){
+	    return text;
+    }
+
 
     public String getName(){
         return name;
@@ -59,9 +64,9 @@ public abstract class Gate {
         return inputs;
     }
 
-    public void setOutput(boolean value){
-        // if(iHaveOutput) return;
-        if(value == true){
+
+    public void setOutput(QuadBool value){
+        if(value == QuadBool.TRUE){
             changeOutputColor(Unity.ON);
             if(text != null){
                 text.setText("1");
@@ -70,7 +75,7 @@ public abstract class Gate {
                 text.setStrokeWidth(2);
             }
         }
-        else{
+        else if(value== QuadBool.FALSE){
             changeOutputColor(Unity.OFF);
             if(text != null){
                 text.setText("0");
@@ -79,8 +84,15 @@ public abstract class Gate {
                 text.setStrokeWidth(2);
             }
         }
+
+        else if(value==QuadBool.ERROR){
+            changeOutputColor(Unity.ERR);
+        }
+        else changeOutputColor(Unity.NOTH);
+
+
         output.setOutput(value);
-    }
+}
     public void setShape(Shape shape){
         this.shape = shape;
     }
@@ -102,7 +114,7 @@ public abstract class Gate {
         return false;
     }
 
-    public boolean getOutput(){
+    public QuadBool getOutput(){
         if(iHaveOutput)
             return output.getOutput();
 

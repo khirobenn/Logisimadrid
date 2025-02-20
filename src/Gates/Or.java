@@ -3,6 +3,7 @@ import Gate.Fils;
 import Gate.Gate;
 import Gate.GatesShapes;
 import Gate.OIput;
+import Gate.QuadBool;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 public class Or extends Gate {
@@ -23,9 +24,9 @@ public class Or extends Gate {
     @Override
     public void evaluateOutput(){
         OIput[] inputs = getInputs();
-        boolean result = inputs[0].getOutput();
+        QuadBool result = inputs[0].getOutput();
         for(int i = 1; i < inputs.length; i++){
-            result = result || inputs[i].getOutput();
+            result = OrQuad.Or(result,inputs[i].getOutput());
         }
         
         setOutput(result);

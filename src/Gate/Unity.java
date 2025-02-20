@@ -1,6 +1,7 @@
 package Gate;
 
-import javafx.scene.paint.Color;
+
+import javafx.scene.paint.Color;   
 
 public class Unity {
     public static final int x = 20;
@@ -14,4 +15,11 @@ public class Unity {
     }
     public static Color ON = Color.rgb(122, 240, 5);
     public static Color OFF = Color.rgb(0, 153, 0);
+    public static Color ERR = Color.RED;
+    public static Color NOTH = Color.BLUE;
+
+
+ 
+
+
 }

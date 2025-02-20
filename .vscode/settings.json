@@ -10,6 +10,14 @@
         "/home/khiro/Files/javafx-sdk-23.0.2/lib/javafx.media.jar",
         "/home/khiro/Files/javafx-sdk-23.0.2/lib/javafx.swing.jar",
         "/home/khiro/Files/javafx-sdk-23.0.2/lib/javafx.web.jar",
-        "/home/khiro/Files/javafx-sdk-23.0.2/lib/javafx-swt.jar"
+        "/home/khiro/Files/javafx-sdk-23.0.2/lib/javafx-swt.jar",
+        "/home/aramis/Downloads/javafx-sdk-23.0.2/lib/javafx.base.jar",
+        "/home/aramis/Downloads/javafx-sdk-23.0.2/lib/javafx.controls.jar",
+        "/home/aramis/Downloads/javafx-sdk-23.0.2/lib/javafx.fxml.jar",
+        "/home/aramis/Downloads/javafx-sdk-23.0.2/lib/javafx.graphics.jar",
+        "/home/aramis/Downloads/javafx-sdk-23.0.2/lib/javafx.media.jar",
+        "/home/aramis/Downloads/javafx-sdk-23.0.2/lib/javafx.swing.jar",
+        "/home/aramis/Downloads/javafx-sdk-23.0.2/lib/javafx.web.jar",
+        "/home/aramis/Downloads/javafx-sdk-23.0.2/lib/javafx-swt.jar"
     ]
 }

@@ -1,6 +1,7 @@
 package Gates;
 
 import Gate.Fils;
+import Gates.NotQuad;
 import Gate.Gate;
 import Gate.GatesShapes;
 import javafx.scene.layout.Pane;
@@ -19,7 +20,7 @@ public class Not extends Gate {
 
     @Override
     public void evaluateOutput(){
-        setOutput(!(getInputs()[0].getOutput()));
+        setOutput(NotQuad.Not(getInputs()[0].getOutput()));
         setIHaveOutput(true);
     }
 }

@@ -23,13 +23,13 @@ public class OIput {
     // used for connected fils
     private Set <OIput> connected;
 
-    private Line l1;
-    private Line l2;
+    public Line l1;
+    public Line l2;
 
     //used as the end point of OIput
-    private Circle circle;
+    public Circle circle;
     //used as the start point of OIput
-    private Circle circle2;
+    public Circle circle2;
 
     private boolean dx, dy;
 
@@ -214,6 +214,7 @@ public class OIput {
                 return;
             }
             else if(isL1InParent){
+                System.out.println("cas 1");
                 // Have to add this func
                 fixOnL1 = fixLineToAdd(l2, parent.l1);
                 fixOnL2 = fixLineToAdd(l2, parent.l2);
@@ -227,9 +228,12 @@ public class OIput {
                 }
             }
             else if(isL2InParent){
+                System.out.println("cas 2");
                 
             }
             else{
+                System.out.println("cas 3");
+
                 if(parent != null){
                     fixOnL1 = fixLineToAdd(l1, parent.l1);
                     fixOnL2 = fixLineToAdd(l1, parent.l2);
@@ -272,6 +276,8 @@ public class OIput {
 
         searchConnected();
         fils.eval(null);
+        circle.setFill(Color.MAGENTA);
+        System.out.println(connected.size());
     }
 
     private void reinitialiseParemeters(){
@@ -400,7 +406,6 @@ public class OIput {
             xCord = start;
             yCord = constantCoord;
         }
-        
         for(int i = 0; i <= distance; i += Unity.x) {
             OIput element = new OIput(xCord, yCord, fils, this, null);
             
@@ -410,6 +415,7 @@ public class OIput {
             }
             else{
                 element.circle2.setFill(Color.TRANSPARENT);
+                // element.circle.setFill(Color.MAGENTA);
             }
 
             if(n == 0){

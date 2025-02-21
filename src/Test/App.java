@@ -153,7 +153,6 @@ public class App extends Application{
             nbOfButtonSelected = tmp;
             i.setStyle("-fx-background-color : white; -fx-text-fill: black");
         }
-        System.out.println(nbOfButtonSelected);
     }
 
     private Button createButton(String str){

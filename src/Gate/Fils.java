@@ -81,7 +81,25 @@ public class Fils {
     }
 
     private void reinitialiseOI(){
+        int i = 0;
         for(OIput oi : fils){
+            i++;
+            // QuadBool value = oi.getOutputValue();
+            // switch(value){
+            //     case QuadBool.TRUE:
+            //     oi.changeColor(Unity.ON);
+            //     break;
+            //     case QuadBool.FALSE:
+            //     oi.changeColor(Unity.OFF);
+            //     break;
+            //     case QuadBool.ERROR:
+            //     oi.changeColor(Unity.ERR);
+            //     break;
+            //     case QuadBool.NOTHING:
+            //     oi.changeColor(Unity.NOTH);
+            //     break;
+            // }
+            if(oi.circle.getFill() == Unity.OFF || oi.l1.getStroke() == Unity.OFF) System.out.println("OKEEEY" + i);
             oi.reinitialiseOutput();
         }
 

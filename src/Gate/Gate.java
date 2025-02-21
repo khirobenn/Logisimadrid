@@ -14,7 +14,7 @@ public abstract class Gate {
     private String name;
     private OIput[] inputs;
     private OIput output;
-    private boolean iHaveOutput;
+    private boolean isOutPutSet;
     private Shape shape;
     private Text text;
     Fils fils;
@@ -23,8 +23,9 @@ public abstract class Gate {
     public Gate(String name, Fils fils, Pane layout){
         this.layout = layout;
         this.name = name;
-        this.iHaveOutput = false;
         this.fils = fils;
+        isOutPutSet = false;
+
         if(name == "Variable"){
             text = new Text("0");
         }
@@ -34,8 +35,8 @@ public abstract class Gate {
     public Gate(String name, int nb, Fils fils, Pane layout){
         this.layout = layout;
         this.name = name;
-        this.iHaveOutput = false;
         this.inputs = new OIput[nb];
+        isOutPutSet = false;
         this.fils = fils;
     }
 
@@ -46,7 +47,6 @@ public abstract class Gate {
             this.text.setLayoutX(shape.getLayoutBounds().getMaxX() / 2 + shape.getLayoutX());
             this.text.setLayoutY(shape.getLayoutBounds().getMaxY() / 2 + shape.getLayoutY());
             layout.getChildren().add(this.text);
-            System.out.println("Text added");
         }
         else this.text.setText(text);
     }
@@ -64,35 +64,46 @@ public abstract class Gate {
         return inputs;
     }
 
+    private void textChange(QuadBool value){
+        if(text != null){
+            if(value == QuadBool.TRUE){
+                text.setText("1");
+                text.setFill(Unity.ON);
+                text.setStroke(Unity.ON);
+            }
+            else if (value == QuadBool.FALSE){
+                text.setText("0");
+                text.setFill(Unity.OFF);
+                text.setStroke(Unity.OFF);
+            }
+            text.setStrokeWidth(2);
+            
+        }   
+    }
 
     public void setOutput(QuadBool value){
         if(value == QuadBool.TRUE){
             changeOutputColor(Unity.ON);
-            if(text != null){
-                text.setText("1");
-                text.setFill(Unity.ON);
-                text.setStroke(Unity.ON);
-                text.setStrokeWidth(2);
-            }
         }
         else if(value== QuadBool.FALSE){
             changeOutputColor(Unity.OFF);
-            if(text != null){
-                text.setText("0");
-                text.setFill(Unity.OFF);
-                text.setStroke(Unity.OFF);
-                text.setStrokeWidth(2);
-            }
         }
-
+        
         else if(value==QuadBool.ERROR){
             changeOutputColor(Unity.ERR);
         }
         else changeOutputColor(Unity.NOTH);
-
+        
+        textChange(value);
 
         output.setOutput(value);
-}
+        isOutPutSet = true;
+    }
+
+    public void setOutputValue(QuadBool value){
+        textChange(value);
+        output.setOutputValue(value);
+    }
     public void setShape(Shape shape){
         this.shape = shape;
     }
@@ -102,7 +113,7 @@ public abstract class Gate {
     }
 
     public void setIHaveOutput(boolean value){
-        iHaveOutput = value;
+        isOutPutSet = value;
         output.setIsOutputSet(value);
     }
 
@@ -115,10 +126,13 @@ public abstract class Gate {
         return false;
     }
 
-    public QuadBool getOutput(){
-        if(iHaveOutput)
-            return output.getOutput();
 
+    public QuadBool getOutputValue(){
+        return output.getOutputValue();
+    }
+    
+    public QuadBool getOutput(){
+        if(name == "VARIABLE" || isOutPutSet) return output.getOutput();
         if(changeOutput()) return getOutput();
         return output.getOutput();
     }
@@ -130,6 +144,7 @@ public abstract class Gate {
     public boolean changeOutput(){
         if(checkIfIsConnected()){
             evaluateOutput();
+            isOutPutSet = true;
             return true;
         }
         return false;
@@ -139,6 +154,7 @@ public abstract class Gate {
     public void addPoints(){
         int distance = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY());
         output = new OIput(shape.getLayoutBounds().getMaxX() + shape.getLayoutX(), shape.getLayoutY() + distance/2, fils, null, this);
+        if(name == "VARIABLE") output.setOIputAsVariable();
         if(inputs != null){
             distance /= inputs.length + 1;
             for(int i = 1; i < inputs.length+1; i++){
@@ -192,7 +208,6 @@ public abstract class Gate {
 
     public void reinitialiseOutput(){
         if(!name.equals("VARIABLE")){
-            iHaveOutput = false;
             output.reinitialiseOutput();
             for(OIput oi : inputs){
                 oi.reinitialiseOutput();

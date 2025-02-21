@@ -25,10 +25,13 @@ public class Or extends Gate {
     public void evaluateOutput(){
         OIput[] inputs = getInputs();
         QuadBool result = inputs[0].getOutput();
+        System.out.println(result);
         for(int i = 1; i < inputs.length; i++){
-            result = OrQuad.Or(result,inputs[i].getOutput());
+            QuadBool o = inputs[i].getOutput();
+            System.out.println(o);
+            result = OrQuad.Or(result, o);
         }
-        
+        System.out.println(result);
         setOutput(result);
         setIHaveOutput(true);
     }

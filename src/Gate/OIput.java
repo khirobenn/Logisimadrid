@@ -1,7 +1,9 @@
 package Gate;
 
 import java.util.Deque;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
@@ -19,7 +21,7 @@ public class OIput {
     private boolean isOutPutSet;
     private QuadBool output;
     // used for connected fils
-    private Deque <OIput> connected;
+    private Set <OIput> connected;
 
     private Line l1;
     private Line l2;
@@ -31,6 +33,8 @@ public class OIput {
 
     private boolean dx, dy;
 
+    private boolean isOutputOfVariable = false;
+
     public OIput(Fils fils, OIput parent, Gate gate){
         this.parent = parent;
         this.gate = gate;
@@ -38,12 +42,12 @@ public class OIput {
             output = parent.output;
         }
         else{
-            output = QuadBool.FALSE;
+            output = QuadBool.NOTHING;
         }
         isOutPutSet = false;
         int pos = 20;
         this.fils = fils;
-        connected = new LinkedList<OIput>();
+        connected = new HashSet<OIput>();
 
         dx = false;
         dy = false;
@@ -63,13 +67,21 @@ public class OIput {
         l2.setStrokeWidth(6);
 
         circle.setFill(Color.TRANSPARENT);
-        circle2.setFill(Unity.OFF);
+        circle2.setFill(Unity.NOTH);
         circle2.setOnMouseDragged(e -> dragOIput(e, circle2, circle));
         circle2.setOnMouseReleased(e -> onRelease());
         circle2.setOnMouseEntered(e -> addStroke(circle2));
         circle2.setOnMouseExited(e -> removeStroke(circle2));
 
         fils.addElement(this);
+    }
+
+    public void setOIputAsVariable(){
+        isOutputOfVariable = true;
+    }
+
+    public boolean getIsAVariable(){
+        return isOutputOfVariable;
     }
 
     public OIput(double x, double y, Fils fils, OIput parent, Gate gate){
@@ -85,22 +97,22 @@ public class OIput {
         for(OIput elem : oi.connected){
             if(!l.contains(elem)){
                 l.add(oi);
-                if(elem.isOutPutSet){
-                    if((elem.output == QuadBool.FALSE && output == QuadBool.TRUE) ||
-                    (elem.output == QuadBool.TRUE && output == QuadBool.FALSE)){
-                        output = QuadBool.ERROR;
-                        elem.output = QuadBool.ERROR;
-                        changeColor(Unity.ERR);
-
-                    }else  elem.output = output;    
+                if(elem.isOutPutSet == true && 
+                ((output == QuadBool.TRUE && elem.output == QuadBool.FALSE)
+                || output == QuadBool.FALSE && elem.output == QuadBool.TRUE)){
+                    elem.output = QuadBool.ERROR;
+                    output = QuadBool.ERROR;
+                    changeColor(Unity.ERR);
+                    elem.changeColor(Unity.ERR);
                 }
-                else elem.output = output;
-          
-                switch (output) {
-                    case TRUE -> elem.changeColor(Unity.ON);
-                    case FALSE -> elem.changeColor(Unity.OFF);
-                    case ERROR -> elem.changeColor(Unity.ERR);
-                    default -> elem.changeColor(Unity.NOTH);
+                else{
+                    elem.output = output;
+                    switch (output) {
+                        case TRUE -> elem.changeColor(Unity.ON);
+                        case FALSE -> elem.changeColor(Unity.OFF);
+                        case ERROR -> elem.changeColor(Unity.ERR);
+                        default -> elem.changeColor(Unity.NOTH);
+                    }
                 }
                 
                 elem.isOutPutSet = true;
@@ -134,10 +146,17 @@ public class OIput {
         return output;
     }
 
+    public QuadBool getOutputValue(){ return output; }
+
     public void setOutput(QuadBool value){
         output = value;
         isOutPutSet = true;
         recurseSetOutput(new LinkedList<OIput>(), this);
+    }
+
+    public void setOutputValue(QuadBool value){
+        output = value;
+        
     }
 
     public void reinitialiseOutput(){
@@ -399,8 +418,8 @@ public class OIput {
             else{
                 xCord += x;
             }
-            connected.push(element);
-            element.connected.push(this);
+            connected.add(element);
+            element.connected.add(this);
 
             start += x;
         }

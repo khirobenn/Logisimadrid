@@ -48,13 +48,33 @@ public class Fils {
 
     public void eval(Gate variableClicked){
         if(variableClicked != null){
-            variableClicked.setOutput(NotQuad.Not(variableClicked.getOutput()));
+            String o = variableClicked.getText().getText();
+            if(o.equals("1")){
+                variableClicked.setOutputValue(QuadBool.FALSE);
+            }
+            else{
+                variableClicked.setOutputValue(QuadBool.TRUE);
+            }
         }
+
         for(Gate varia : variables){
-            varia.setOutput(varia.getOutput());
+            String o = varia.getText().getText();
+            if(o.equals("0")){
+                varia.setOutputValue(QuadBool.FALSE);
+            }
+            else{
+                varia.setOutputValue(QuadBool.TRUE);
+            }
         }
+
+        for(Gate varia : variables){
+            QuadBool o = varia.getOutputValue();
+            varia.setOutput(o);
+        }
+
         for(Gate gate : gates){
-            gate.getOutput();
+            System.out.println("Porte : " + gate.getName() + "resultat = " + gate.getOutput());
+            System.out.println("");
         }
         
         reinitialiseOI();

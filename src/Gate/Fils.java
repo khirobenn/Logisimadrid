@@ -1,6 +1,5 @@
 package Gate;
 
-import Gates.NotQuad;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -10,28 +9,25 @@ import javafx.scene.layout.Pane;
 public class Fils {
     
     private Pane group;
-    private Deque <OIput> fils;
+    private Set<OIput> fils;
     private Set<Gate> variables;
     private Set<Gate> gates;
 
     public Fils(Pane group){
         this.group = group;
-        fils = new LinkedList<OIput>();
+        fils = new HashSet<OIput>();
         variables = new HashSet<Gate>();
         gates = new HashSet<Gate>();
     }
 
     public void addElement(OIput element){
         element.addPoint(group);
-        fils.push(element);
+        fils.add(element);
     }
 
-    public OIput removeElement(){
-        return fils.pop();
-    }
 
     public Pane getPane(){ return group; } 
-    public Deque <OIput> getFilsList(){ return fils; }
+    public Set <OIput> getFilsList(){ return fils; }
     public void setOutputToFils(){
         for(OIput oi : fils){
             oi.setOutput(QuadBool.FALSE);
@@ -73,33 +69,14 @@ public class Fils {
         }
 
         for(Gate gate : gates){
-            System.out.println("Porte : " + gate.getName() + "resultat = " + gate.getOutput());
-            System.out.println("");
+            gate.getOutput();
         }
         
         reinitialiseOI();
     }
 
     private void reinitialiseOI(){
-        int i = 0;
         for(OIput oi : fils){
-            i++;
-            // QuadBool value = oi.getOutputValue();
-            // switch(value){
-            //     case QuadBool.TRUE:
-            //     oi.changeColor(Unity.ON);
-            //     break;
-            //     case QuadBool.FALSE:
-            //     oi.changeColor(Unity.OFF);
-            //     break;
-            //     case QuadBool.ERROR:
-            //     oi.changeColor(Unity.ERR);
-            //     break;
-            //     case QuadBool.NOTHING:
-            //     oi.changeColor(Unity.NOTH);
-            //     break;
-            // }
-            if(oi.circle.getFill() == Unity.OFF || oi.l1.getStroke() == Unity.OFF) System.out.println("OKEEEY" + i);
             oi.reinitialiseOutput();
         }
 

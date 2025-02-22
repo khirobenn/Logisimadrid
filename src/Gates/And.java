@@ -25,12 +25,8 @@ public class And extends Gate {
     public void evaluateOutput(){
         OIput[] inputs = getInputs();
         QuadBool result = inputs[0].getOutput();
-        System.out.println(result);
         for(int i = 1; i < inputs.length; i++){
-            QuadBool o = inputs[i].getOutput();
-            System.out.println(o);
-            result =AndQuad.And(result, o);
-            System.out.println(result);
+            result =AndQuad.And(result, inputs[i].getOutput());
         }
 
         setOutput(result);

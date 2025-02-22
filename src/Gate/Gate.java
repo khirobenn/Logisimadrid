@@ -153,12 +153,12 @@ public abstract class Gate {
     public abstract void evaluateOutput();
     public void addPoints(){
         int distance = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY());
-        output = new OIput(shape.getLayoutBounds().getMaxX() + shape.getLayoutX(), shape.getLayoutY() + distance/2, fils, null, this);
+        output = new OIput(Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX() + shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + distance/2), fils, null, this, null);
         if(name == "VARIABLE") output.setOIputAsVariable();
         if(inputs != null){
             distance /= inputs.length + 1;
             for(int i = 1; i < inputs.length+1; i++){
-                inputs[i-1] = new OIput(shape.getLayoutX(), shape.getLayoutY() + i*distance, fils, null, null);
+                inputs[i-1] = new OIput(Unity.tranformDoubleToInt(shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + i*distance), fils, null, null, null);
             }   
         }
 
@@ -197,11 +197,11 @@ public abstract class Gate {
 
     private void updatePoints(){
         int distance = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY());
-        output.changePlaceForPoints(shape.getLayoutBounds().getMaxX() + shape.getLayoutX(), shape.getLayoutY() + distance/2);
+        output.changePlaceForPoints(Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX() + shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + distance/2));
         if(inputs != null){
             distance /= inputs.length + 1;
             for(int i = 1; i < inputs.length+1; i++){
-                inputs[i-1].changePlaceForPoints(shape.getLayoutX(), shape.getLayoutY() + i*distance);
+                inputs[i-1].changePlaceForPoints(Unity.tranformDoubleToInt(shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + i*distance));
             }
         }
     }

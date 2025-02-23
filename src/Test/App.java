@@ -10,10 +10,18 @@ import Gate.Unity;
 
 import Gate.Gate;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -25,6 +33,7 @@ import javafx.stage.Stage;
 public class App extends Application{
     Scene scene;
     private double widthOfButton = Unity.x*5;
+    private double widthOfShape = Unity.x*2;
     // private final int height = Unity.height;
     private final int height = 1080;
     // private final int width = Unity.width;
@@ -60,25 +69,31 @@ public class App extends Application{
     public void start(Stage window) throws Exception {
         Pane sp = new Pane();
         grid(sp);
-        sp.setMinSize(Unity.width - widthOfButton, Unity.height);
-        sp.setMaxSize(width - widthOfButton, height);
+        sp.setMinSize(Unity.width - widthOfButton - widthOfShape, Unity.height);
+        sp.setMaxSize(width - widthOfButton - widthOfShape, height);
         Fils fils = new Fils(sp);
         
         sp.setOnMouseClicked(e -> addItem(e, fils, sp));
 
         VBox hb = new VBox();
-        hb.setStyle("-fx-background-color: black");
-        hb.setPrefWidth(widthOfButton);
-        int i;
+        // hb.setStyle("-fx-background-color: black");
+        hb.setPrefWidth(widthOfButton + widthOfShape);
+        hb.setBorder(new Border(new BorderStroke(Color.BLACK,
+            BorderStrokeStyle.SOLID,
+            CornerRadii.EMPTY,
+            BorderWidths.DEFAULT)));
+
         for(Button btn : buttons){
             btn.setOnMouseClicked(e -> setNbOfGateSelected(btn));
-            btn.setPrefWidth(widthOfButton);
+            // btn.setPrefWidth(widthOfButton);
             hb.getChildren().add(btn);
         }
 
         BorderPane border = new BorderPane();
         border.setLeft(hb);
         border.setCenter(sp);
+
+        BorderPane.setMargin(sp, new Insets(Unity.x));
 
         scene = new Scene(border, Unity.width, Unity.height);
 
@@ -134,7 +149,7 @@ public class App extends Application{
         }
 
         if(nbOfButtonSelected >= 0){
-            buttons.get(nbOfButtonSelected).setStyle("-fx-background-color : black; -fx-text-fill: white");
+            buttons.get(nbOfButtonSelected).setStyle("-fx-background-color : white;");
         }
         nbOfButtonSelected = -1;
     }
@@ -143,21 +158,39 @@ public class App extends Application{
         int tmp = buttons.indexOf(i);
         if(tmp == nbOfButtonSelected){
             nbOfButtonSelected = -1;
-            i.setStyle("-fx-background-color : black; -fx-text-fill: white");
+            i.setStyle("-fx-background-color : white;");
 
         }
         else{
             if(nbOfButtonSelected >= 0){
-                buttons.get(nbOfButtonSelected).setStyle("-fx-background-color : black; -fx-text-fill: white");
+                buttons.get(nbOfButtonSelected).setStyle("-fx-background-color : white;");
             }
             nbOfButtonSelected = tmp;
-            i.setStyle("-fx-background-color : white; -fx-text-fill: black");
+            i.setStyle("-fx-background-color : rgb(219, 219, 219);");
         }
     }
 
     private Button createButton(String str){
+        String myPath = System.getProperty("user.dir");
+        System.out.println(myPath + "/src/pictures/" + str.toLowerCase() + ".png");
+        
         Button btn = new Button(str);
-        btn.setStyle("-fx-background-color : black; -fx-text-fill: white");
+
+        if(!str.equals("VARIABLE")){
+            Image img = new Image(getClass().getResourceAsStream("/pictures/"  + str.toLowerCase() + ".png"));
+            ImageView view = new ImageView(img);
+            view.setFitHeight(widthOfShape);
+            view.setPreserveRatio(true);
+    
+            btn.setGraphic(view);
+        }
+        btn.setStyle("-fx-background-color: white");
+        btn.setMaxWidth(Double.MAX_VALUE);
+        btn.setMaxHeight(Double.MAX_VALUE);
+        btn.setBorder(new Border(new BorderStroke(Color.BLACK,
+            BorderStrokeStyle.SOLID,
+            CornerRadii.EMPTY,
+            BorderWidths.DEFAULT)));
         return btn;
     }
 

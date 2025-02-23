@@ -2,7 +2,6 @@ package Gate;
 
 import java.util.Deque;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Set;
 import javafx.scene.layout.Pane;
 
@@ -25,6 +24,9 @@ public class Fils {
         fils.add(element);
     }
 
+    public void removeElement(OIput element){
+        fils.remove(element);
+    }
 
     public Pane getPane(){ return group; } 
     public Set <OIput> getFilsList(){ return fils; }

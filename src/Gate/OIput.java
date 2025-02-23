@@ -222,12 +222,9 @@ public class OIput {
                 createPointOnEachLine(l2);
             }
             searchConnected();
-            fils.eval(null);
-            if(parent != null){
-                // changeColor();
-            }
             circle.setFill(Color.TRANSPARENT);
         }
+        fils.eval(null);
     }
 
     private int sign(double start, double end){
@@ -371,5 +368,17 @@ public class OIput {
 
     public int getConnectedNb(){
         return connected.size();
+    }
+
+    public void removeConnection(){
+        for(OIput oi : connected){
+            oi.connected.remove(this);
+            connected.remove(oi);
+        }
+    }
+
+    public void removeAttributesAndDelete(){
+        fils.getPane().getChildren().removeAll(l1, l2, circle, circle2);
+        fils.removeElement(this);
     }
 }

@@ -1,6 +1,5 @@
 package Gate;
 
-import Gate.Unity;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -8,7 +7,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javax.lang.model.util.ElementScanner14;
 
 public abstract class Gate {
     private String name;
@@ -212,6 +210,15 @@ public abstract class Gate {
             for(OIput oi : inputs){
                 oi.reinitialiseOutput();
             }
+        }
+    }
+
+    public void removeGate(){
+        output.removeConnection();
+        output.removeAttributesAndDelete();
+        for(OIput oi : inputs){
+            oi.removeConnection();
+            oi.removeAttributesAndDelete();
         }
     }
 }

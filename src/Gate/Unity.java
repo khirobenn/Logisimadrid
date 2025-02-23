@@ -15,7 +15,7 @@ public class Unity {
     }
     public static Color ON = Color.rgb(122, 240, 5);
     public static Color OFF = Color.rgb(0, 153, 0);
-    public static Color ERR = Color.DARKRED;
+    public static Color ERR = Color.RED;
     public static Color NOTH = Color.BLUE;
 
 

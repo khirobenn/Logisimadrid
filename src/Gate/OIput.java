@@ -110,6 +110,7 @@ public class OIput {
 
         circle.setCenterY(y);
         circle2.setCenterY(y);
+        this.isPositionEmpty[(int)x][(int)y] = true;
     }
 
     private void recurseSetOutput(Deque<OIput> l, OIput oi){
@@ -180,6 +181,7 @@ public class OIput {
 
     public void reinitialiseOutput(){
         isOutPutSet = false;
+        output = QuadBool.NOTHING;
     }
 
     public void setIsOutputSet(boolean value){
@@ -221,9 +223,10 @@ public class OIput {
             }
             searchConnected();
             fils.eval(null);
+            if(parent != null){
+                // changeColor();
+            }
             circle.setFill(Color.TRANSPARENT);
-            circle.setCenterX(circle2.getCenterX());
-            circle.setCenterY(circle2.getCenterY());
         }
     }
 
@@ -236,6 +239,7 @@ public class OIput {
         if(!(fils.getPane().getChildren().contains(l1) && fils.getPane().getChildren().contains(l2))){
             fils.getPane().getChildren().addAll(l1, l2);
         }
+        changeColor(Color.BLACK);
         double xPoint = e.getX();
         double yPoint = e.getY();
 
@@ -284,7 +288,7 @@ public class OIput {
     /**
      * Adding Fils for a line we created, such that for each point we can drag it.
      */
-    private void addFilsInLine(double p1, double p2, double constantCoord, int n){ 
+    private void addFilsInLine(double p1, double p2, double constantCoord, int n, Line l){ 
         // the n is for the position of the line
         // n = 0 , x is constant else y is constant
         p1 = Unity.tranformDoubleToInt(p1);
@@ -304,10 +308,9 @@ public class OIput {
             xCord = start;
             yCord = Unity.tranformDoubleToInt(constantCoord);
         }
-        for(int i = 0; i <= distance; i += Unity.x) {
 
+        for(int i = 0; i <= distance; i += Unity.x) {
             OIput element = new OIput(xCord, yCord, fils, this, null, isPositionEmpty);
-            System.out.println("Coordonnées : (" + xCord + ", " + yCord + ")");
             
             if(parent != null && (parent.l1.contains(xCord, yCord) || parent.l2.contains(xCord, yCord))
             && (parent.l2.getEndX() != xCord || parent.l2.getEndY() != yCord)){
@@ -315,7 +318,6 @@ public class OIput {
             }
             else{
                 element.circle2.setFill(Color.TRANSPARENT);
-                // element.circle.setFill(Color.MAGENTA);
             }
 
             connected.add(element);
@@ -327,7 +329,6 @@ public class OIput {
             else{
                 xCord += x;
             }
-            start += x;
         }
     }
 
@@ -336,10 +337,10 @@ public class OIput {
     */
     private void createPointOnEachLine(Line l){
         if(l.getEndX() == l.getStartX()){
-            addFilsInLine(l.getStartY(), l.getEndY(), l.getEndX(), 0);
+            addFilsInLine(l.getStartY(), l.getEndY(), l.getEndX(), 0, l);
         }
         else if(l.getEndY() == l.getStartY()){
-            addFilsInLine(l.getStartX(), l.getEndX(), l.getEndY(), 1);
+            addFilsInLine(l.getStartX(), l.getEndX(), l.getEndY(), 1, l);
         }
     }
 
@@ -352,8 +353,8 @@ public class OIput {
             // !elem.isPointFixe() &&
             (elem.l1.contains(point) 
             || elem.l2.contains(point)
-            || elem.circle.contains(point)
-            || elem.circle2.contains(point))){
+            || (elem.circle.getCenterX() == point.getX() && elem.circle.getCenterY() == point.getY())
+            || (elem.circle2.getCenterX() == point.getX() && elem.circle2.getCenterY() == point.getY()))){
                 elem.connected.add(this);
                 connected.add(elem);
             }

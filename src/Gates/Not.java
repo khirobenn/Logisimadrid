@@ -9,13 +9,7 @@ import javafx.scene.shape.Shape;
 
 public class Not extends Gate {
     public Not(Fils fils, Pane layout, double x, double y){
-        super("NOT", 1, fils, layout);
-        Shape sh = GatesShapes.notShape();
-        setShape(sh);
-        addShapeToGroup();
-        sh.setLayoutX(x);
-        sh.setLayoutY(y);
-        addPoints();
+        super("NOT", 1, fils, layout, x, y);
     }
 
     @Override

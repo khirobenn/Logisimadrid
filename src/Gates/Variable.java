@@ -14,6 +14,7 @@ public class Variable extends Gate {
         addShapeToGroup();
         sh.setLayoutX(x);
         sh.setLayoutY(y);
+        sh.setOnMouseClicked(e -> fils.setSelectedGate(this));
         setText("0");
         getText().setOnMouseClicked(e -> fils.eval(this));
         addPoints();

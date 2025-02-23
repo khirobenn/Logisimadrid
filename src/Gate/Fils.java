@@ -1,6 +1,5 @@
 package Gate;
 
-import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 import javafx.scene.layout.Pane;
@@ -11,6 +10,7 @@ public class Fils {
     private Set<OIput> fils;
     private Set<Gate> variables;
     private Set<Gate> gates;
+    private Gate selectedGate;
 
     public Fils(Pane group){
         this.group = group;
@@ -22,6 +22,18 @@ public class Fils {
     public void addElement(OIput element){
         element.addPoint(group);
         fils.add(element);
+    }
+
+    public void setSelectedGate(Gate selectedGate){
+        if(selectedGate == this.selectedGate){
+            this.selectedGate = null;
+            System.out.println("No gate selected");
+        }
+        else{
+            this.selectedGate = selectedGate;
+            System.out.println("Gate selected !!!");
+
+        }
     }
 
     public void removeElement(OIput element){
@@ -44,7 +56,27 @@ public class Fils {
         gates.add(gate);
     }
 
+    public void removeSelectedGate(){
+        if(selectedGate == null) return;
+        removeGate(selectedGate);
+        selectedGate = null;
+        eval(null);
+    }
+
+    public void removeGate(Gate gate){
+        gate.removeGate();
+        if(variables.contains(gate)){
+            variables.remove(gate);
+            group.getChildren().remove(gate.getText());
+        }
+        else{
+            gates.remove(gate);
+        }
+        group.getChildren().remove(gate.getShape());
+    }
+
     public void eval(Gate variableClicked){
+        reinitialiseOI();
         if(variableClicked != null){
             String o = variableClicked.getText().getText();
             if(o.equals("1")){
@@ -74,7 +106,6 @@ public class Fils {
             gate.getOutput();
         }
         
-        reinitialiseOI();
     }
 
     private void reinitialiseOI(){

@@ -12,13 +12,7 @@ public class Xor extends Gate {
      * @requires nb >= 2
      */
     public Xor(int nb,  Fils fils, Pane layout, double x, double y){
-        super("XOR", nb, fils, layout);
-        Shape sh = GatesShapes.xorShape();
-        setShape(sh);
-        addShapeToGroup();
-        sh.setLayoutX(x);
-        sh.setLayoutY(y);
-        addPoints();
+        super("XOR", nb, fils, layout, x, y);
     }
 
     @Override

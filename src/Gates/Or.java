@@ -12,13 +12,7 @@ public class Or extends Gate {
      * @requires nb >= 2
      */
     public Or(int nb,  Fils fils, Pane layout, double x, double y){
-        super("OR", nb, fils, layout);
-        Shape sh = GatesShapes.orShape();
-        setShape(sh);
-        addShapeToGroup();
-        sh.setLayoutX(x);
-        sh.setLayoutY(y);
-        addPoints();
+        super("OR", nb, fils, layout, x, y);
     }
 
     @Override

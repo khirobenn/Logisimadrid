@@ -128,10 +128,10 @@ public class OIput {
                 else{
                     elem.output = output;
                     switch (output) {
-                        case TRUE -> elem.changeColor(Unity.ON);
-                        case FALSE -> elem.changeColor(Unity.OFF);
-                        case ERROR -> elem.changeColor(Unity.ERR);
-                        default -> elem.changeColor(Unity.NOTH);
+                        case TRUE : elem.changeColor(Unity.ON); break;
+                        case FALSE : elem.changeColor(Unity.OFF); break;
+                        case ERROR : elem.changeColor(Unity.ERR); break;
+                        default : elem.changeColor(Unity.NOTH);
                     }
                 }
                 
@@ -149,10 +149,10 @@ public class OIput {
                 if(elem.gate != null) output = elem.gate.getOutput();
                 else output = elem.output;
                 switch (output) {
-                    case TRUE -> elem.changeColor(Unity.ON);
-                    case FALSE -> elem.changeColor(Unity.OFF);
-                    case ERROR -> elem.changeColor(Unity.ERR);
-                    default -> elem.changeColor(Unity.NOTH);
+                    case TRUE : elem.changeColor(Unity.ON); break;
+                    case FALSE : elem.changeColor(Unity.OFF); break;
+                    case ERROR : elem.changeColor(Unity.ERR); break;
+                    default : elem.changeColor(Unity.NOTH);
                 }
                 isOutPutSet = true;
             }
@@ -182,6 +182,7 @@ public class OIput {
     public void reinitialiseOutput(){
         isOutPutSet = false;
         output = QuadBool.NOTHING;
+        changeColor(Unity.NOTH);
     }
 
     public void setIsOutputSet(boolean value){
@@ -211,6 +212,11 @@ public class OIput {
 
         l.setEndX(endX);
         l.setEndY(endY);
+    }
+
+    private boolean isNoLine(Line l){
+        if(l == null) return true;
+        return l.getStartX() == l.getEndX() && l.getStartY() == l.getEndY();
     }
 
     private void onRelease(){
@@ -280,6 +286,7 @@ public class OIput {
         sh.setStrokeWidth(0);
         sh.setStroke(null);
     }
+
 
 
     /**
@@ -370,15 +377,13 @@ public class OIput {
         return connected.size();
     }
 
-    public void removeConnection(){
-        for(OIput oi : connected){
-            oi.connected.remove(this);
-            connected.remove(oi);
-        }
-    }
 
     public void removeAttributesAndDelete(){
-        fils.getPane().getChildren().removeAll(l1, l2, circle, circle2);
-        fils.removeElement(this);
+        fils.getPane().getChildren().removeAll(circle, circle2);
+        if(isNoLine(l1)) fils.getPane().getChildren().remove(l1);
+        if(isNoLine(l2)) fils.getPane().getChildren().remove(l2);
+        if(isNoLine(l2) && isNoLine(l2) && connected.size() == 0){
+            fils.removeElement(this);
+        }
     }
 }

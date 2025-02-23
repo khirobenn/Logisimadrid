@@ -10,11 +10,14 @@ import Gate.Unity;
 
 import Gate.Gate;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
@@ -40,7 +43,6 @@ public class App extends Application{
     private final int width = 1980;
     private final int x = Unity.x;
     private final int y = Unity.y;
-    private Shape selectedItem;
     private final Rectangle background = new Rectangle(-1, -1, width+1, height+1);
 
     private int nbOfButtonSelected = -1;
@@ -96,6 +98,16 @@ public class App extends Application{
         BorderPane.setMargin(sp, new Insets(Unity.x));
 
         scene = new Scene(border, Unity.width, Unity.height);
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+            @Override
+            public void handle(KeyEvent key) {
+                if(key.getCode() == KeyCode.DELETE){
+                    fils.removeSelectedGate();
+                }
+            }
+            
+        });
 
         window.setScene(scene);
         window.show();
@@ -171,9 +183,6 @@ public class App extends Application{
     }
 
     private Button createButton(String str){
-        String myPath = System.getProperty("user.dir");
-        System.out.println(myPath + "/src/pictures/" + str.toLowerCase() + ".png");
-        
         Button btn = new Button(str);
 
         if(!str.equals("VARIABLE")){

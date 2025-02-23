@@ -12,14 +12,7 @@ public class Nand extends Gate{
      * @requires nb >= 2
      */
     public Nand(int nb, Fils fils, Pane layout, double x, double y){
-        super("NAND", nb, fils, layout);
-        Shape sh = GatesShapes.nandShape();
-        setShape(sh);
-        addShapeToGroup();
-        sh.setLayoutX(x);
-        sh.setLayoutY(y);
-        addPoints();
-
+        super("NAND", nb, fils, layout, x, y);
     }
 
     @Override

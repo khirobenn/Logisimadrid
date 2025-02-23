@@ -12,13 +12,7 @@ public class Nor extends Gate{
      * @requires nb >= 2
      */
     public Nor(int nb, Fils fils, Pane layout, double x, double y){
-        super("NOR", nb, fils, layout);
-        Shape sh = GatesShapes.norShape();
-        setShape(sh);
-        addShapeToGroup();
-        sh.setLayoutX(x);
-        sh.setLayoutY(y);
-        addPoints();
+        super("NOR", nb, fils, layout, x, y);
     }
 
     @Override

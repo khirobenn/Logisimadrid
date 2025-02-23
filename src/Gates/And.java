@@ -12,13 +12,7 @@ public class And extends Gate {
      * @requires nb >= 2
      */
     public And(int nb, Fils fils, Pane layout, double x, double y){
-        super("AND", nb, fils, layout);
-        Shape sh = GatesShapes.andShape();
-        setShape(sh);
-        addShapeToGroup();
-        sh.setLayoutX(x);
-        sh.setLayoutY(y);
-        addPoints();
+        super("AND", nb, fils, layout, x, y);
     }
 
     @Override

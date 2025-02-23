@@ -21,21 +21,53 @@ public abstract class Gate {
     public Gate(String name, Fils fils, Pane layout){
         this.layout = layout;
         this.name = name;
-        this.fils = fils;
         isOutPutSet = false;
-
-        if(name == "Variable"){
-            text = new Text("0");
-        }
-        else text = null;
+        this.fils = fils;
     }
 
-    public Gate(String name, int nb, Fils fils, Pane layout){
-        this.layout = layout;
-        this.name = name;
+    public Gate(String name, int nb, Fils fils, Pane layout, double x, double y){
+        this(name, fils, layout);
         this.inputs = new OIput[nb];
-        isOutPutSet = false;
-        this.fils = fils;
+
+        initShape(x, y);
+    }
+
+
+    private void initShape(double x, double y){
+        switch (name) {
+            case "AND":
+            shape = GatesShapes.andShape();
+            break;
+            
+            case "OR":
+            shape = GatesShapes.orShape();
+            break;
+
+            case "XOR":
+            shape = GatesShapes.xorShape();
+            break;
+
+            case "NAND":
+            shape = GatesShapes.nandShape();
+            break;
+
+            case "NOR":
+            shape = GatesShapes.norShape();
+            break;
+
+            case "XNOR":
+            shape = GatesShapes.xnorShape();
+            break;
+
+            case "NOT":
+            shape = GatesShapes.notShape();
+            break;
+        }
+        addShapeToGroup();
+        shape.setLayoutX(x);
+        shape.setLayoutY(y);
+        shape.setOnMouseClicked(e -> fils.setSelectedGate(this));
+        addPoints();
     }
 
     public void setText(String text){
@@ -62,6 +94,7 @@ public abstract class Gate {
         return inputs;
     }
 
+    public Shape getShape(){ return shape; }
     private void textChange(QuadBool value){
         if(text != null){
             if(value == QuadBool.TRUE){
@@ -214,11 +247,11 @@ public abstract class Gate {
     }
 
     public void removeGate(){
-        output.removeConnection();
         output.removeAttributesAndDelete();
-        for(OIput oi : inputs){
-            oi.removeConnection();
-            oi.removeAttributesAndDelete();
+        if(inputs != null){
+            for(OIput oi : inputs){
+                oi.removeAttributesAndDelete();
+            }
         }
     }
 }

@@ -12,13 +12,7 @@ public class Xnor extends Gate {
      * @requires nb >= 2
      */
     public Xnor(int nb,  Fils fils, Pane layout, double x, double y){
-        super("XNOR", nb, fils, layout);
-        Shape sh = GatesShapes.xnorShape();
-        setShape(sh);
-        addShapeToGroup();
-        sh.setLayoutX(x);
-        sh.setLayoutY(y);
-        addPoints();
+        super("XNOR", nb, fils, layout, x, y);
     }
 
     @Override

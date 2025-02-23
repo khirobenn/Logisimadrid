@@ -10,24 +10,24 @@ import javafx.scene.text.Text;
 
 public abstract class Gate {
     private String name;
-    private OIput[] inputs;
-    private OIput output;
+    private Fils[] inputs;
+    private Fils output;
     private boolean isOutPutSet;
     private Shape shape;
     private Text text;
-    Fils fils;
+    Circuit circuit;
     Pane layout;
 
-    public Gate(String name, Fils fils, Pane layout){
+    public Gate(String name, Circuit circuit, Pane layout){
         this.layout = layout;
         this.name = name;
         isOutPutSet = false;
-        this.fils = fils;
+        this.circuit = circuit;
     }
 
-    public Gate(String name, int nb, Fils fils, Pane layout, double x, double y){
-        this(name, fils, layout);
-        this.inputs = new OIput[nb];
+    public Gate(String name, int nb, Circuit circuit, Pane layout, double x, double y){
+        this(name, circuit, layout);
+        this.inputs = new Fils[nb];
 
         initShape(x, y);
     }
@@ -66,7 +66,7 @@ public abstract class Gate {
         addShapeToGroup();
         shape.setLayoutX(x);
         shape.setLayoutY(y);
-        shape.setOnMouseClicked(e -> fils.setSelectedGate(this));
+        shape.setOnMouseClicked(e -> circuit.setSelectedGate(this));
         addPoints();
     }
 
@@ -90,7 +90,7 @@ public abstract class Gate {
         return name;
     }
 
-    public OIput[] getInputs(){
+    public Fils[] getInputs(){
         return inputs;
     }
 
@@ -168,7 +168,7 @@ public abstract class Gate {
         return output.getOutput();
     }
 
-    public void setInput(int n, OIput gate){
+    public void setInput(int n, Fils gate){
         inputs[n] = gate;
     }
 
@@ -184,12 +184,12 @@ public abstract class Gate {
     public abstract void evaluateOutput();
     public void addPoints(){
         int distance = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY());
-        output = new OIput(Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX() + shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + distance/2), fils, null, this, null);
-        if(name == "VARIABLE") output.setOIputAsVariable();
+        output = new Fils(Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX() + shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + distance/2), circuit, null, this, null);
+        if(name == "VARIABLE") output.setFilsAsVariable();
         if(inputs != null){
             distance /= inputs.length + 1;
             for(int i = 1; i < inputs.length+1; i++){
-                inputs[i-1] = new OIput(Unity.tranformDoubleToInt(shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + i*distance), fils, null, null, null);
+                inputs[i-1] = new Fils(Unity.tranformDoubleToInt(shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + i*distance), circuit, null, null, null);
             }   
         }
 
@@ -240,7 +240,7 @@ public abstract class Gate {
     public void reinitialiseOutput(){
         if(!name.equals("VARIABLE")){
             output.reinitialiseOutput();
-            for(OIput oi : inputs){
+            for(Fils oi : inputs){
                 oi.reinitialiseOutput();
             }
         }
@@ -249,7 +249,7 @@ public abstract class Gate {
     public void removeGate(){
         output.removeAttributesAndDelete();
         if(inputs != null){
-            for(OIput oi : inputs){
+            for(Fils oi : inputs){
                 oi.removeAttributesAndDelete();
             }
         }

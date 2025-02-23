@@ -1,23 +1,21 @@
 package Gates;
+import Gate.Circuit;
 import Gate.Fils;
 import Gate.Gate;
-import Gate.GatesShapes;
-import Gate.OIput;
 import Gate.QuadBool;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Shape;
 public class Xnor extends Gate {
     /**
      * @param nb
      * @requires nb >= 2
      */
-    public Xnor(int nb,  Fils fils, Pane layout, double x, double y){
-        super("XNOR", nb, fils, layout, x, y);
+    public Xnor(int nb,  Circuit circuit, Pane layout, double x, double y){
+        super("XNOR", nb, circuit, layout, x, y);
     }
 
     @Override
     public void evaluateOutput(){
-        OIput[] inputs = getInputs();
+        Fils[] inputs = getInputs();
 
         QuadBool result=inputs[0].getOutput();
 

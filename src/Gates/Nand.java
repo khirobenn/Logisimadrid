@@ -1,23 +1,22 @@
 package Gates;
+import Gate.Circuit;
 import Gate.Fils;
 import Gate.Gate;
-import Gate.GatesShapes;
-import Gate.OIput;
 import Gate.QuadBool;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Shape;
+
 public class Nand extends Gate{
     /**
      * @param nb
      * @requires nb >= 2
      */
-    public Nand(int nb, Fils fils, Pane layout, double x, double y){
-        super("NAND", nb, fils, layout, x, y);
+    public Nand(int nb, Circuit circuit, Pane layout, double x, double y){
+        super("NAND", nb, circuit, layout, x, y);
     }
 
     @Override
     public void evaluateOutput(){
-        OIput[] inputs = getInputs();
+        Fils[] inputs = getInputs();
         QuadBool result = inputs[0].getOutput();
         for(int i = 1; i < inputs.length; i++){
             result = AndQuad.And(result,inputs[i].getOutput());

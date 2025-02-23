@@ -5,7 +5,7 @@ import Gates.*;
 import java.util.Arrays;
 import java.util.List;
 
-import Gate.Fils;
+import Gate.Circuit;
 import Gate.Unity;
 
 import Gate.Gate;
@@ -73,9 +73,9 @@ public class App extends Application{
         grid(sp);
         sp.setMinSize(Unity.width - widthOfButton - widthOfShape, Unity.height);
         sp.setMaxSize(width - widthOfButton - widthOfShape, height);
-        Fils fils = new Fils(sp);
+        Circuit circuit = new Circuit(sp);
         
-        sp.setOnMouseClicked(e -> addItem(e, fils, sp));
+        sp.setOnMouseClicked(e -> addItem(e, circuit, sp));
 
         VBox hb = new VBox();
         // hb.setStyle("-fx-background-color: black");
@@ -103,7 +103,7 @@ public class App extends Application{
             @Override
             public void handle(KeyEvent key) {
                 if(key.getCode() == KeyCode.DELETE){
-                    fils.removeSelectedGate();
+                    circuit.removeSelectedGate();
                 }
             }
             
@@ -113,49 +113,49 @@ public class App extends Application{
         window.show();
     }
 
-    private void addItem(MouseEvent e, Fils fils, Pane pane){
+    private void addItem(MouseEvent e, Circuit circuit, Pane pane){
         double x = Unity.tranformDoubleToInt(e.getX());
         double y = Unity.tranformDoubleToInt(e.getY());
         Gate gate;
         switch (nbOfButtonSelected) {
             case 0:
-                gate = new And(2, fils, pane, x, y);
-                fils.addGate(gate);
+                gate = new And(2, circuit, pane, x, y);
+                circuit.addGate(gate);
             break;
     
             case 1:
-                gate = new Or(2, fils, pane, x, y);
-                fils.addGate(gate);
+                gate = new Or(2, circuit, pane, x, y);
+                circuit.addGate(gate);
             break;
             case 2:
-                gate = new Xor(2, fils, pane, x, y);
-                fils.addGate(gate);
+                gate = new Xor(2, circuit, pane, x, y);
+                circuit.addGate(gate);
                 
             break;
             
             case 3:
-                gate = new Nand(2, fils, pane, x, y);
-                fils.addGate(gate);
+                gate = new Nand(2, circuit, pane, x, y);
+                circuit.addGate(gate);
             break;
             
             case 4:
-                gate = new Nor(2, fils, pane, x, y);
-                fils.addGate(gate);
+                gate = new Nor(2, circuit, pane, x, y);
+                circuit.addGate(gate);
             break;
             
             case 5:
-                gate = new Xnor(2, fils, pane, x, y);
-                fils.addGate(gate);
+                gate = new Xnor(2, circuit, pane, x, y);
+                circuit.addGate(gate);
             break;
             
             case 6:
-                gate = new Not(fils, pane, x, y);
-                fils.addGate(gate);
+                gate = new Not(circuit, pane, x, y);
+                circuit.addGate(gate);
             break;
 
             case 7:
-                gate = new Variable(fils, pane, x, y);
-                fils.addVariable(gate);
+                gate = new Variable(circuit, pane, x, y);
+                circuit.addVariable(gate);
             default:
                 break;
         }

@@ -1,4 +1,4 @@
-package Gate;
+package Circuit;
 
 import java.util.HashSet;
 import java.util.Set;

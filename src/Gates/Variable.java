@@ -1,8 +1,8 @@
 package Gates;
-import Gate.Circuit;
-import Gate.Gate;
-import Gate.GatesShapes;
-import Gate.QuadBool;
+import Circuit.Circuit;
+import Circuit.Gate;
+import Circuit.GatesShapes;
+import Circuit.QuadBool;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 public class Variable extends Gate {

@@ -1,4 +1,4 @@
-package Gate;
+package Circuit;
 
 import java.util.Deque;
 import java.util.HashSet;

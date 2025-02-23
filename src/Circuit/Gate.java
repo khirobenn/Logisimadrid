@@ -1,4 +1,4 @@
-package Gate;
+package Circuit;
 
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;

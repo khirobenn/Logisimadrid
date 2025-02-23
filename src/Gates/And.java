@@ -1,8 +1,8 @@
 package Gates;
-import Gate.Circuit;
-import Gate.Fils;
-import Gate.Gate;
-import Gate.QuadBool;
+import Circuit.Circuit;
+import Circuit.Fils;
+import Circuit.Gate;
+import Circuit.QuadBool;
 import javafx.scene.layout.Pane;
 
 public class And extends Gate {

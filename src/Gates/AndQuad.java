@@ -1,5 +1,5 @@
 package Gates;
-import Gate.QuadBool;
+import Circuit.QuadBool;
 
 public class AndQuad{
 

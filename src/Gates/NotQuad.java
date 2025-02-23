@@ -1,6 +1,6 @@
 package Gates;
 
-import Gate.QuadBool;
+import Circuit.QuadBool;
 
 
 

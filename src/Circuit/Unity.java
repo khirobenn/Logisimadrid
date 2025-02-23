@@ -1,4 +1,4 @@
-package Gate;
+package Circuit;
 
 
 import javafx.scene.paint.Color;   

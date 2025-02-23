@@ -1,7 +1,7 @@
 package Gates;
 
-import Gate.Circuit;
-import Gate.Gate;
+import Circuit.Circuit;
+import Circuit.Gate;
 import javafx.scene.layout.Pane;
 
 public class Not extends Gate {

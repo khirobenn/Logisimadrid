@@ -1,14 +1,13 @@
-package Test;
+package Application;
 
 import Gates.*;
 
 import java.util.Arrays;
 import java.util.List;
 
-import Gate.Circuit;
-import Gate.Unity;
-
-import Gate.Gate;
+import Circuit.Circuit;
+import Circuit.Gate;
+import Circuit.Unity;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;

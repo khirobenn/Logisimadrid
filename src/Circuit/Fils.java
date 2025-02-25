@@ -33,8 +33,6 @@ public class Fils {
 
     private boolean dx, dy;
 
-    private boolean isPositionEmpty[][];
-
     private boolean isOutputOfVariable = false;
 
     public Fils(Circuit circuit, Fils parent, Gate gate, boolean[][] isPositionEmpty){
@@ -45,13 +43,6 @@ public class Fils {
         }
         else{
             output = QuadBool.NOTHING;
-        }
-
-        if(isPositionEmpty == null){
-            initPositionArray();
-        }
-        else{
-            this.isPositionEmpty = isPositionEmpty;
         }
 
         isOutPutSet = false;
@@ -70,8 +61,8 @@ public class Fils {
         circle2.setCenterX(pos);
         circle2.setCenterY(pos);
 
-        l1 = new Line(-10, -10, -10, -10);
-        l2 = new Line(-10, -10, -10, -10);
+        l1 = new Line(10, -200, 10, -200);
+        l2 = new Line(10, -200, 10, -200);
 
         l1.setStrokeWidth(6);
         l2.setStrokeWidth(6);
@@ -86,23 +77,6 @@ public class Fils {
         circuit.addElement(this);
     }
 
-    private void initPositionArray(){
-        isPositionEmpty = new boolean[1920][1080];
-        for(int i = 0; i < 1920; i++){
-            for(int j = 0; j < 1080; j++){
-                isPositionEmpty[i][j] = false;
-            }
-        }
-    }
-
-    public void setFilsAsVariable(){
-        isOutputOfVariable = true;
-    }
-
-    public boolean getIsAVariable(){
-        return isOutputOfVariable;
-    }
-
     public Fils(double x, double y, Circuit circuit, Fils parent, Gate gate, boolean[][] isPositionEmpty){
         this(circuit, parent, gate, isPositionEmpty);
         circle.setCenterX(x);
@@ -110,8 +84,30 @@ public class Fils {
 
         circle.setCenterY(y);
         circle2.setCenterY(y);
-        this.isPositionEmpty[(int)x][(int)y] = true;
     }
+
+    public void setCircleToTransparent(){
+        circle.setFill(Color.TRANSPARENT);
+        circle2.setFill(Color.TRANSPARENT);
+    }
+
+    public void setFilsAsVariable(){
+        isOutputOfVariable = true;
+    }
+    
+    public void setGate(Gate gate){
+        this.gate = gate;
+    }
+
+    public void addToConnected(Fils fils){
+        connected.add(fils);
+        fils.connected.add(this);
+    }
+
+    public boolean getIsAVariable(){
+        return isOutputOfVariable;
+    }
+
 
     private void recurseSetOutput(Deque<Fils> l, Fils oi){
         for(Fils elem : oi.connected){
@@ -197,8 +193,8 @@ public class Fils {
     }
 
     private void reinitialiseLine(Line l){
-        int r = -10;
-        setLineCoord(l1, r, r, r, r);
+        double r = -200;
+        setLineCoord(l1, 10, r, 10, r);
         circuit.getPane().getChildren().remove(l);
     }
     private void reinitialiseLines(){
@@ -219,7 +215,22 @@ public class Fils {
         return l.getStartX() == l.getEndX() && l.getStartY() == l.getEndY();
     }
 
-    private void onRelease(){
+    
+    private int sign(double start, double end){
+        if(end > start) return 1;
+        return -1;
+    }
+    
+    private void dragFils(MouseEvent e, Circle circle, Circle circle2){
+        
+        changeColor(Color.BLACK);
+        double xPoint = e.getX();
+        double yPoint = e.getY();
+        
+        moveFils(xPoint, yPoint);
+    }
+    
+    public void onRelease(){
         if(dx || dy){
             if(l1.getStartX() != l1.getEndX() || l1.getStartY() != l1.getEndY()){
                 createPointOnEachLine(l1);
@@ -228,53 +239,62 @@ public class Fils {
                 createPointOnEachLine(l2);
             }
             searchConnected();
-            circle.setFill(Color.TRANSPARENT);
         }
         circuit.eval(null);
     }
 
-    private int sign(double start, double end){
-        if(end > start) return 1;
-        return -1;
+    public void swapCircles(){
+        Circle tmp = circle;
+        circle = circle2;
+        circle2 = tmp;
     }
 
-    private void dragFils(MouseEvent e, Circle circle, Circle circle2){
+    public void moveFils(double xPoint, double yPoint){
         if(!(circuit.getPane().getChildren().contains(l1) && circuit.getPane().getChildren().contains(l2))){
             circuit.getPane().getChildren().addAll(l1, l2);
         }
-        changeColor(Color.BLACK);
-        double xPoint = e.getX();
-        double yPoint = e.getY();
 
         xPoint = Unity.tranformDoubleToInt(xPoint);
         yPoint = Unity.tranformDoubleToInt(yPoint);
 
-        if(xPoint == circle.getCenterX() && yPoint != circle.getCenterY()) dy = true;
-        else if(xPoint != circle.getCenterX() && yPoint == circle.getCenterY()) dx = true;
-        else if(xPoint == circle.getCenterX() && yPoint == circle.getCenterY()){
+        if(xPoint == circle2.getCenterX() && yPoint != circle2.getCenterY()) dy = true;
+        else if(xPoint != circle2.getCenterX() && yPoint == circle2.getCenterY()) dx = true;
+        else if(xPoint == circle2.getCenterX() && yPoint == circle2.getCenterY()){
             dx = false;
             dy = false;
         }
 
         if(dx){
-            setLineCoord(l1, circle.getCenterX(), circle.getCenterY(), xPoint, circle.getCenterY());
-            setLineCoord(l2, xPoint, circle.getCenterY(), xPoint, yPoint);
+            setLineCoord(l1, circle2.getCenterX(), circle2.getCenterY(), xPoint, circle2.getCenterY());
+            setLineCoord(l2, xPoint, circle2.getCenterY(), xPoint, yPoint);
         }
         else if(dy){
-            setLineCoord(l1, circle.getCenterX(), circle.getCenterY(), circle.getCenterX(), yPoint);
-            setLineCoord(l2, circle.getCenterX(), yPoint, xPoint, yPoint);
+            setLineCoord(l1, circle2.getCenterX(), circle2.getCenterY(), circle2.getCenterX(), yPoint);
+            setLineCoord(l2, circle2.getCenterX(), yPoint, xPoint, yPoint);
     
         }
         else if(!dx && !dy){
             reinitialiseLines();
         }
 
-        circle2.setCenterX(xPoint);
-        circle2.setCenterY(yPoint);
+        circle.setCenterX(xPoint);
+        circle.setCenterY(yPoint);
+    }
+
+    public Point2D getCircle2Coord(){
+        return new Point2D(circle2.getCenterX(), circle2.getCenterY());
+    }
+
+    public void setCircleFill(Color color){
+        circle.setFill(color);
+    }
+
+    public void setCircle2Fill(Color color){
+        circle2.setFill(color);
     }
 
     public void addPoint(Pane layout){
-        layout.getChildren().addAll(circle, circle2);
+        layout.getChildren().addAll(circle, circle2, l1, l2);
     }
 
     private void addStroke(Shape sh){
@@ -314,7 +334,7 @@ public class Fils {
         }
 
         for(int i = 0; i <= distance; i += Unity.x) {
-            Fils element = new Fils(xCord, yCord, circuit, this, null, isPositionEmpty);
+            Fils element = new Fils(xCord, yCord, circuit, this, null, null);
             
             if(parent != null && (parent.l1.contains(xCord, yCord) || parent.l2.contains(xCord, yCord))
             && (parent.l2.getEndX() != xCord || parent.l2.getEndY() != yCord)){
@@ -366,9 +386,14 @@ public class Fils {
     }
 
     public void changeColor(Color clr){
-        if(!(circle2.getFill() == Color.TRANSPARENT)){
+        if(!(circle2.getFill().equals(Color.TRANSPARENT))){
             circle2.setFill(clr);
         }
+
+        if(!(circle.getFill().equals(Color.TRANSPARENT))){
+            circle.setFill(clr);
+        }
+
         l1.setStroke(clr);
         l2.setStroke(clr);
     }

@@ -18,6 +18,9 @@ public abstract class Gate {
     Circuit circuit;
     Pane layout;
 
+    boolean isReleased = false;
+    boolean isReleasedForInputs[];
+
     public Gate(String name, Circuit circuit, Pane layout){
         this.layout = layout;
         this.name = name;
@@ -28,6 +31,7 @@ public abstract class Gate {
     public Gate(String name, int nb, Circuit circuit, Pane layout, double x, double y){
         this(name, circuit, layout);
         this.inputs = new Fils[nb];
+        this.isReleasedForInputs = new boolean[nb];
 
         initShape(x, y);
     }
@@ -182,6 +186,7 @@ public abstract class Gate {
     }
 
     public abstract void evaluateOutput();
+
     public void addPoints(){
         int distance = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY());
         output = new Fils(Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX() + shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + distance/2), circuit, null, this, null);
@@ -198,8 +203,31 @@ public abstract class Gate {
     public void addShapeToGroup(){
         layout.getChildren().add(shape);
         shape.setOnMouseDragged(e -> dragItem(e));
+        shape.setOnMouseReleased(e -> onRelease());
     }
 
+    private void onRelease(){
+        if(isReleased){
+            output.swapCircles();
+        }
+        output.onRelease();
+
+        if(inputs != null){
+            for(int i = 0; i < inputs.length; i++){
+                if(isReleasedForInputs[i]){
+                    inputs[i].swapCircles();
+                }
+                inputs[i].onRelease();
+            }
+        }
+
+        isReleased = false;
+        if(isReleasedForInputs != null){
+            for(int i = 0; i < isReleasedForInputs.length; i++){
+                isReleasedForInputs[i] = false;
+            }
+        }
+    }
     private void dragItem(MouseEvent e){
         // On convertit les coordonnées de la souris par rapport au parent (la fenetre)
         Point2D mouseCoord = shape.localToParent(e.getX(), e.getY());
@@ -228,11 +256,59 @@ public abstract class Gate {
 
     private void updatePoints(){
         int distance = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY());
-        output.changePlaceForPoints(Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX() + shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + distance/2));
+        updateOnePoint(-1, distance);
         if(inputs != null){
             distance /= inputs.length + 1;
             for(int i = 1; i < inputs.length+1; i++){
-                inputs[i-1].changePlaceForPoints(Unity.tranformDoubleToInt(shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + i*distance));
+                updateOnePoint(i, distance);
+            }
+        }
+    }
+
+    private void updateOnePoint(int index, int distance){
+        boolean toUse;
+        Fils filsToCheck;
+        if(index != -1){
+            toUse = isReleasedForInputs[index-1];
+            filsToCheck = inputs[index-1];
+        }
+        else{
+            toUse = isReleased;
+            filsToCheck = output;
+        }
+
+        if(filsToCheck.getConnectedNb() == 0){
+            if(index == -1){
+                filsToCheck.changePlaceForPoints(Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX() + shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + distance/2));
+            }
+            else{
+                filsToCheck.changePlaceForPoints(Unity.tranformDoubleToInt(shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + index*distance));
+            }
+        }
+        else if(toUse){
+            filsToCheck.changeColor(Color.BLACK);
+            if(index == -1){
+                filsToCheck.moveFils(Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX() + shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + distance/2));
+            }
+            else{
+                filsToCheck.moveFils(Unity.tranformDoubleToInt(shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + index*distance));
+            }
+        }
+        else{
+            Point2D coordPreviousOutput = filsToCheck.getCircle2Coord();
+            Fils newOutput = new Fils(coordPreviousOutput.getX(), coordPreviousOutput.getY(), circuit, null, this, null);
+            newOutput.setCircleFill(Color.BLACK);
+            newOutput.setCircle2Fill(Color.TRANSPARENT);
+            filsToCheck.setGate(null);
+            filsToCheck.addToConnected(newOutput);
+            filsToCheck.setCircleToTransparent();
+            if(index == -1){
+                output = newOutput;
+                isReleased = true;
+            }
+            else{
+                inputs[index-1] = newOutput;
+                isReleasedForInputs[index-1] = true;
             }
         }
     }

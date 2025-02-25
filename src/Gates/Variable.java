@@ -5,6 +5,7 @@ import Circuit.GatesShapes;
 import Circuit.QuadBool;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
+
 public class Variable extends Gate {
     public Variable(QuadBool value, Circuit circuit, Pane layout, double x, double y){
         super("VARIABLE", circuit, layout);
@@ -16,10 +17,15 @@ public class Variable extends Gate {
         sh.setLayoutY(y);
         sh.setOnMouseClicked(e -> circuit.setSelectedGate(this));
         setText("0");
-        getText().setOnMouseClicked(e -> circuit.eval(this));
+        getText().setOnMouseClicked(e -> evaluate(circuit));
         addPoints();
         setIHaveOutput(true);
         setOutput(value);
+    }
+
+    private void evaluate(Circuit circuit){
+        circuit.eval(this);
+        circuit.fixFilsColors();
     }
 
     public Variable(Circuit circuit, Pane layout, double x, double y){

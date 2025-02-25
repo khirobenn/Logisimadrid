@@ -4,7 +4,6 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
-
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -70,7 +69,7 @@ public class Fils {
         circle.setFill(Color.TRANSPARENT);
         circle2.setFill(Unity.NOTH);
         circle2.setOnMouseDragged(e -> dragFils(e, circle2, circle));
-        circle2.setOnMouseReleased(e -> onRelease());
+        circle2.setOnMouseReleased(e -> onRelease());   
         circle2.setOnMouseEntered(e -> addStroke(circle2));
         circle2.setOnMouseExited(e -> removeStroke(circle2));
 
@@ -118,17 +117,17 @@ public class Fils {
                 || output == QuadBool.FALSE && elem.output == QuadBool.TRUE)){
                     elem.output = QuadBool.ERROR;
                     output = QuadBool.ERROR;
-                    changeColor(Unity.ERR);
-                    elem.changeColor(Unity.ERR);
+                    // changeColor(Unity.ERR);
+                    // elem.changeColor(Unity.ERR);
                 }
                 else{
                     elem.output = output;
-                    switch (output) {
-                        case TRUE : elem.changeColor(Unity.ON); break;
-                        case FALSE : elem.changeColor(Unity.OFF); break;
-                        case ERROR : elem.changeColor(Unity.ERR); break;
-                        default : elem.changeColor(Unity.NOTH);
-                    }
+                    // switch (output) {
+                    //     case TRUE : elem.changeColor(Unity.ON); break;
+                    //     case FALSE : elem.changeColor(Unity.OFF); break;
+                    //     case ERROR : elem.changeColor(Unity.ERR); break;
+                    //     default : elem.changeColor(Unity.NOTH);
+                    // }
                 }
                 
                 elem.isOutPutSet = true;
@@ -144,12 +143,12 @@ public class Fils {
                 recurseGetOutput(l, elem);
                 if(elem.gate != null) output = elem.gate.getOutput();
                 else output = elem.output;
-                switch (output) {
-                    case TRUE : elem.changeColor(Unity.ON); break;
-                    case FALSE : elem.changeColor(Unity.OFF); break;
-                    case ERROR : elem.changeColor(Unity.ERR); break;
-                    default : elem.changeColor(Unity.NOTH);
-                }
+                // switch (output) {
+                //     case TRUE : elem.changeColor(Unity.ON); break;
+                //     case FALSE : elem.changeColor(Unity.OFF); break;
+                //     case ERROR : elem.changeColor(Unity.ERR); break;
+                //     default : elem.changeColor(Unity.NOTH);
+                // }
                 isOutPutSet = true;
             }
         }
@@ -241,6 +240,7 @@ public class Fils {
             searchConnected();
         }
         circuit.eval(null);
+        circuit.fixFilsColors();
     }
 
     public void swapCircles(){

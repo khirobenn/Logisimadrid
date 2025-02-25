@@ -4,6 +4,7 @@ import Circuit.Fils;
 import Circuit.Gate;
 import Circuit.QuadBool;
 import javafx.scene.layout.Pane;
+
 public class Or extends Gate {
     /**
      * @param nb

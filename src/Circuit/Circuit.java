@@ -61,6 +61,19 @@ public class Circuit {
         removeGate(selectedGate);
         selectedGate = null;
         eval(null);
+        fixFilsColors();
+    }
+
+    public void fixFilsColors(){
+        for(Fils fil : fils){
+            QuadBool value = fil.getOutputValue();
+            switch(value){
+                case QuadBool.TRUE: fil.changeColor(Unity.ON); break;
+                case QuadBool.FALSE: fil.changeColor(Unity.OFF); break;
+                case QuadBool.NOTHING: fil.changeColor(Unity.NOTH); break;
+                case QuadBool.ERROR: fil.changeColor(Unity.ERR); break;
+            }
+        }
     }
 
     public void removeGate(Gate gate){

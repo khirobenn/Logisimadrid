@@ -1,25 +1,17 @@
 package Gates;
 
-import Gate.Fils;
-import Gate.Gate;
-import Gate.GatesShapes;
+import Circuit.Circuit;
+import Circuit.Gate;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Shape;
 
 public class Not extends Gate {
-    public Not(Fils fils, Pane layout, double x, double y){
-        super("NOT", 1, fils, layout);
-        Shape sh = GatesShapes.notShape();
-        setShape(sh);
-        addShapeToGroup();
-        sh.setLayoutX(x);
-        sh.setLayoutY(y);
-        addPoints();
+    public Not(Circuit circuit, Pane layout, double x, double y){
+        super("NOT", 1, circuit, layout, x, y);
     }
 
     @Override
     public void evaluateOutput(){
-        setOutput(!(getInputs()[0].getOutput()));
+        setOutput(NotQuad.Not(getInputs()[0].getOutput()));
         setIHaveOutput(true);
     }
 }

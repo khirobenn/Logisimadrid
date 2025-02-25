@@ -1,27 +1,35 @@
 package Gates;
-import Gate.Fils;
-import Gate.Gate;
-import Gate.GatesShapes;
+import Circuit.Circuit;
+import Circuit.Gate;
+import Circuit.GatesShapes;
+import Circuit.QuadBool;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
+
 public class Variable extends Gate {
-    public Variable(boolean value, Fils fils, Pane layout, double x, double y){
-        super("VARIABLE", fils, layout);
-        setIHaveOutput(true);
+    public Variable(QuadBool value, Circuit circuit, Pane layout, double x, double y){
+        super("VARIABLE", circuit, layout);
         Shape sh = GatesShapes.variable();
-        sh.setOnMouseClicked(e -> fils.eval(this));
+        sh.setOnMouseClicked(e -> circuit.eval(this));
         setShape(sh);
         addShapeToGroup();
         sh.setLayoutX(x);
         sh.setLayoutY(y);
-        addPoints();
-        setOutput(value);
+        sh.setOnMouseClicked(e -> circuit.setSelectedGate(this));
         setText("0");
-        getText().setOnMouseClicked(e -> fils.eval(this));
+        getText().setOnMouseClicked(e -> evaluate(circuit));
+        addPoints();
+        setIHaveOutput(true);
+        setOutput(value);
     }
 
-    public Variable(Fils fils, Pane layout, double x, double y){
-        this(false, fils, layout, x, y);
+    private void evaluate(Circuit circuit){
+        circuit.eval(this);
+        circuit.fixFilsColors();
+    }
+
+    public Variable(Circuit circuit, Pane layout, double x, double y){
+        this(QuadBool.FALSE, circuit, layout, x, y);
     }
 
     @Override

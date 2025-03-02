@@ -54,6 +54,7 @@ public class App extends Application{
         createButton("XNOR"),
         createButton("NOT"),
         createButton("VARIABLE"),
+        createButton("OUTPUT")
     });
 
     public static void main(String[] args) throws Exception {
@@ -90,6 +91,9 @@ public class App extends Application{
             hb.getChildren().add(btn);
         }
 
+        Button rotate = new Button("Rotate Item");
+        hb.getChildren().add(rotate);
+        rotate.setOnMouseClicked(e -> circuit.rotateSelectedEement());
         BorderPane border = new BorderPane();
         border.setLeft(hb);
         border.setCenter(sp);
@@ -155,6 +159,10 @@ public class App extends Application{
             case 7:
                 gate = new Variable(circuit, pane, x, y);
                 circuit.addVariable(gate);
+            break;
+            case 8:
+                gate = new OutputGate(circuit, pane, x, y);
+                circuit.addGate(gate);
             default:
                 break;
         }
@@ -184,7 +192,7 @@ public class App extends Application{
     private Button createButton(String str){
         Button btn = new Button(str);
 
-        if(!str.equals("VARIABLE")){
+        if(!str.equals("VARIABLE") && !str.equals("OUTPUT")){
             Image img = new Image(getClass().getResourceAsStream("/pictures/"  + str.toLowerCase() + ".png"));
             ImageView view = new ImageView(img);
             view.setFitHeight(widthOfShape);

@@ -32,8 +32,9 @@ public abstract class Gate {
         this(name, circuit, layout);
         this.inputs = new Fils[nb];
         this.isReleasedForInputs = new boolean[nb];
-
-        initShape(x, y);
+        if(!name.equals("OUTPUT")){
+            initShape(x, y);
+        }
     }
 
 
@@ -110,6 +111,16 @@ public abstract class Gate {
                 text.setText("0");
                 text.setFill(Unity.OFF);
                 text.setStroke(Unity.OFF);
+            }
+            else if (value == QuadBool.NOTHING && name.equals("OUTPUT")){
+                text.setText("U");
+                text.setFill(Unity.NOTH);
+                text.setStroke(Unity.NOTH);
+            }
+            else if (value == QuadBool.ERROR && name.equals("OUTPUT")){
+                text.setText("N");
+                text.setFill(Unity.ERR);
+                text.setStroke(Unity.ERR);
             }
             text.setStrokeWidth(2);
             
@@ -189,12 +200,12 @@ public abstract class Gate {
 
     public void addPoints(){
         int distance = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY());
-        output = new Fils(Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX() + shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + distance/2), circuit, null, this, null);
+        output = new Fils(Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX() + shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + distance/2), circuit, null, this);
         if(name == "VARIABLE") output.setFilsAsVariable();
         if(inputs != null){
             distance /= inputs.length + 1;
             for(int i = 1; i < inputs.length+1; i++){
-                inputs[i-1] = new Fils(Unity.tranformDoubleToInt(shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + i*distance), circuit, null, null, null);
+                inputs[i-1] = new Fils(Unity.tranformDoubleToInt(shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + i*distance), circuit, null, null);
             }   
         }
 
@@ -254,7 +265,7 @@ public abstract class Gate {
         updatePoints();
     }
 
-    private void updatePoints(){
+    public void updatePoints(){
         int distance = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY());
         updateOnePoint(-1, distance);
         if(inputs != null){
@@ -296,17 +307,19 @@ public abstract class Gate {
         }
         else{
             Point2D coordPreviousOutput = filsToCheck.getCircle2Coord();
-            Fils newOutput = new Fils(coordPreviousOutput.getX(), coordPreviousOutput.getY(), circuit, null, this, null);
+            Fils newOutput = new Fils(coordPreviousOutput.getX(), coordPreviousOutput.getY(), circuit, null, this);
             newOutput.setCircleFill(Color.BLACK);
             newOutput.setCircle2Fill(Color.TRANSPARENT);
             filsToCheck.setGate(null);
             filsToCheck.addToConnected(newOutput);
             filsToCheck.setCircleToTransparent();
             if(index == -1){
+                newOutput.setLp(output);
                 output = newOutput;
                 isReleased = true;
             }
             else{
+                newOutput.setLp(inputs[index-1]);
                 inputs[index-1] = newOutput;
                 isReleasedForInputs[index-1] = true;
             }
@@ -329,5 +342,9 @@ public abstract class Gate {
                 oi.removeAttributesAndDelete();
             }
         }
+    }
+
+    public void hideOutput(){
+        output.hide();
     }
 }

@@ -37,7 +37,7 @@ public class Fils {
 
 	private boolean isOutputOfVariable = false;
 
-	public Fils(Circuit circuit, Fils parent, Gate gate, boolean[][] isPositionEmpty){
+	public Fils(Circuit circuit, Fils parent, Gate gate){
 		this.parent = parent;
 		this.gate = gate;
 		if(parent != null){
@@ -81,8 +81,8 @@ public class Fils {
 		circuit.addElement(this);
 	}
 
-	public Fils(double x, double y, Circuit circuit, Fils parent, Gate gate, boolean[][] isPositionEmpty){
-		this(circuit, parent, gate, isPositionEmpty);
+	public Fils(double x, double y, Circuit circuit, Fils parent, Gate gate){
+		this(circuit, parent, gate);
 		circle.setCenterX(x);
 		circle2.setCenterX(x);
 
@@ -148,12 +148,6 @@ public class Fils {
 				recurseGetOutput(l, elem);
 				if(elem.gate != null) output = elem.gate.getOutput();
 				else output = elem.output;
-				// switch (output) {
-				//     case TRUE : elem.changeColor(Unity.ON); break;
-				//     case FALSE : elem.changeColor(Unity.OFF); break;
-				//     case ERROR : elem.changeColor(Unity.ERR); break;
-				//     default : elem.changeColor(Unity.NOTH);
-				// }
 				isOutPutSet = true;
 			}
 		}
@@ -236,10 +230,7 @@ public class Fils {
 
 
 	private boolean isSonInTheParent (Line l, Line ll){
-		if((ll.contains(l.getStartX(), l.getStartY()) && ll.contains(l.getEndX(), l.getEndY()))){
-			return true;
-		}
-		return false;
+		return (ll.contains(l.getStartX(), l.getStartY()) && ll.contains(l.getEndX(), l.getEndY()));
 	}
 
 	private void reinitLine(Line l){
@@ -256,19 +247,19 @@ public class Fils {
 					boolean access=false;
 					for (Line l : lp) {
 						if( l == l1) continue;
-						if(!isSonInTheParent(l1, l)){
-							createPointOnEachLine(l1);
+						if(isSonInTheParent(l1, l)){
 							access = true;
-							break;
-						}
-						else{
-							System.out.println("erreur fils 1");
+                            break;
 						}
 					}
 					if(!access){
-						reinitLine(l1);
+                        createPointOnEachLine(l1);
+                        System.out.println("Created");
 					}
-
+                    else{
+                        System.out.println("Reini");
+                        reinitLine(l1);
+                    }
 				}
 				else{
 					createPointOnEachLine(l1);
@@ -279,24 +270,26 @@ public class Fils {
 					boolean access=false;
 					for (Line l : lp) {
 						if( l == l2) continue;
-						if(!isSonInTheParent(l2, l)){
-							createPointOnEachLine(l2);
+						if(isSonInTheParent(l2, l)){
 							access = true;
 							break;
 						}
-						else{
-							System.out.println("erreur fils 2");
-						}
+						
 					}
 					if(!access){
-						reinitLine(l2);
+                        createPointOnEachLine(l2);
+                        System.out.println("Created 2");
 					}
+                    else{
+                        reinitLine(l2);
+                        System.out.println("reini 2");
+
+                    }
 
 				}
 				else{
 					createPointOnEachLine(l2);  
 				}
-
 			}
 			searchConnected();
 		}
@@ -308,7 +301,25 @@ public class Fils {
 		Circle tmp = circle;
 		circle = circle2;
 		circle2 = tmp;
+        if(!isNoLine(l2)){
+            Line tmpLine = l1;
+            l1 = l2;
+            l2 = tmpLine;
+        }
+        swapStartAndEnd(l1);
+        swapStartAndEnd(l2);
 	}
+
+    private void swapStartAndEnd(Line l){
+        double x = l.getStartX();
+        double y = l.getStartY();
+
+        l.setStartX(l.getEndX());
+        l.setStartY(l.getEndY());
+
+        l.setEndX(x);
+        l.setEndY(y);
+    }
 
 	public void moveFils(double xPoint, double yPoint){
 		if(!(circuit.getPane().getChildren().contains(l1) && circuit.getPane().getChildren().contains(l2))){
@@ -397,10 +408,9 @@ public class Fils {
 		}
 
 		for(int i = 0; i <= distance; i += Unity.x) {
-			Fils element = new Fils(xCord, yCord, circuit, this, null, null);
+			Fils element = new Fils(xCord, yCord, circuit, this, null);
 			element.lp=lp;
-			lp.add(l1);
-			lp.add(l2);
+			lp.add(l);
 
 			if(parent != null && (parent.l1.contains(xCord, yCord) || parent.l2.contains(xCord, yCord))
 					&& (parent.l2.getEndX() != xCord || parent.l2.getEndY() != yCord)){
@@ -421,6 +431,12 @@ public class Fils {
 			}
 		}
 	}
+
+    public void setLp(Fils source){
+        lp = source.lp;
+        lp.add(l1);
+        lp.add(l2);
+    }
 
 	/** 
 	 * Adding circuit for our two lines, we call addFilsInLine for the two line in our class.
@@ -476,5 +492,9 @@ public class Fils {
 		if(isNoLine(l2) && isNoLine(l2) && connected.size() == 0){
 			circuit.removeElement(this);
 		}
+	}
+
+	public void hide(){
+		circuit.getPane().getChildren().removeAll(circle, circle2, l1, l2);
 	}
 }

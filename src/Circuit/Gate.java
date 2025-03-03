@@ -346,5 +346,6 @@ public abstract class Gate {
 
     public void hideOutput(){
         output.hide();
+        circuit.getFilsList().remove(output);
     }
 }

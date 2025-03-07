@@ -3,6 +3,7 @@ package Circuit;
 import java.util.HashSet;
 import java.util.Set;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 public class Circuit {
     
@@ -26,18 +27,29 @@ public class Circuit {
 
     public void setSelectedGate(Gate selectedGate){
         if(selectedGate == this.selectedGate){
+            selectedGate.getShape().setFill(Color.TRANSPARENT);
             this.selectedGate = null;
             System.out.println("No gate selected");
         }
         else{
+            if(this.selectedGate != null){
+                this.selectedGate.getShape().setFill(Color.TRANSPARENT);
+            }
             this.selectedGate = selectedGate;
+            selectedGate.getShape().setFill(Color.rgb(219, 219, 219));
             System.out.println("Gate selected !!!");
-
         }
+
     }
 
     public void removeElement(Fils element){
         fils.remove(element);
+    }
+
+    public void rotateSelectedEement(){
+        if(selectedGate == null) return;
+        GatesShapes.rotate(selectedGate.getShape());
+        selectedGate.updatePoints();
     }
 
     public Pane getPane(){ return group; } 
@@ -80,11 +92,15 @@ public class Circuit {
         gate.removeGate();
         if(variables.contains(gate)){
             variables.remove(gate);
-            group.getChildren().remove(gate.getText());
         }
         else{
             gates.remove(gate);
         }
+
+        if(gate.getText() != null){
+            group.getChildren().remove(gate.getText());
+        }
+        
         group.getChildren().remove(gate.getShape());
     }
 

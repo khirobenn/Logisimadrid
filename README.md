@@ -15,6 +15,6 @@
 - Extraire le fichier zip qu'on a téléchargé.
 - Accèder au dossier où il y'a le makefile.
 - Changer la valeur de la variable MODULE_PATH par le chemin où vous avez téléchargé la bibliothèque.
-  Par exemple si j'ai téléchargé JavaFX dans le dossier suivant /home/myuser/`alors mon `MODULE_PATH`sera `/home/myuser/javafx-sdk-23.0.2/lib/.
+  Par exemple si j'ai téléchargé JavaFX dans le dossier suivant `/home/myuser/` alors mon `MODULE_PATH` sera `/home/myuser/javafx-sdk-23.0.2/lib/`.
 - Exécuter la commande make.
 - C'est bon!! Construisez votre circuit.

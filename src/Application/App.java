@@ -54,7 +54,8 @@ public class App extends Application{
         createButton("XNOR"),
         createButton("NOT"),
         createButton("VARIABLE"),
-        createButton("OUTPUT")
+        createButton("OUTPUT"),
+        createButton("ADDER")
     });
 
     public static void main(String[] args) throws Exception {
@@ -163,6 +164,9 @@ public class App extends Application{
             case 8:
                 gate = new OutputGate(circuit, pane, x, y);
                 circuit.addGate(gate);
+            case 9:
+                gate = new Adder(circuit, pane, x, y);
+                circuit.addGate(gate);
             default:
                 break;
         }
@@ -192,7 +196,7 @@ public class App extends Application{
     private Button createButton(String str){
         Button btn = new Button(str);
 
-        if(!str.equals("VARIABLE") && !str.equals("OUTPUT")){
+        if(!str.equals("VARIABLE") && !str.equals("OUTPUT") && !str.equals("ADDER")){
             Image img = new Image(getClass().getResourceAsStream("/pictures/"  + str.toLowerCase() + ".png"));
             ImageView view = new ImageView(img);
             view.setFitHeight(widthOfShape);

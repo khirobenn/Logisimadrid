@@ -18,7 +18,7 @@ public class Variable extends Gate {
         sh.setOnMouseClicked(e -> circuit.setSelectedGate(this));
         setText("0");
         getText().setOnMouseClicked(e -> evaluate(circuit));
-        addPoints();
+        addPoints(circuit);
         setIHaveOutput(true);
         setOutput(value);
     }

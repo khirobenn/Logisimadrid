@@ -67,12 +67,16 @@ public abstract class Gate {
             case "NOT":
             shape = GatesShapes.notShape();
             break;
+
+            case "ADDER":
+            shape = GatesShapes.adder();
+            break;
         }
         addShapeToGroup();
         shape.setLayoutX(x);
         shape.setLayoutY(y);
         shape.setOnMouseClicked(e -> circuit.setSelectedGate(this));
-        addPoints();
+        this.addPoints(circuit);
     }
 
     public void setText(String text){
@@ -86,6 +90,10 @@ public abstract class Gate {
         else this.text.setText(text);
     }
 
+    public void setOutputFils(Fils output){
+        this.output = output;
+    }
+
     public Text getText(){
 	    return text;
     }
@@ -97,6 +105,10 @@ public abstract class Gate {
 
     public Fils[] getInputs(){
         return inputs;
+    }
+
+    public Fils getOutputFils(){
+        return output;
     }
 
     public Shape getShape(){ return shape; }
@@ -198,7 +210,7 @@ public abstract class Gate {
 
     public abstract void evaluateOutput();
 
-    public void addPoints(){
+    public void addPoints(Circuit circuit){
         int distance = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY());
         output = new Fils(Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX() + shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + distance/2), circuit, null, this);
         if(name == "VARIABLE") output.setFilsAsVariable();
@@ -261,49 +273,76 @@ public abstract class Gate {
             if(text != null){
                 text.setLayoutY(shape.getLayoutBounds().getMaxY() / 2 + shape.getLayoutY());
             }
-        }   
-        updatePoints();
+        }
+        
+        this.updatePoints();
     }
 
+    //              (true, false)
+    //              ____________
+    //              |          |
+    // (true, true) |          | (false, false)
+    //              |__________|
+    //              (false, true)
+
     public void updatePoints(){
-        int distance = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY());
-        updateOnePoint(-1, distance);
+        updateOnePoint(-1, false, false);
         if(inputs != null){
-            distance /= inputs.length + 1;
             for(int i = 1; i < inputs.length+1; i++){
-                updateOnePoint(i, distance);
+                updateOnePoint(i, true, true);
             }
         }
     }
 
-    private void updateOnePoint(int index, int distance){
+    public void updateOnePoint(int index, boolean a, boolean b){
+        int distance;
+        if(a == b){
+            distance = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY());
+        }
+        else{
+            distance = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX());
+        }
+
+        double coef;
+
         boolean toUse;
         Fils filsToCheck;
         if(index != -1){
             toUse = isReleasedForInputs[index-1];
             filsToCheck = inputs[index-1];
+            coef = index / (double)(inputs.length+1);
         }
         else{
             toUse = isReleased;
             filsToCheck = output;
+            coef = 0.5;
+        }
+
+        int x = 0, y = 0;
+
+        if(a == true && b == true){
+            x = Unity.tranformDoubleToInt(shape.getLayoutX());
+            y = Unity.tranformDoubleToInt(shape.getLayoutY() + distance*coef);
+        }
+        else if(a == true && b == false){
+            x = Unity.tranformDoubleToInt(shape.getLayoutX() + distance*coef);
+            y = Unity.tranformDoubleToInt(shape.getLayoutY());
+        }
+        else if(a == false && b == true){
+            x = Unity.tranformDoubleToInt(shape.getLayoutX() + distance*coef);
+            y = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY() + shape.getLayoutY());
+        }
+        else if(a == false && b == false){
+            x = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX() + shape.getLayoutX());
+            y = Unity.tranformDoubleToInt(shape.getLayoutY() + distance*coef);
         }
 
         if(filsToCheck.getConnectedNb() == 0){
-            if(index == -1){
-                filsToCheck.changePlaceForPoints(Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX() + shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + distance/2));
-            }
-            else{
-                filsToCheck.changePlaceForPoints(Unity.tranformDoubleToInt(shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + index*distance));
-            }
+            filsToCheck.changePlaceForPoints(x, y);
         }
         else if(toUse){
             filsToCheck.changeColor(Color.BLACK);
-            if(index == -1){
-                filsToCheck.moveFils(Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX() + shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + distance/2));
-            }
-            else{
-                filsToCheck.moveFils(Unity.tranformDoubleToInt(shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + index*distance));
-            }
+            filsToCheck.moveFils(x, y);
         }
         else{
             Point2D coordPreviousOutput = filsToCheck.getCircle2Coord();

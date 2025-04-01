@@ -118,6 +118,14 @@ public class GatesShapes {
         return sh;
     }
 
+    public static Shape adder(){
+        Shape sh = new Rectangle(0, 0, 4*x, 4*x);
+        sh.setFill(Color.TRANSPARENT);
+        sh.setStroke(Color.BLACK);
+        sh.setStrokeWidth(3);
+        return sh;
+    }
+    
     public static Shape variable(){
         Polygon sh = new Polygon();
         sh.getPoints().addAll(new Double[]{

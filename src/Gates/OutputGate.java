@@ -23,7 +23,7 @@ public class OutputGate extends Gate{
         sh.setLayoutY(y);
         sh.setOnMouseClicked(e -> circuit.setSelectedGate(this));
         setText("U");
-        addPoints();
+        addPoints(circuit);
         setOutputValue(QuadBool.NOTHING);
         hideOutput();
     }

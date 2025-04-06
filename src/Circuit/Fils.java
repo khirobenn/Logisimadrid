@@ -146,7 +146,10 @@ public class Fils {
 			if(!l.contains(elem)){
 				l.add(oi);
 				recurseGetOutput(l, elem);
-				if(elem.gate != null) output = elem.gate.getOutput();
+				if(elem.gate != null){
+					elem.gate.getOutput();
+					output = elem.getOutput();
+				}
 				else output = elem.output;
 				isOutPutSet = true;
 			}

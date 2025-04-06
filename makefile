@@ -1,11 +1,7 @@
 JAVAC=javac
 JAVA=java
 #Chemin a modifier selon votre repertoire
-<<<<<<< HEAD
 MODULE_PATH=/home/khiro/Files/javafx-sdk-23.0.2/lib
-=======
-MODULE_PATH=/home/samy/Téléchargements/javafx-sdk-23.0.2/lib
->>>>>>> f15da4a2fab5c3a5a14d1f6ee606e5bbf513b4fd
 MODULES=javafx.controls,javafx.fxml
 SRC=src/**/*.java
 OUT_DIR=out

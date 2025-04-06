@@ -1,5 +1,8 @@
 package Circuit;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -18,6 +21,8 @@ public abstract class Gate {
     Circuit circuit;
     Pane layout;
 
+    Set<Fils> otherFils;
+
     boolean isReleased = false;
     boolean isReleasedForInputs[];
 
@@ -26,6 +31,7 @@ public abstract class Gate {
         this.name = name;
         isOutPutSet = false;
         this.circuit = circuit;
+        otherFils = new HashSet<Fils>();
     }
 
     public Gate(String name, int nb, Circuit circuit, Pane layout, double x, double y){
@@ -37,6 +43,9 @@ public abstract class Gate {
         }
     }
 
+    public void addFilsToOthers(Fils fil){
+        otherFils.add(fil);
+    }
 
     private void initShape(double x, double y){
         switch (name) {
@@ -79,12 +88,12 @@ public abstract class Gate {
         this.addPoints(circuit);
     }
 
-    public void setText(String text){
+    public void setText(String text, double x, double y){
         if(this.text == null){
             this.text = new Text(text);
             this.text.setFont(new Font(20));
-            this.text.setLayoutX(shape.getLayoutBounds().getMaxX() / 2 + shape.getLayoutX());
-            this.text.setLayoutY(shape.getLayoutBounds().getMaxY() / 2 + shape.getLayoutY());
+            this.text.setLayoutX(x);
+            this.text.setLayoutY(y);
             layout.getChildren().add(this.text);
         }
         else this.text.setText(text);
@@ -113,7 +122,7 @@ public abstract class Gate {
 
     public Shape getShape(){ return shape; }
     private void textChange(QuadBool value){
-        if(text != null){
+        if(text != null && !name.equals("ADDER")){
             if(value == QuadBool.TRUE){
                 text.setText("1");
                 text.setFill(Unity.ON);
@@ -173,6 +182,9 @@ public abstract class Gate {
     public void setIHaveOutput(boolean value){
         isOutPutSet = value;
         output.setIsOutputSet(value);
+        for(Fils oi : otherFils){
+            oi.setIsOutputSet(value);
+        }
     }
 
     private boolean checkIfIsConnected(){
@@ -229,7 +241,7 @@ public abstract class Gate {
         shape.setOnMouseReleased(e -> onRelease());
     }
 
-    private void onRelease(){
+    public void onRelease(){
         if(isReleased){
             output.swapCircles();
         }
@@ -378,6 +390,11 @@ public abstract class Gate {
         output.removeAttributesAndDelete();
         if(inputs != null){
             for(Fils oi : inputs){
+                oi.removeAttributesAndDelete();
+            }
+        }
+        if(otherFils != null){
+            for(Fils oi : otherFils){
                 oi.removeAttributesAndDelete();
             }
         }

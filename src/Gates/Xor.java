@@ -22,9 +22,8 @@ public class Xor extends Gate {
 
         
         for(int i = 1 ; i < inputs.length; i++){
-        result = AndQuad.And(OrQuad.Or(result, inputs[i].getOutput()),NotQuad.Not(AndQuad.And(result,inputs[i].getOutput())));
+            result = QuadBool.xor(result, inputs[i].getOutput());
         }
-        
         
         
         setOutput(result);

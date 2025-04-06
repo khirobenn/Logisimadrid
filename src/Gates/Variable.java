@@ -16,7 +16,7 @@ public class Variable extends Gate {
         sh.setLayoutX(x);
         sh.setLayoutY(y);
         sh.setOnMouseClicked(e -> circuit.setSelectedGate(this));
-        setText("0");
+        setText("0", sh.getLayoutBounds().getMaxX() / 2 + sh.getLayoutX(), sh.getLayoutBounds().getMaxY() / 2 + sh.getLayoutY());
         getText().setOnMouseClicked(e -> evaluate(circuit));
         addPoints(circuit);
         setIHaveOutput(true);

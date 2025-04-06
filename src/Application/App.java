@@ -13,6 +13,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -71,6 +72,8 @@ public class App extends Application{
     @Override
     public void start(Stage window) throws Exception {
         Pane sp = new Pane();
+        ScrollPane scroll = new ScrollPane();
+        scroll.setContent(sp);
         grid(sp);
         sp.setMinSize(Unity.width - widthOfButton - widthOfShape, Unity.height);
         sp.setMaxSize(width - widthOfButton - widthOfShape, height);
@@ -106,9 +109,9 @@ public class App extends Application{
 
         BorderPane border = new BorderPane();
         border.setLeft(hb);
-        border.setCenter(sp);
+        border.setCenter(scroll);
 
-        BorderPane.setMargin(sp, new Insets(Unity.x));
+        BorderPane.setMargin(scroll, new Insets(Unity.x));
 
         scene = new Scene(border, Unity.width, Unity.height);
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {

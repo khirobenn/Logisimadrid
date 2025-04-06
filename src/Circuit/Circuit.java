@@ -3,7 +3,6 @@ package Circuit;
 import java.util.HashSet;
 import java.util.Set;
 
-import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Scale;

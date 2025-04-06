@@ -164,6 +164,7 @@ public class App extends Application{
             case 8:
                 gate = new OutputGate(circuit, pane, x, y);
                 circuit.addGate(gate);
+                break;
             case 9:
                 gate = new Adder(circuit, pane, x, y);
                 circuit.addGate(gate);

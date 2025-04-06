@@ -2,8 +2,11 @@ package Circuit;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Scale;
 
 public class Circuit {
     
@@ -12,12 +15,18 @@ public class Circuit {
     private Set<Gate> variables;
     private Set<Gate> gates;
     private Gate selectedGate;
+    private double zoom = 1.;
+    Scale scale;
 
     public Circuit(Pane group){
         this.group = group;
         fils = new HashSet<Fils>();
         variables = new HashSet<Gate>();
         gates = new HashSet<Gate>();
+        scale = new Scale();
+        scale.setPivotX(0);
+        scale.setPivotY(0);
+        this.group.getTransforms().add(scale);
     }
 
     public void addElement(Fils element){
@@ -150,5 +159,22 @@ public class Circuit {
             var.setIHaveOutput(true);
         }
     }
-    
+
+    public void zoom(){
+        if(zoom < 1.5){
+            zoom += 0.1;
+            scale.setX(zoom);
+            scale.setY(zoom);
+            System.out.println("Zoom! " + zoom);
+        }
+    }
+
+    public void unzoom(){
+        if(zoom > 0.41){
+            zoom -= 0.1;
+            scale.setX(zoom);
+            scale.setY(zoom);
+            System.out.println("Unzoom! " + zoom);
+        }
+    }  
 }

@@ -95,6 +95,15 @@ public class App extends Application{
         Button rotate = new Button("Rotate Item");
         hb.getChildren().add(rotate);
         rotate.setOnMouseClicked(e -> circuit.rotateSelectedEement());
+
+        Button scale = new Button("Zoom");
+        hb.getChildren().add(scale);
+        scale.setOnMouseClicked(e -> circuit.zoom());
+
+        Button unScale = new Button("Unzoom");
+        hb.getChildren().add(unScale);
+        unScale.setOnMouseClicked(e -> circuit.unzoom());
+
         BorderPane border = new BorderPane();
         border.setLeft(hb);
         border.setCenter(sp);

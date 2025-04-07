@@ -163,8 +163,6 @@ public class App extends Application{
             }
             
         });
-        System.out.println(window.getHeight());
-        System.out.println(window.getWidth());
         window.setScene(scene);
         window.show();
     }

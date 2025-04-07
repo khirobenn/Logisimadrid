@@ -1,7 +1,7 @@
-JAVAC=javac
+JAVAC=javac -cp .:json-simple-1.1.1.jar
 JAVA=java
 #Chemin a modifier selon votre repertoire
-MODULE_PATH=/home/khiro/Files/javafx-sdk-23.0.2/lib
+MODULE_PATH=/home/liti/Téléchargements/javafx-sdk-23.0.2/lib
 MODULES=javafx.controls,javafx.fxml
 SRC=src/**/*.java
 OUT_DIR=out
@@ -17,7 +17,7 @@ compile:
 # cp: cp -r src/pictures/ $(OUT_DIR)
 
 run: compile
-	$(JAVA) --enable-preview --module-path $(MODULE_PATH) --add-modules $(MODULES) -cp $(OUT_DIR) $(MAIN_CLASS)
+	$(JAVA) --enable-preview --module-path $(MODULE_PATH) --add-modules $(MODULES) -cp "$(OUT_DIR):json-simple-1.1.1.jar" $(MAIN_CLASS)
 
 
 clean :

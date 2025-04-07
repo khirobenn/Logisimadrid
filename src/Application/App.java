@@ -5,7 +5,10 @@ import Gates.*;
 import java.util.Arrays;
 import java.util.List;
 
+import org.json.simple.parser.ParseException;
+
 import Circuit.Circuit;
+import Circuit.CircuitSaver;
 import Circuit.Gate;
 import Circuit.Unity;
 import javafx.application.Application;
@@ -26,10 +29,10 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 
@@ -40,10 +43,9 @@ public class App extends Application{
     // private final int height = Unity.height;
     private final int height = 1080;
     // private final int width = Unity.width;
-    private final int width = 1980;
+    private final int width = 1920;
     private final int x = Unity.x;
     private final int y = Unity.y;
-    private final Rectangle background = new Rectangle(-1, -1, width+1, height+1);
 
     private int nbOfButtonSelected = -1;
     private List <Button> buttons = Arrays.asList(new Button[]{ 
@@ -65,18 +67,39 @@ public class App extends Application{
     
     @Override
     public void init() throws Exception{
-        background.setFill(Color.BLACK);
         super.init();
     }
 
     @Override
     public void start(Stage window) throws Exception {
         Pane sp = new Pane();
-        ScrollPane scroll = new ScrollPane();
-        scroll.setContent(sp);
         grid(sp);
-        sp.setMinSize(Unity.width - widthOfButton - widthOfShape, Unity.height);
-        sp.setMaxSize(width - widthOfButton - widthOfShape, height);
+
+        Pane pane2 = new Pane();
+        pane2.setMaxWidth(width);
+        pane2.setMaxHeight(height);
+        pane2.getChildren().add(sp);
+
+        ScrollPane scroll = new ScrollPane();
+        scroll.setMinHeight(Unity.height/2);
+        scroll.setMinWidth(Unity.width/2);
+        
+        scroll.setMaxWidth(width);
+        scroll.setMaxHeight(height);
+        scroll.setContent(pane2);
+        
+
+        // String enteredByUser = "abcdef";
+        // sp.setStyle("-fx-background-color: #" + enteredByUser);
+
+        // sp.setMinSize(Unity.width - widthOfButton - widthOfShape, Unity.height);
+        sp.setMinSize(width - widthOfButton - widthOfShape, height);
+        sp.setMaxWidth(Region.USE_PREF_SIZE);
+        sp.setMaxHeight(Region.USE_PREF_SIZE);
+
+        sp.setPrefWidth(width*4);
+        sp.setPrefHeight(height*4);
+
         Circuit circuit = new Circuit(sp);
         
         sp.setOnMouseClicked(e -> addItem(e, circuit, sp));
@@ -107,6 +130,22 @@ public class App extends Application{
         hb.getChildren().add(unScale);
         unScale.setOnMouseClicked(e -> circuit.unzoom());
 
+        CircuitSaver saver = new CircuitSaver(circuit);
+
+        Button save = new Button("Save");
+        hb.getChildren().add(save);
+        save.setOnMouseClicked(e -> saver.saveCircuit("liti.json"));
+
+        Button load = new Button("Load");
+        hb.getChildren().add(load);
+        load.setOnMouseClicked(e -> {
+            try {
+                saver.loadCircuit("liti.json");
+            } catch (ParseException e1) {
+                e1.printStackTrace();
+            }
+        });
+
         BorderPane border = new BorderPane();
         border.setLeft(hb);
         border.setCenter(scroll);
@@ -124,7 +163,8 @@ public class App extends Application{
             }
             
         });
-
+        System.out.println(window.getHeight());
+        System.out.println(window.getWidth());
         window.setScene(scene);
         window.show();
     }

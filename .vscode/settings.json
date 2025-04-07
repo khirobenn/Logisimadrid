@@ -18,6 +18,7 @@
         "/home/aramis/Downloads/javafx-sdk-23.0.2/lib/javafx.media.jar",
         "/home/aramis/Downloads/javafx-sdk-23.0.2/lib/javafx.swing.jar",
         "/home/aramis/Downloads/javafx-sdk-23.0.2/lib/javafx.web.jar",
-        "/home/aramis/Downloads/javafx-sdk-23.0.2/lib/javafx-swt.jar"
+        "/home/aramis/Downloads/javafx-sdk-23.0.2/lib/javafx-swt.jar",
+        "/home/khiro/Files/json-simple-1.1.1.jar"
     ]
 }

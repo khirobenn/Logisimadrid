@@ -175,5 +175,9 @@ public class Circuit {
             scale.setY(zoom);
             System.out.println("Unzoom! " + zoom);
         }
-    }  
+    } 
+
+    public Set<Gate> getGates(){
+        return gates;
+    }
 }

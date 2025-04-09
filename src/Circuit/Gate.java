@@ -16,7 +16,7 @@ public abstract class Gate {
     private Fils[] inputs;
     private Fils output;
     private boolean isOutPutSet;
-    private Shape shape;
+    protected Shape shape;
     private Text text;
     Circuit circuit;
     Pane layout;
@@ -80,6 +80,18 @@ public abstract class Gate {
             case "ADDER":
             shape = GatesShapes.adder();
             break;
+
+	    case "EVENPARITY":
+	    shape = GatesShapes.EvenParityShape();
+	    break;
+	    
+	    case "ODDPARITY":
+	    shape = GatesShapes.OddParityShape();
+	    break;
+
+	    case "MULTIPLIER":
+	    shape = GatesShapes.multiplier();
+	    break;
         }
         addShapeToGroup();
         shape.setLayoutX(x);

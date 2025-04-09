@@ -6,11 +6,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.json.simple.parser.ParseException;
-
+import Gates.Multiplier;
 import Circuit.Circuit;
 import Circuit.CircuitSaver;
 import Circuit.Gate;
 import Circuit.Unity;
+import Circuit.OddParityGate;
+import Circuit.EvenParityGate;
+
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -58,7 +61,10 @@ public class App extends Application{
         createButton("NOT"),
         createButton("VARIABLE"),
         createButton("OUTPUT"),
-        createButton("ADDER")
+        createButton("ADDER"),
+	createButton("MULTIPLIER"),
+	createButton("ODDPARITY"),
+	createButton("EVENPARITY")
     });
 
     public static void main(String[] args) throws Exception {
@@ -130,11 +136,15 @@ public class App extends Application{
         hb.getChildren().add(unScale);
         unScale.setOnMouseClicked(e -> circuit.unzoom());
 
+
         CircuitSaver saver = new CircuitSaver(circuit);
 
         Button save = new Button("Save");
         hb.getChildren().add(save);
         save.setOnMouseClicked(e -> saver.saveCircuit("liti.json"));
+
+
+
 
         Button load = new Button("Load");
         hb.getChildren().add(load);
@@ -218,6 +228,19 @@ public class App extends Application{
             case 9:
                 gate = new Adder(circuit, pane, x, y);
                 circuit.addGate(gate);
+		break;
+	   case 11:
+		gate = new OddParityGate(circuit, pane,x,y,3);
+		circuit.addGate(gate);
+		break;
+	   case 10:
+		gate = new Multiplier(circuit, pane,x,y);
+		circuit.addGate(gate);
+		break;
+	   case 12:
+		gate = new EvenParityGate(circuit, pane,x,y,3);
+		circuit.addGate(gate);
+		break;
             default:
                 break;
         }
@@ -247,7 +270,7 @@ public class App extends Application{
     private Button createButton(String str){
         Button btn = new Button(str);
 
-        if(!str.equals("VARIABLE") && !str.equals("OUTPUT") && !str.equals("ADDER")){
+        if(!str.equals("VARIABLE") && !!str.equals("MULTIPLIER") && str.equals("EvenParityGate") && !str.equals("ADDER") && !str.equals("EVENPARITY")){
             Image img = new Image(getClass().getResourceAsStream("/pictures/"  + str.toLowerCase() + ".png"));
             ImageView view = new ImageView(img);
             view.setFitHeight(widthOfShape);

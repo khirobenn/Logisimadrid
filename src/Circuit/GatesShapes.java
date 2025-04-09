@@ -65,6 +65,27 @@ public class GatesShapes {
 
         return sh;
     }
+
+    public static Shape EvenParityShape() {
+        Rectangle evenParityGateShape = new Rectangle(100, 50);  // Width and Height
+        evenParityGateShape.setArcWidth(15);  // Rounded corners
+        evenParityGateShape.setArcHeight(15);
+        evenParityGateShape.setFill(Color.LIGHTBLUE);  // Set the fill color
+        evenParityGateShape.setStroke(Color.BLACK);  // Set the border color
+
+
+        return evenParityGateShape;
+    }
+    public static Shape OddParityShape() {
+        Rectangle oddParityGateShape = new Rectangle(100, 50);  // Width and Height
+        oddParityGateShape.setArcWidth(15);  // Rounded corners
+        oddParityGateShape.setArcHeight(15);
+        oddParityGateShape.setFill(Color.LIGHTBLUE);  // Set the fill color
+        oddParityGateShape.setStroke(Color.BLACK);  // Set the border color
+
+
+        return oddParityGateShape;
+    }
     
     public static Shape xorShape(){
         QuadCurve quad = new QuadCurve(x, 0, 4*x, 3*y, x, 6*y);
@@ -119,6 +140,13 @@ public class GatesShapes {
     }
 
     public static Shape adder(){
+        Shape sh = new Rectangle(0, 0, 4*x, 4*x);
+        sh.setFill(Color.TRANSPARENT);
+        sh.setStroke(Color.BLACK);
+        sh.setStrokeWidth(3);
+        return sh;
+    }
+    public static Shape multiplier(){
         Shape sh = new Rectangle(0, 0, 4*x, 4*x);
         sh.setFill(Color.TRANSPARENT);
         sh.setStroke(Color.BLACK);

@@ -1,1 +1,1 @@
-{"gates":[{"inputs_length":2,"name":"XOR","x":180.0,"y":100.0},{"inputs_length":2,"name":"NAND","x":360.0,"y":160.0},{"inputs_length":1,"name":"NOT","x":520.0,"y":340.0}]}
+{"gates":[{"inputs_length":3,"name":"ODDPARITY","x":140.0,"y":460.0}]}

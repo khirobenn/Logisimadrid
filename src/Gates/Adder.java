@@ -194,4 +194,4 @@ public class Adder extends Gate {
         }
         retenuIn.onRelease();
     }
-}
+} 

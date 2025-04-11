@@ -35,8 +35,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 
 public class App extends Application{
@@ -79,7 +77,6 @@ public class App extends Application{
     @Override
     public void start(Stage window) throws Exception {
         Pane sp = new Pane();
-        grid(sp);
 
         Pane pane2 = new Pane();
         pane2.setMaxWidth(width);
@@ -288,17 +285,4 @@ public class App extends Application{
         return btn;
     }
 
-    private void grid(Pane layout){
-        for(int i = 0; i*x <= width; i++ ){
-            for(int j = 0; j*y <= height; j++ ){
-                Line line = new Line(i*x, 0, i*x, height);
-                line.setFill(Color.GRAY);
-                Line line2 = new Line(0, j*y, width, j*y);
-                line2.setFill(Color.GRAY);
-                Shape dot = Line.intersect(line, line2);
-                dot.setFill(Color.PURPLE);
-                layout.getChildren().add(dot);
-            }
-        }
-    }
 }

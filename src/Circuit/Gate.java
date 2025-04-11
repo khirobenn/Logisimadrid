@@ -285,14 +285,14 @@ public abstract class Gate {
 
         // On vérifie que l'objet ne dépasse pas la fenetre
         // On note que setLayout, définit les coordonnées par rapport au parent
-        if(mouseCoord.getX() >= 0 && mouseCoord.getX() + shape.boundsInParentProperty().getValue().getWidth() <= 1920){
+        if(mouseCoord.getX() >= 0 && mouseCoord.getX() + shape.boundsInParentProperty().getValue().getWidth() <= 1920*(1.5+circuit.getZoom())){
             shape.setLayoutX(mouseCoord.getX());
             if(text != null){
                 text.setLayoutX(shape.getLayoutBounds().getMaxX() / 2 + shape.getLayoutX());
             }
         }
         
-        if(mouseCoord.getY() >= 0 && mouseCoord.getY() + shape.boundsInParentProperty().getValue().getHeight() <= 1080){
+        if(mouseCoord.getY() >= 0 && mouseCoord.getY() + shape.boundsInParentProperty().getValue().getHeight() <= 1080*(1.5+circuit.getZoom())){
             shape.setLayoutY(mouseCoord.getY());
             if(text != null){
                 text.setLayoutY(shape.getLayoutBounds().getMaxY() / 2 + shape.getLayoutY());

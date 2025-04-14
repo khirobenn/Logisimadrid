@@ -92,6 +92,10 @@ public abstract class Gate {
 	    case "MULTIPLIER":
 	    shape = GatesShapes.multiplier();
 	    break;
+
+	    case "BASCULE RS":
+	    shape = GatesShapes.Bascule_RS();
+	    break;
         }
         addShapeToGroup();
         shape.setLayoutX(x);
@@ -134,7 +138,7 @@ public abstract class Gate {
 
     public Shape getShape(){ return shape; }
     private void textChange(QuadBool value){
-        if(text != null && !name.equals("ADDER")){
+        if(text != null && !name.equals("BASCULE RS") && !name.equals("ADDER")){
             if(value == QuadBool.TRUE){
                 text.setText("1");
                 text.setFill(Unity.ON);

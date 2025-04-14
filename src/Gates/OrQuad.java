@@ -14,7 +14,7 @@ public class OrQuad{
 
 	if(input1==QuadBool.TRUE && input2!=QuadBool.ERROR) return QuadBool.TRUE;
 
-	if(input1==QuadBool.TRUE && input2==QuadBool.ERROR) return QuadBool.ERROR;
+	if(input1==QuadBool.TRUE && input2==QuadBool.ERROR) return QuadBool.TRUE;
 
 	if(input1==QuadBool.NOTHING && input2!=QuadBool.TRUE) return QuadBool.ERROR;
 

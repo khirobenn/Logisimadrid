@@ -14,7 +14,7 @@ public class RSflipflop extends Gate {
     private QuadBool current = QuadBool.FALSE;  // represente Qn
     private Circuit circuit;
 
-    public Adder(Circuit circuit, Pane layout, double x, double y) {
+    public RSflipflop(Circuit circuit, Pane layout, double x, double y) {
         super("RS FlipFlop", 2, circuit, layout, x, y);
         this.circuit = circuit;
         Shape shape = getShape();
@@ -30,7 +30,7 @@ public class RSflipflop extends Gate {
         QuadBool R = inputs[0].getOutput();
         QuadBool S = inputs[1].getOutput();
         
-        QuadBool nextQ = QuadBool.or(QuadBool.and(QuadBool.not(R), current), S);
+        QuadBool nextQ = OrQuad.Or(AndQuad.And(NotQuad.Not(R), current), S);
         setOutput(nextQ);
         current = nextQ; //mise à jour
 

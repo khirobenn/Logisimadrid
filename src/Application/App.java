@@ -62,7 +62,8 @@ public class App extends Application{
         createButton("ADDER"),
         createButton("MULTIPLIER"),
         createButton("ODDPARITY"),
-        createButton("EVENPARITY") 
+        createButton("EVENPARITY"),
+        createButton("BASCULE RS")	
     });
 
     public static void main(String[] args) throws Exception {
@@ -242,6 +243,11 @@ public class App extends Application{
                 gate = new EvenParityGate(circuit, pane,x,y,3);
                 circuit.addGate(gate);
                 break;
+
+	    case 13:
+		gate = new Bascule_RS(circuit,pane,x,y);
+		circuit.addGate(gate);
+		break;
 
             default:
                 break;

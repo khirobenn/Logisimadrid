@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.json.simple.parser.ParseException;
-import Gates.Multiplier;
+
 import Circuit.Circuit;
 import Circuit.CircuitSaver;
 import Circuit.Gate;
@@ -18,8 +18,11 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -35,6 +38,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class App extends Application{
@@ -62,8 +66,7 @@ public class App extends Application{
         createButton("ADDER"),
         createButton("MULTIPLIER"),
         createButton("ODDPARITY"),
-        createButton("EVENPARITY"),
-        createButton("BASCULE RS")	
+        createButton("EVENPARITY") 
     });
 
     public static void main(String[] args) throws Exception {
@@ -74,6 +77,41 @@ public class App extends Application{
     public void init() throws Exception{
         super.init();
     }
+
+    private void AfficherFenetreNom ( CircuitSaver saver ) {
+        Stage pop = new Stage() ;
+        pop.initModality(Modality.APPLICATION_MODAL);
+        pop.setTitle ("File Name");
+        Label l = new Label("Give a Name :") ;
+        TextField n = new TextField();
+        Button OK = new Button("OK") ;
+        OK.setOnAction( e-> {
+          String nF = n.getText().trim() ;
+          if ( ! nF.isEmpty()  )  {
+  
+              if ( !nF.endsWith(".json")) {
+                  nF += ".json" ;
+              }
+              saver.saveCircuit(nF);
+              System.out.println("Fichier sauvegarde :"+nF );
+              pop.close(); 
+          }
+          else {
+              Alert a = new Alert(Alert.AlertType.WARNING , "You didn't give a name !!") ;
+              a.showAndWait();
+          }
+  
+        }); 
+  
+        VBox ly = new VBox(10,l,n,OK) ;
+        ly.setPadding(new Insets(15));
+        Scene scene2 = new Scene(ly,200 , 200 ) ;
+  
+        pop.setScene(scene2);
+        pop.showAndWait();
+  
+       }
+
 
     @Override
     public void start(Stage window) throws Exception {
@@ -139,7 +177,7 @@ public class App extends Application{
 
         Button save = new Button("Save");
         hb.getChildren().add(save);
-        save.setOnMouseClicked(e -> saver.saveCircuit("liti.json"));
+        save.setOnMouseClicked(e -> AfficherFenetreNom(saver));
 
 
         Button load = new Button("Load");
@@ -243,11 +281,6 @@ public class App extends Application{
                 gate = new EvenParityGate(circuit, pane,x,y,3);
                 circuit.addGate(gate);
                 break;
-
-	    case 13:
-		gate = new Bascule_RS(circuit,pane,x,y);
-		circuit.addGate(gate);
-		break;
 
             default:
                 break;

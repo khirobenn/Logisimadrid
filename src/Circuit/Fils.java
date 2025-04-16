@@ -359,6 +359,10 @@ public class Fils {
 	public Point2D getCircle2Coord(){
 		return new Point2D(circle2.getCenterX(), circle2.getCenterY());
 	}
+	
+	public Point2D getCircle1Coord(){
+		return new Point2D(circle.getCenterX(), circle.getCenterY());
+	}
 
 	public void setCircleFill(Color color){
 		circle.setFill(color);
@@ -500,4 +504,13 @@ public class Fils {
 	public void hide(){
 		circuit.getPane().getChildren().removeAll(circle, circle2, l1, l2);
 	}
+
+	public Fils getParent () {
+		return this.parent ;
+	}
+
+	public Gate getGate () {
+		return this.gate ;
+	}
+
 }

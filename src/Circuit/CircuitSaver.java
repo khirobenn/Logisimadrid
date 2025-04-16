@@ -10,68 +10,134 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class CircuitSaver {
-    
-    private Circuit circuit;
-
-    public CircuitSaver(Circuit circuit) {
-        this.circuit = circuit;
+    private Circuit circuit ;
+  
+    public CircuitSaver (Circuit circuit ) {
+       this.circuit = circuit ;
     }
-
+   
    // creer un fichier avec le text
-    public void saveCircuit(String fileName){
-        try {
-            FileWriter writer = new FileWriter(fileName);
-            writer.write(exportCircuit().toCharArray());
-            System.out.println("Circuit enregistré avec succès dans " + fileName);
-            writer.close();
-        } catch (IOException e) {
-            System.out.println("Erreur pendant l enregistrement du circuit : " + e.getMessage());
-        }
-    }
+   
+   public void saveCircuit ( String filename ) {
+    try {
+      FileWriter writer = new FileWriter(filename ) ;
+      writer.write ( exportCircuit().toCharArray () );
+      System.out.println("Circuit enregistré avec succés dans " + filename ) ;
+      writer.close();
+    } catch ( IOException e ) {
+      System.out.println ( "Erreur pendant l enregistrement du circuit : " + e.getMessage());
+     }
+   }
 
-  // transformer le circuit en texte 
-    @SuppressWarnings("unchecked")
-    private String exportCircuit() {
+   // transformer le circuit en texte 
+   @SuppressWarnings ("unchecked")
+     private String exportCircuit () { 
         JSONObject obj = new JSONObject();
-        JSONArray array = new JSONArray();
-        Set<Gate> gates = circuit.getGates();  // je dois faire une fonction qui recupere toute les porte §§§ 
-        for (Gate gate : gates) { // je sais pas est ce que je dois recuperer dabord les portes ou le fils aucune idéé
-            // la je dois parcourir la liste des portes avec les valeures et les fils mais jai pas reuissi a le faire 
-            JSONObject o = new JSONObject();
+        
+        
+        // remplire le fichier avec toutes les portes creer dans le circuit et aussi avec toutes les outputs
+        JSONArray gateArray = new JSONArray();
+        Set<Gate> gates = circuit.getGates();  
+        for (Gate gate : gates) { 
+            JSONObject o = new JSONObject() ;
             o.put("name", gate.getName());
+            o.put("value", gate.getText() );
             o.put("inputs_length", gate.getInputs().length);
             o.put("x", gate.getShape().getLayoutX());
             o.put("y", gate.getShape().getLayoutY());
-            array.add(o);
+            gateArray.add(o);
         }
-        obj.put("gates", array);
+        obj.put("gates", gateArray );
+
+
+
+        // RECUPERER LES FILS
+        JSONArray filsArray = new JSONArray();
+        Set<Fils> files = circuit.getFils() ;
+        for ( Fils file : files ) {
+            // on cree l objet et apres on l ajoute dans le tableau des fils
+            JSONObject o = new JSONObject() ;
+            if ( file.getGate()!= null ) {
+                o.put("gate" , file.getGate() ) ;
+            }else{
+                o.put("gate" , "Unknown" ) ;
+            }
+            if ( file.getCircle1Coord()!= null ) {
+                o.put("centre_cercle_1 " , file.getCircle1Coord() ) ;
+            }else 
+            {
+                o.put("circle1_1X", 0 ) ;
+                o.put("circle1_1Y", 0 ) ;
+            }
+            if ( file.getCircle1Coord()!= null ) {
+                o.put("centre_cercle_2 " , file.getCircle2Coord() ) ;
+            }else 
+            {
+                o.put("circle1_2X", 0 ) ;
+                o.put("circle1_2Y", 0 ) ;
+            }
+            if ( file.getParent() != null ) {
+                o.put("Parent " , file.getParent() ) ;
+            }
+            // on verifie si les lignes pour les remplir
+            if ( file.l1 != null ) {
+                o.put ("Line_1X_start " , file.l1.getStartX()) ;
+                o.put ("Line_1X_end " , file.l1.getEndX()) ;
+                o.put ("Line_1Ystart " , file.l1.getStartY()) ;
+                o.put ("Line_1Y_end " , file.l1.getEndY()) ;
+            }
+            if ( file.l2 != null ) {
+                o.put ("Line_2X_start " , file.l1.getStartX()) ;
+                o.put ("Line_2X_end " , file.l1.getEndX()) ;
+                o.put ("Line_2Y_start " , file.l1.getStartY()) ;
+                o.put ("Line_2Y_end " , file.l1.getEndY()) ;
+            }
+            o.put("outPut " , file.getOutput() ) ;
+            filsArray.add(o) ;
+        }
+        obj.put("fils", filsArray );
+
+
+        // recuperer toutes les variables : 
+         JSONArray VarArray = new JSONArray();
+        Set<Gate> variable = circuit.getVar(); 
+        for (Gate var : variable ) { 
+            JSONObject o = new JSONObject() ;
+            o.put("name", var.getName());
+            if ( var.getInputs() != null ) {
+                o.put("inputs_length", var.getInputs().length);
+            }
+            o.put("x", var.getShape().getLayoutX());
+            o.put("y", var.getShape().getLayoutY());
+            o.put("value", var.getText() );
+            VarArray.add(o);
+        }
+        obj.put("Variable", VarArray );
+
+
         return obj.toJSONString();
     }
 
     //charger le circuit 
-    
-    public void loadCircuit(String fileName) throws ParseException{
+    public void loadCircuit ( String filename ) throws ParseException {
         try {
+            JSONParser parser = new JSONParser() ;
+            Reader reader = new FileReader(filename) ;
+            Object jsonObj = parser.parse (reader) ;
+            JSONObject jsonObject = ( JSONObject) jsonObj ;
+            JSONArray gates = ( JSONArray) jsonObject.get("gates") ;
 
-            JSONParser parser = new JSONParser();
-            Reader reader = new FileReader(fileName);
-
-            Object jsonObj = parser.parse(reader);
-
-            JSONObject jsonObject = (JSONObject) jsonObj;
-
-            JSONArray gates = (JSONArray) jsonObject.get("gates");
-
-            for(Object gate : gates){
-                JSONObject jsObj = (JSONObject) gate;
+            for ( Object gate : gates ) {
+                JSONObject jsObj = (JSONObject) gate ;
                 System.out.println(jsObj.toJSONString());
             }
-
             reader.close();
-        }
-        catch (IOException e) {
-            System.out.println("Erreur lors du chargement du circuit : " + e.getMessage());
-        }
+           } 
+           catch ( IOException e ) {
+            System.out.println("Erreur lors du chargement de fichier :" + e.getMessage() ) ;
+           }
     }
+
 }
+
 

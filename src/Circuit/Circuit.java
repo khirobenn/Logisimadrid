@@ -184,4 +184,15 @@ public class Circuit {
     public Set<Gate> getGates(){
         return gates;
     }
+
+    public Set<Gate> getVar(){
+        return variables ;
+    }
+
+    public Set<Fils> getFils () {
+        return fils ;
+    }
+
+ 
 }
+

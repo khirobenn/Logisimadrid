@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.json.simple.parser.ParseException;
 import Gates.Multiplier;
+import Gates.Bascule_RS;
 import Circuit.Circuit;
 import Circuit.CircuitSaver;
 import Circuit.Gate;
@@ -60,9 +61,16 @@ public class App extends Application{
         createButton("VARIABLE"),
         createButton("OUTPUT"),
         createButton("ADDER"),
+
         createButton("MULTIPLIER"),
         createButton("ODDPARITY"),
         createButton("EVENPARITY")
+
+	createButton("MULTIPLIER"),
+	createButton("ODDPARITY"),
+	createButton("EVENPARITY"),
+	createButton("BASCULE RS")
+
     });
 
     public static void main(String[] args) throws Exception {
@@ -226,6 +234,7 @@ public class App extends Application{
             case 9:
                 gate = new Adder(circuit, pane, x, y);
                 circuit.addGate(gate);
+
 	        	break;
 
             case 11:
@@ -242,6 +251,25 @@ public class App extends Application{
                 gate = new EvenParityGate(circuit, pane,x,y,3);
                 circuit.addGate(gate);
                 break;
+
+
+		break;
+	   case 11:
+		gate = new OddParityGate(circuit, pane,x,y,3);
+		circuit.addGate(gate);
+		break;
+	   case 10:
+		gate = new Multiplier(circuit, pane,x,y);
+		circuit.addGate(gate);
+		break;
+	   case 12:
+		gate = new EvenParityGate(circuit, pane,x,y,3);
+		circuit.addGate(gate);
+		break;
+	   case 13:
+		gate = new Bascule_RS(circuit,pane,x,y);
+		circuit.addGate(gate);
+		break;
 
             default:
                 break;
@@ -273,7 +301,9 @@ public class App extends Application{
     private Button createButton(String str){
         Button btn = new Button(str);
 
-        if(!str.equals("VARIABLE") && !!str.equals("MULTIPLIER") && str.equals("EvenParityGate") && !str.equals("ADDER") && !str.equals("EVENPARITY")){
+	if(!str.equals("VARIABLE") && !str.equals("MULTIPLIER") &&
+			str.equals("EvenParityGate") && !str.equals("ADDER") &&
+			!str.equals("EVENPARITY") && !str.equals("BASCULE RS")){
             Image img = new Image(getClass().getResourceAsStream("/pictures/"  + str.toLowerCase() + ".png"));
             ImageView view = new ImageView(img);
             view.setFitHeight(widthOfShape);

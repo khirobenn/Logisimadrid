@@ -32,6 +32,7 @@ public class Variable extends Gate {
         this(QuadBool.FALSE, circuit, layout, x, y);
     }
 
+
     @Override
     public void evaluateOutput(){}
 }

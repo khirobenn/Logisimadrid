@@ -1,0 +1,13 @@
+{
+  "nom": "Additionneur",
+  "image": "additionneur.png",
+  "nbEntree": 2,
+  "nbSortie": 1,
+  "tableVerite": [
+    { "entree": [0, 0], "sortie": [0] },
+    { "entree": [0, 1], "sortie": [1] },
+    { "entree": [1, 0], "sortie": [1] },
+    { "entree": [1, 1], "sortie": [0] }
+  ]
+}
+

@@ -11,6 +11,8 @@ import Circuit.Circuit;
 import Circuit.CircuitSaver;
 import Circuit.Gate;
 import Circuit.Unity;
+import Circuit.NouveauComposant ;
+import Circuit.ComposantLoad ;
 import Circuit.OddParityGate;
 import Circuit.EvenParityGate;
 
@@ -53,7 +55,7 @@ public class App extends Application{
     private final int width = 1920;
     private final int x = Unity.x;
     private final int y = Unity.y;
-
+    private final NouveauComposant cmp = ComposantLoad.chargerComp("../../Composants_Json/add.json") ; // on a le chemin de fichier
     private int nbOfButtonSelected = -1;
     private List <Button> buttons = Arrays.asList(new Button[]{ 
         createButton("AND"),
@@ -69,7 +71,8 @@ public class App extends Application{
         createButton("MULTIPLIER"),
         createButton("ODDPARITY"),
         createButton("EVENPARITY"),
-        createButton("BASCULE RS")
+        createButton("BASCULE RS") ,
+        createButton( cmp != null ? cmp.getNameComp().toUpperCase(): "NONE")
     });
 
     public static void main(String[] args) throws Exception {

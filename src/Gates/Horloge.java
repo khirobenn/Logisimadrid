@@ -30,7 +30,7 @@ public class Horloge extends Gate{
     QuadBool input = inputs[0].getOutput(); 
     if ( lastInput == QuadBool.FALSE && input == QuadBool.TRUE ) // detection de front montant
     {
-        current = NotQuad.Not(current);g // changement d'état
+        current = NotQuad.Not(current);// changement d'état
     }
 
     lastInput = input;

@@ -236,6 +236,8 @@ public class App extends Application{
             public void handle(KeyEvent key) {
                 if(key.getCode() == KeyCode.DELETE){
                     circuit.removeSelectedGate();
+                } else if (key.isControlDown() && key.getCode() == KeyCode.S) {
+                    AfficherFenetreNom(saver);
                 }
             }
             

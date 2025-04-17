@@ -286,7 +286,7 @@ public abstract class Gate {
             Math.floor(mouseCoord.getX()) - Math.floor(mouseCoord.getX())%Unity.x,
             Math.floor(mouseCoord.getY()) - Math.floor(mouseCoord.getY())%Unity.y
         );
-
+ 
         // On vérifie que l'objet ne dépasse pas la fenetre
         // On note que setLayout, définit les coordonnées par rapport au parent
         if(mouseCoord.getX() >= 0 && mouseCoord.getX() + shape.boundsInParentProperty().getValue().getWidth() <= 1920*(1.5+circuit.getZoom())){

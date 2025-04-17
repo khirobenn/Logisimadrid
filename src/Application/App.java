@@ -241,7 +241,7 @@ public class App extends Application{
                 } else if (key.isControlDown() && key.getCode() == KeyCode.EQUALS) {
                     circuit.zoom(); 
                     System.out.println("zoom reussi");
-                }
+                    
                 } else if (key.isControlDown() && key.getCode() == KeyCode.MINUS) {
                     circuit.unzoom();  
                     System.out.println("Unzoom reussi");

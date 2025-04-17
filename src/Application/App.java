@@ -238,6 +238,13 @@ public class App extends Application{
                     circuit.removeSelectedGate();
                 } else if (key.isControlDown() && key.getCode() == KeyCode.S) {
                     AfficherFenetreNom(saver);
+                } else if (key.isControlDown() && key.getCode() == KeyCode.EQUALS) {
+                    circuit.zoom(); 
+                    System.out.println("zoom reussi");
+                }
+                } else if (key.isControlDown() && key.getCode() == KeyCode.MINUS) {
+                    circuit.unzoom();  
+                    System.out.println("Unzoom reussi");
                 }
             }
             

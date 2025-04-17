@@ -9,7 +9,7 @@ import org.json.simple.parser.JSONParser ;
 public class ComposantLoad {
 
     public static NouveauComposant chargerComp ( String d ) {
-        // on cherche si dans notre dossier on a des nouveaux composants a récupérer , et on recupere leurs valeurs dans une liste
+        
         File fichier = new File( d ) ;
 
         if ( fichier.exists() && fichier.isFile() ) {
@@ -28,7 +28,8 @@ public class ComposantLoad {
                         JSONArray l = (JSONArray) table.get(i) ;
                         boolean[] lb = new boolean[l.size()] ;
                         for ( int j=0 ; j<l.size() ; j++ ) {
-                            lb[j] = (boolean) l.get(j) ;
+                            Object val = l.get(j) ;
+                            lb[j] = Boolean.parseBoolean(val.toString());
                         }
                         tableVerite[i] = lb ;
 

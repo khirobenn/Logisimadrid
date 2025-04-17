@@ -55,7 +55,7 @@ public class App extends Application{
     private final int width = 1920;
     private final int x = Unity.x;
     private final int y = Unity.y;
-    private final NouveauComposant cmp = ComposantLoad.chargerComp("../../Composants_Json/add.json") ; // on a le chemin de fichier
+    private final NouveauComposant cmp = ComposantLoad.chargerComp("./Composants_Json/Ajout_Comp.json") ; // on a le chemin de fichier
     private int nbOfButtonSelected = -1;
     private List <Button> buttons = Arrays.asList(new Button[]{ 
         createButton("AND"),
@@ -379,4 +379,5 @@ public class App extends Application{
     }
 
 }
+
 

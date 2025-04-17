@@ -11,11 +11,9 @@ import javafx.scene.shape.Shape;
 public class Bascule_RS extends Gate {
 
 	private QuadBool current = QuadBool.FALSE;  // représente Qn
-	private Circuit circuit;
 
 	public Bascule_RS(Circuit circuit, Pane layout, double x, double y) {
 		super("BASCULE RS", 2, circuit, layout, x, y);
-		this.circuit = circuit;
 
 		Shape shape = getShape();
 
@@ -65,14 +63,14 @@ public class Bascule_RS extends Gate {
 		int distance = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX());
 		Fils output = new Fils(Unity.tranformDoubleToInt(shape.getLayoutX() + distance / 2),
 				Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY() + shape.getLayoutY()), 
-				circuit, null, this);
+				circuit, null, this, true);
 		setOutputFils(output);
 
 		if (inputs != null) {
 			distance /= (inputs.length + 1);
 			for (int i = 1; i < inputs.length + 1; i++) {
 				inputs[i - 1] = new Fils(Unity.tranformDoubleToInt(shape.getLayoutX() + i * distance),
-						Unity.tranformDoubleToInt(shape.getLayoutY()), circuit, null, null);
+						Unity.tranformDoubleToInt(shape.getLayoutY()), circuit, null, null, true);
 			}
 		}
 	}

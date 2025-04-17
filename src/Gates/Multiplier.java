@@ -25,8 +25,8 @@ public class Multiplier extends Gate {
 
 		Shape shape = getShape();
 		float distance = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY());
-		retenuOut = new Fils(Unity.tranformDoubleToInt(shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + distance / 2), circuit, null, this);
-		retenuIn = new Fils(Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX() + shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + distance / 2), circuit, null, this);
+		retenuOut = new Fils(Unity.tranformDoubleToInt(shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + distance / 2), circuit, null, this, true);
+		retenuIn = new Fils(Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX() + shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + distance / 2), circuit, null, this, true);
 
 		isRetenuOutReleased = false;
 		isRetenuInReleased = false;
@@ -62,13 +62,13 @@ public class Multiplier extends Gate {
 		Fils[] inputs = getInputs();
 		Shape shape = getShape();
 		int distance = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX());
-		Fils output = new Fils(Unity.tranformDoubleToInt(shape.getLayoutX() + distance / 2), Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY() + shape.getLayoutY()), circuit, null, this);
+		Fils output = new Fils(Unity.tranformDoubleToInt(shape.getLayoutX() + distance / 2), Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY() + shape.getLayoutY()), circuit, null, this, true);
 		setOutputFils(output);
 
 		if (inputs != null) {
 			distance /= (inputs.length + 1);
 			for (int i = 1; i < inputs.length + 1; i++) {
-				inputs[i - 1] = new Fils(Unity.tranformDoubleToInt(shape.getLayoutX() + i * distance), Unity.tranformDoubleToInt(shape.getLayoutY()), circuit, null, null);
+				inputs[i - 1] = new Fils(Unity.tranformDoubleToInt(shape.getLayoutX() + i * distance), Unity.tranformDoubleToInt(shape.getLayoutY()), circuit, null, null, true);
 			}
 		}
 	}
@@ -120,7 +120,7 @@ public class Multiplier extends Gate {
 			retenuOut.moveFils(x, y);
 		} else {
 			Point2D coordPreviousOutput = retenuOut.getCircle2Coord();
-			Fils newOutput = new Fils(coordPreviousOutput.getX(), coordPreviousOutput.getY(), circuit, null, this);
+			Fils newOutput = new Fils(coordPreviousOutput.getX(), coordPreviousOutput.getY(), circuit, null, this, true);
 			newOutput.setCircleFill(Color.BLACK);
 			newOutput.setCircle2Fill(Color.TRANSPARENT);
 			retenuOut.setGate(null);
@@ -167,7 +167,7 @@ public class Multiplier extends Gate {
 			retenuIn.moveFils(x, y);
 		} else {
 			Point2D coordPreviousOutput = retenuIn.getCircle2Coord();
-			Fils newOutput = new Fils(coordPreviousOutput.getX(), coordPreviousOutput.getY(), circuit, null, this);
+			Fils newOutput = new Fils(coordPreviousOutput.getX(), coordPreviousOutput.getY(), circuit, null, this, true);
 			newOutput.setCircleFill(Color.BLACK);
 			newOutput.setCircle2Fill(Color.TRANSPARENT);
 			retenuIn.setGate(null);

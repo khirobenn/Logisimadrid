@@ -84,17 +84,17 @@
                         o.put("Parent " , file.getParent() ) ;
                     }
                     // on verifie si les lignes pour les remplir
-                    if ( file.l1 != null ) {
-                        o.put ("Line_1X_start " , file.l1.getStartX()) ;
-                        o.put ("Line_1X_end " , file.l1.getEndX()) ;
-                        o.put ("Line_1Ystart " , file.l1.getStartY()) ;
-                        o.put ("Line_1Y_end " , file.l1.getEndY()) ;
+                    if ( file.getL1() != null ) {
+                        o.put ("Line_1X_start " , file.getL1().getStartX()) ;
+                        o.put ("Line_1X_end " , file.getL1().getEndX()) ;
+                        o.put ("Line_1Ystart " , file.getL1().getStartY()) ;
+                        o.put ("Line_1Y_end " , file.getL1().getEndY()) ;
                     }
-                    if ( file.l2 != null ) {
-                        o.put ("Line_2X_start " , file.l1.getStartX()) ;
-                        o.put ("Line_2X_end " , file.l1.getEndX()) ;
-                        o.put ("Line_2Y_start " , file.l1.getStartY()) ;
-                        o.put ("Line_2Y_end " , file.l1.getEndY()) ;
+                    if ( file.getL2() != null ) {
+                        o.put ("Line_2X_start " , file.getL2().getStartX()) ;
+                        o.put ("Line_2X_end " , file.getL2().getEndX()) ;
+                        o.put ("Line_2Y_start " , file.getL2().getStartY()) ;
+                        o.put ("Line_2Y_end " , file.getL2().getEndY()) ;
                     }
                     o.put("outPut " , file.getOutput() ) ;
                     filsArray.add(o) ;

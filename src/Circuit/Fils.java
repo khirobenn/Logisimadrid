@@ -17,14 +17,15 @@ public class Fils {
 	private Gate gate;
 	private Fils parent;
 
+	private boolean isFilsRelatedToSomething;
 	private boolean isOutPutSet;
 	private QuadBool output;
 	// used for connected circuit
 	private Set <Fils> connected;
 
-	public Line l1;
-	public Line l2;
-	public Set<Line> lp;
+	private Line l1;
+	private Line l2;
+	private Set<Line> lp;
 
 
 
@@ -37,7 +38,8 @@ public class Fils {
 
 	private boolean isOutputOfVariable = false;
 
-	public Fils(Circuit circuit, Fils parent, Gate gate){
+	public Fils(Circuit circuit, Fils parent, Gate gate, boolean isFilsRelatedToSomething){
+		this.isFilsRelatedToSomething = isFilsRelatedToSomething;
 		this.parent = parent;
 		this.gate = gate;
 		if(parent != null){
@@ -81,13 +83,21 @@ public class Fils {
 		circuit.addElement(this);
 	}
 
-	public Fils(double x, double y, Circuit circuit, Fils parent, Gate gate){
-		this(circuit, parent, gate);
+	public Fils(double x, double y, Circuit circuit, Fils parent, Gate gate, boolean isFilsRelatedToSomething){
+		this(circuit, parent, gate, isFilsRelatedToSomething);
 		circle.setCenterX(x);
 		circle2.setCenterX(x);
 
 		circle.setCenterY(y);
 		circle2.setCenterY(y);
+	}
+
+	public Line getL1(){
+		return l1;
+	}
+
+	public Line getL2(){
+		return l2;
 	}
 
 	public void setCircleToTransparent(){
@@ -195,8 +205,7 @@ public class Fils {
 
 	private void reinitialiseLine(Line l){
 		double r = -200;
-		setLineCoord(l1, 10, r, 10, r);
-		circuit.getPane().getChildren().remove(l);
+		setLineCoord(l, 10, r, 10, r);
 	}
 	private void reinitialiseLines(){
 		reinitialiseLine(l1);
@@ -211,7 +220,7 @@ public class Fils {
 		l.setEndY(endY);
 	}
 
-	private boolean isNoLine(Line l){
+	public boolean isNoLine(Line l){
 		if(l == null) return true;
 		return l.getStartX() == l.getEndX() && l.getStartY() == l.getEndY();
 	}
@@ -295,10 +304,27 @@ public class Fils {
 				}
 			}
 			searchConnected();
+			circuit.eval(null);
+			circuit.fixFilsColors();
 		}
-		circuit.eval(null);
-		circuit.fixFilsColors();
+		else{
+			System.out.println("fil séléctionné");
+			circuit.setFilSelected(getTheFilWithLine());
+			circuit.setSelectedGate(null);
+		}
 	}
+
+	private Fils getTheFilWithLine(){
+		if(isNoLine(l1) && isNoLine(l2)){
+			for(Fils fil : connected){
+				if(!isNoLine(fil.l1) || !isNoLine(fil.l2)){
+					return fil;
+				}
+			}
+		}
+		return this;
+	}
+
 
 	public void swapCircles(){
 		Circle tmp = circle;
@@ -349,7 +375,7 @@ public class Fils {
 
 		}
 		else if(!dx && !dy){
-			reinitialiseLines();
+			reinitialiseAtt();
 		}
 
 		circle.setCenterX(xPoint);
@@ -415,7 +441,7 @@ public class Fils {
 		}
 
 		for(int i = 0; i <= distance; i += Unity.x) {
-			Fils element = new Fils(xCord, yCord, circuit, this, null);
+			Fils element = new Fils(xCord, yCord, circuit, this, null, false);
 			element.lp=lp;
 			lp.add(l);
 
@@ -499,6 +525,44 @@ public class Fils {
 		if(isNoLine(l2) && isNoLine(l2) && connected.size() == 0){
 			circuit.removeElement(this);
 		}
+	}
+
+	private void reinitialiseAtt(){
+		circle.setFill(Color.TRANSPARENT);
+		circle2.setFill(Unity.NOTH);
+		circle.setCenterX(circle2.getCenterX());
+		circle.setCenterY(circle2.getCenterY());
+		reinitialiseLines();
+	}
+
+	public void removeFil(){
+		deleteFilsConnectedInCircuit();
+		if(!isFilsRelatedToSomething){
+			System.out.println("Okey y a pas de porte");
+			delete();
+		}
+		else{
+			reinitialiseAtt();
+		}
+	}
+
+	private void deleteFilsConnectedInCircuit(){
+		for(Fils fil: new HashSet<Fils>(connected)){
+			fil.connected.remove(this);
+			connected.remove(fil);
+			if(!fil.isFilsRelatedToSomething){
+				if(isNoLine(fil.l1) && isNoLine(fil.l2)){
+					fil.delete();
+				}
+			}
+		}
+	}
+
+	private void delete(){
+		circuit.getPane().getChildren().removeAll(circle, circle2);
+		circuit.getPane().getChildren().remove(l1);
+		circuit.getPane().getChildren().remove(l2);
+		circuit.removeElement(this);
 	}
 
 	public void hide(){

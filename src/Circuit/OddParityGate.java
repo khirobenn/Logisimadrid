@@ -3,21 +3,13 @@
 package Circuit;
 
 import javafx.scene.layout.Pane;
-import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
 public class OddParityGate extends Gate {
-    private int numInputs;
-    private Circuit circuit;
 
     public OddParityGate(Circuit circuit, Pane layout, double x, double y, int numInputs) {
         super("ODDPARITY", numInputs, circuit, layout, x, y);
-        this.numInputs = numInputs;
-        this.circuit = circuit;
-
         Shape shape = getShape();
-        int distance = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY());
 
         setText("2k+1", shape.getLayoutBounds().getMaxX() / 2 + shape.getLayoutX(),
                 shape.getLayoutBounds().getMaxY() / 2 + shape.getLayoutY());
@@ -56,14 +48,14 @@ public class OddParityGate extends Gate {
         int distance = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX());
         Fils output = new Fils(Unity.tranformDoubleToInt(shape.getLayoutX() + distance / 2),
                                Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY() + shape.getLayoutY()), 
-                               circuit, null, this);
+                               circuit, null, this, true);
         setOutputFils(output);
 
         if (inputs != null) {
             distance /= (inputs.length + 1);
             for (int i = 1; i < inputs.length + 1; i++) {
                 inputs[i - 1] = new Fils(Unity.tranformDoubleToInt(shape.getLayoutX() + i * distance),
-                                         Unity.tranformDoubleToInt(shape.getLayoutY()), circuit, null, null);
+                                         Unity.tranformDoubleToInt(shape.getLayoutY()), circuit, null, null, true);
             }
         }
     }

@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
 
 public class Circuit {
@@ -14,7 +15,11 @@ public class Circuit {
     private Set<Gate> variables;
     private Set<Gate> gates;
     private Gate selectedGate;
+    private Fils filSelected;
     private double zoom = 1.;
+
+    private Rectangle rec1;
+    private Rectangle rec2;
     Scale scale;
 
     public Circuit(Pane group){
@@ -26,6 +31,8 @@ public class Circuit {
         scale.setPivotX(0);
         scale.setPivotY(0);
         this.group.getTransforms().add(scale);
+        rec1 = new Rectangle(Unity.x/2, Unity.x/2);
+        rec2 = new Rectangle(Unity.x/2, Unity.x/2);
     }
 
     public void addElement(Fils element){
@@ -34,7 +41,13 @@ public class Circuit {
     }
 
     public void setSelectedGate(Gate selectedGate){
-        if(selectedGate == this.selectedGate){
+        if(selectedGate == null){
+            if(this.selectedGate != null){
+                this.selectedGate.getShape().setFill(Color.TRANSPARENT);
+            }
+            this.selectedGate = selectedGate;
+        }
+        else if(selectedGate == this.selectedGate){
             selectedGate.getShape().setFill(Color.TRANSPARENT);
             this.selectedGate = null;
             System.out.println("No gate selected");
@@ -50,6 +63,12 @@ public class Circuit {
 
     }
 
+    public void removeFilSelected(){
+        if(filSelected != null){
+            filSelected.removeFil();
+        }
+    }
+
     public void removeElement(Fils element){
         fils.remove(element);
     }
@@ -58,6 +77,26 @@ public class Circuit {
         if(selectedGate == null) return;
         GatesShapes.rotate(selectedGate.getShape());
         selectedGate.updatePoints();
+    }
+
+    public void setFilSelected(Fils fil){
+        filSelected = fil;
+        if(filSelected == null){
+            group.getChildren().removeAll(rec1, rec2);
+            return;
+        }
+        rec1.setX(filSelected.getL1().getStartX() - Unity.x/4);
+        rec1.setY(filSelected.getL1().getStartY() - Unity.x/4);
+
+        rec2.setX(filSelected.getL1().getEndX() - Unity.x/4);
+        rec2.setY(filSelected.getL1().getEndY() - Unity.x/4);
+
+        if(!filSelected.isNoLine(fil.getL2())){
+            rec2.setX(filSelected.getL2().getEndX() - Unity.x/4);
+            rec2.setY(filSelected.getL2().getEndY() - Unity.x/4);
+        }
+        group.getChildren().removeAll(rec1, rec2);
+        group.getChildren().addAll(rec1, rec2);
     }
 
     public Pane getPane(){ return group; } 
@@ -77,9 +116,14 @@ public class Circuit {
     }
 
     public void removeSelectedGate(){
-        if(selectedGate == null) return;
-        removeGate(selectedGate);
-        selectedGate = null;
+        if(selectedGate == null) {
+            removeFilSelected();
+            setFilSelected(null);
+        }
+        else{
+            removeGate(selectedGate);
+            selectedGate = null;
+        }
         eval(null);
         fixFilsColors();
     }
@@ -193,6 +237,11 @@ public class Circuit {
         return fils ;
     }
 
+
+    public void resetSelectedItems(){
+        setSelectedGate(null);
+        setFilSelected(null);
+    }
  
 }
 

@@ -240,12 +240,12 @@ public abstract class Gate {
 
     public void addPoints(Circuit circuit){
         int distance = Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxY());
-        output = new Fils(Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX() + shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + distance/2), circuit, null, this);
+        output = new Fils(Unity.tranformDoubleToInt(shape.getLayoutBounds().getMaxX() + shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + distance/2), circuit, null, this, true);
         if(name == "VARIABLE") output.setFilsAsVariable();
         if(inputs != null){
             distance /= inputs.length + 1;
             for(int i = 1; i < inputs.length+1; i++){
-                inputs[i-1] = new Fils(Unity.tranformDoubleToInt(shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + i*distance), circuit, null, null);
+                inputs[i-1] = new Fils(Unity.tranformDoubleToInt(shape.getLayoutX()), Unity.tranformDoubleToInt(shape.getLayoutY() + i*distance), circuit, null, null, true);
             }   
         }
 
@@ -374,7 +374,7 @@ public abstract class Gate {
         }
         else{
             Point2D coordPreviousOutput = filsToCheck.getCircle2Coord();
-            Fils newOutput = new Fils(coordPreviousOutput.getX(), coordPreviousOutput.getY(), circuit, null, this);
+            Fils newOutput = new Fils(coordPreviousOutput.getX(), coordPreviousOutput.getY(), circuit, null, this, true);
             newOutput.setCircleFill(Color.BLACK);
             newOutput.setCircle2Fill(Color.TRANSPARENT);
             filsToCheck.setGate(null);

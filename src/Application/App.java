@@ -40,6 +40,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.animation.PauseTransition;
@@ -53,9 +54,8 @@ public class App extends Application{
     private final int height = 1080;
     // private final int width = Unity.width;
     private final int width = 1920;
-    private final int x = Unity.x;
-    private final int y = Unity.y;
     private final NouveauComposant cmp = ComposantLoad.chargerComp("./Composants_Json/Ajout_Comp.json") ; // on a le chemin de fichier
+
     private int nbOfButtonSelected = -1;
     private List <Button> buttons = Arrays.asList(new Button[]{ 
         createButton("AND"),
@@ -152,11 +152,15 @@ public class App extends Application{
     private void launchMainApp(Stage window) throws Exception {
         Pane sp = new Pane();
 
+        Rectangle background = new Rectangle(20000, 20000);
+        background.setFill(Color.WHITE);
+        sp.getChildren().add(background);
+        
         Pane pane2 = new Pane();
         pane2.setMaxWidth(width);
         pane2.setMaxHeight(height);
         pane2.getChildren().add(sp);
-
+        
         ScrollPane scroll = new ScrollPane();
         scroll.setMinHeight(Unity.height/2);
         scroll.setMinWidth(Unity.width/2);
@@ -165,19 +169,15 @@ public class App extends Application{
         scroll.setMaxHeight(height);
         scroll.setContent(pane2);
         
-
-        // String enteredByUser = "abcdef";
-        // sp.setStyle("-fx-background-color: #" + enteredByUser);
-
-        // sp.setMinSize(Unity.width - widthOfButton - widthOfShape, Unity.height);
         sp.setMinSize(width - widthOfButton - widthOfShape, height);
         sp.setMaxWidth(Region.USE_PREF_SIZE);
         sp.setMaxHeight(Region.USE_PREF_SIZE);
-
+        
         sp.setPrefWidth(width*4);
         sp.setPrefHeight(height*4);
-
+        
         Circuit circuit = new Circuit(sp);
+        background.setOnMouseClicked(e -> circuit.resetSelectedItems());
         
         sp.setOnMouseClicked(e -> addItem(e, circuit, sp));
 
@@ -325,14 +325,13 @@ public class App extends Application{
                 gate = new EvenParityGate(circuit, pane,x,y,3);
                 circuit.addGate(gate);
                 break;
-                
+
             case 13:
                 gate = new Bascule_RS(circuit, pane,x,y);
                 circuit.addGate(gate);
                 break;
             default:
                 break;
-
             }
 
         if(nbOfButtonSelected >= 0){

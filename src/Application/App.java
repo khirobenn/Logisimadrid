@@ -40,6 +40,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 
 public class App extends Application{
     Scene scene;
@@ -112,10 +114,39 @@ public class App extends Application{
         pop.showAndWait();
   
        }
-
-
-    @Override
+       @Override
     public void start(Stage window) throws Exception {
+    // Étape 1 : Créer la scène avec le logo
+    Image logoImage = new Image(getClass().getResourceAsStream("/pictures/logo.jpeg"));
+    ImageView logoView = new ImageView(logoImage);
+    logoView.setFitHeight(300); // adapte la taille
+    logoView.setPreserveRatio(true);
+    Pane logoPane = new Pane(logoView);
+    logoPane.setStyle("-fx-background-color: white;");
+    logoView.setLayoutX(350); // tu peux ajuster le centrage
+    logoView.setLayoutY(150);
+
+    Scene splashScene = new Scene(logoPane, 1200, 600); // taille de l'écran d'accueil
+    window.setScene(splashScene);
+    window.setTitle("LOGISIM");
+    window.show();
+
+    // Étape 2 : Attendre 3 secondes
+    PauseTransition delay = new PauseTransition(Duration.seconds(3));
+    delay.setOnFinished(event -> {
+        try {
+            // Étape 3 : lancer l'app principale
+            launchMainApp(window); 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        });
+    delay.play();
+
+    }
+
+    
+    private void launchMainApp(Stage window) throws Exception {
         Pane sp = new Pane();
 
         Pane pane2 = new Pane();

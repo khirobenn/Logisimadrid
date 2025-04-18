@@ -375,7 +375,7 @@ public class Fils {
 
 		}
 		else if(!dx && !dy){
-			reinitialiseAtt();
+			reinitialiseLines();
 		}
 
 		circle.setCenterX(xPoint);
@@ -529,7 +529,9 @@ public class Fils {
 
 	private void reinitialiseAtt(){
 		circle.setFill(Color.TRANSPARENT);
-		circle2.setFill(Unity.NOTH);
+		if(isFilsRelatedToSomething){
+			circle2.setFill(Unity.NOTH);
+		}
 		circle.setCenterX(circle2.getCenterX());
 		circle.setCenterY(circle2.getCenterY());
 		reinitialiseLines();
@@ -537,23 +539,20 @@ public class Fils {
 
 	public void removeFil(){
 		deleteFilsConnectedInCircuit();
-		if(!isFilsRelatedToSomething){
-			System.out.println("Okey y a pas de porte");
-			delete();
-		}
-		else{
-			reinitialiseAtt();
-		}
+		reinitialiseAtt();
 	}
 
 	private void deleteFilsConnectedInCircuit(){
 		for(Fils fil: new HashSet<Fils>(connected)){
-			fil.connected.remove(this);
-			connected.remove(fil);
-			if(!fil.isFilsRelatedToSomething){
-				if(isNoLine(fil.l1) && isNoLine(fil.l2)){
-					fil.delete();
+			if(fil != parent){
+				fil.connected.remove(this);
+				connected.remove(fil);
+				if(!fil.isFilsRelatedToSomething){
+					if(isNoLine(fil.l1) && isNoLine(fil.l2)){
+						fil.delete();
+					}
 				}
+
 			}
 		}
 	}

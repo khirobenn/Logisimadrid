@@ -117,6 +117,10 @@ public class Fils {
 		isFilsRelatedToSomething = value;
 	}
 
+	public boolean getIsFilsRelatedToSomething(){
+		return isFilsRelatedToSomething;
+	}
+
 	public void addToConnected(Fils fils){
 		connected.add(fils);
 		fils.connected.add(this);

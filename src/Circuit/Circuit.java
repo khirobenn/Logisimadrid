@@ -59,6 +59,7 @@ public class Circuit {
             this.selectedGate = selectedGate;
             selectedGate.getShape().setFill(Color.rgb(219, 219, 219));
             System.out.println("Gate selected !!!");
+            setFilSelected(null);
         }
 
     }

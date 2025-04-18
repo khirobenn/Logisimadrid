@@ -177,9 +177,9 @@ public abstract class Gate {
         }
         else changeOutputColor(Unity.NOTH);
         
-        textChange(value);
-
+        
         output.setOutput(value);
+        textChange(output.getOutputValue());
         isOutPutSet = true;
     }
 
@@ -382,11 +382,14 @@ public abstract class Gate {
             filsToCheck.setCircleToTransparent();
             if(index == -1){
                 newOutput.setLp(output);
+                output.setGate(null);
+                output.setIsFilsRelatedToSomething(false);
                 output = newOutput;
                 isReleased = true;
             }
             else{
                 newOutput.setLp(inputs[index-1]);
+                inputs[index-1].setIsFilsRelatedToSomething(false);
                 inputs[index-1] = newOutput;
                 isReleasedForInputs[index-1] = true;
             }

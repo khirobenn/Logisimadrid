@@ -3,12 +3,9 @@ package Gates;
 import Circuit.Circuit;
 import Circuit.Fils;
 import Circuit.Gate;
-import Circuit.GatesShapes;
 import Circuit.QuadBool;
-import com.sun.jdi.ShortValue;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
-import javax.swing.text.StyledEditorKit;
 
 
 public class Horloge extends Gate{

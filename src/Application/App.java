@@ -2,6 +2,7 @@ package Application;
 
 import Gates.*;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -221,14 +222,7 @@ public class App extends Application{
 
         Button load = new Button("Load");
         hb.getChildren().add(load);
-        load.setOnMouseClicked(e -> {
-            try {
-                saver.loadCircuit("liti.json");
-                System.out.println("Ficher Télecharger");
-            } catch (ParseException e1) {
-                e1.printStackTrace();
-            }
-        });
+        load.setOnMouseClicked(e -> AfficherTelechargement());
 
         BorderPane border = new BorderPane();
         border.setLeft(hb);
@@ -394,6 +388,51 @@ public class App extends Application{
         return btn;
     }
 
+
+    private void AfficherTelechargement (  ) {
+        Stage pop = new Stage() ;
+        pop.initModality(Modality.APPLICATION_MODAL);
+        pop.setTitle ("File Name");
+        Label l = new Label("Give a Name :") ;
+        TextField n = new TextField();
+        Button OK = new Button("OK") ;
+        OK.setOnAction( e-> {
+          String nF = n.getText().trim() ;
+          if ( ! nF.isEmpty()  )  {
+  
+              if ( !nF.endsWith(".json")) {
+                  nF += ".json" ;
+              }
+              //saver.saveCircuit(nF);
+              File fichier = new File(nF) ;
+              if ( fichier.exists()) {
+                Alert a = new Alert(Alert.AlertType.INFORMATION,"LE FICHIER EXISTE:"+nF) ;
+                a.showAndWait();
+              }
+              else {
+                Alert a = new Alert(Alert.AlertType.INFORMATION,"LE FICHIER N EXISTE PAS: "+nF) ;
+                a.showAndWait() ;
+              }
+           
+              pop.close(); 
+          }
+          else {
+              Alert a = new Alert(Alert.AlertType.WARNING , "You didn't give a name !!") ;
+              a.showAndWait();
+          }
+  
+        }); 
+  
+        VBox ly = new VBox(10,l,n,OK) ;
+        ly.setPadding(new Insets(15));
+        Scene scene2 = new Scene(ly,200 , 200 ) ;
+  
+        pop.setScene(scene2);
+        pop.showAndWait();
+  
+       }
+
 }
+
 
 

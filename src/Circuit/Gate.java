@@ -80,6 +80,9 @@ public abstract class Gate {
             case "ADDER":
             shape = GatesShapes.adder();
             break;
+            case "HORLOGE" :
+            shape = GatesShapes.horloge();
+            break ;
 
 	    case "EVENPARITY":
 	    shape = GatesShapes.EvenParityShape();

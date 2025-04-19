@@ -71,6 +71,7 @@ public class App extends Application{
         createButton("ODDPARITY"),
         createButton("EVENPARITY"),
         createButton("BASCULE RS") ,
+        createButton("HORLOGE") ,
         createButton( cmp != null ? cmp.getNameComp().toUpperCase(): "NONE")
     });
 
@@ -333,12 +334,17 @@ public class App extends Application{
                 gate = new Bascule_RS(circuit, pane,x,y);
                 circuit.addGate(gate);
                 break;
-            
             case 14:
+                gate = new Horloge(circuit, pane, x, y);
+                circuit.addGate(gate);
+                break;
+            case 15:
                 System.out.println("porte " + cmp.getNameComp() );
                 gate = new GateDeNouComp(cmp , circuit, pane, x, y) ;
                 circuit.addGate(gate);
                 break;
+            
+
 
             default:
                 break;

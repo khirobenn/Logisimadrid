@@ -11,9 +11,9 @@ public class ComposantLoad {
     public static NouveauComposant chargerComp ( String d ) {
         
         File fichier = new File( d ) ;
-
+        // si le fichier existe
         if ( fichier.exists() && fichier.isFile() ) {
-            
+                // on recupere les données de fichier
                 try ( FileReader reader = new FileReader(fichier )){
                     JSONObject o = (JSONObject) new JSONParser().parse(reader);
                     String nom = (String) o.get("nom") ;
@@ -34,7 +34,7 @@ public class ComposantLoad {
                         tableVerite[i] = lb ;
 
                     }
-
+                    // on return les cordonnés de composant
                      return  new NouveauComposant(nom,image,nbEntree,nbSortie,tableVerite) ;
                
                     } catch (Exception e){

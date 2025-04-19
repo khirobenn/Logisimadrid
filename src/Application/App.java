@@ -40,6 +40,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.animation.PauseTransition;
@@ -53,8 +54,6 @@ public class App extends Application{
     private final int height = 1080;
     // private final int width = Unity.width;
     private final int width = 1920;
-    private final int x = Unity.x;
-    private final int y = Unity.y;
     private final NouveauComposant cmp = ComposantLoad.chargerComp("./Composants_Json/Ajout_Comp.json") ; // on a le chemin de fichier
     private int nbOfButtonSelected = -1;
     private List <Button> buttons = Arrays.asList(new Button[]{ 
@@ -152,6 +151,10 @@ public class App extends Application{
     private void launchMainApp(Stage window) throws Exception {
         Pane sp = new Pane();
 
+        Rectangle background = new Rectangle(20000, 20000);
+        background.setFill(Color.WHITE);
+        sp.getChildren().add(background);
+
         Pane pane2 = new Pane();
         pane2.setMaxWidth(width);
         pane2.setMaxHeight(height);
@@ -178,7 +181,7 @@ public class App extends Application{
         sp.setPrefHeight(height*4);
 
         Circuit circuit = new Circuit(sp);
-        
+        background.setOnMouseClicked(e -> circuit.resetSelectedItems());
         sp.setOnMouseClicked(e -> addItem(e, circuit, sp));
 
         VBox hb = new VBox();

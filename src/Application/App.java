@@ -125,10 +125,10 @@ public class App extends Application{
     logoView.setPreserveRatio(true);
     Pane logoPane = new Pane(logoView);
     logoPane.setStyle("-fx-background-color: white;");
-    logoView.setLayoutX(350); // tu peux ajuster le centrage
-    logoView.setLayoutY(150);
+    logoView.setLayoutX(Unity.width/2 - logoView.getLayoutBounds().getMaxX()/2); // tu peux ajuster le centrage
+    logoView.setLayoutY(Unity.height/2 - logoView.getLayoutBounds().getMaxY()/2);
 
-    Scene splashScene = new Scene(logoPane, 1200, 600); // taille de l'écran d'accueil
+    Scene splashScene = new Scene(logoPane, Unity.width, Unity.height); // taille de l'écran d'accueil
     window.setScene(splashScene);
     window.setTitle("LOGISIM");
     window.show();
@@ -223,11 +223,11 @@ public class App extends Application{
         load.setOnMouseClicked(e -> AfficherTelechargement());
 
         Button increaseInput = new Button("+");
-        hb.getChildren().add(load);
+        hb.getChildren().add(increaseInput);
         increaseInput.setOnMouseClicked(e -> circuit.increaseInputs());
 
         Button decreaseInput = new Button("-");
-        hb.getChildren().add(load);
+        hb.getChildren().add(decreaseInput);
         decreaseInput.setOnMouseClicked(e -> circuit.decreaseInputs());
 
         BorderPane border = new BorderPane();

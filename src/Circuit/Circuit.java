@@ -3,18 +3,10 @@ package Circuit;
 import java.util.HashSet;
 import java.util.Set;
 
-import Gates.Adder;
 import Gates.And;
-import Gates.Bascule_RS;
-import Gates.GateDeNouComp;
-import Gates.Horloge;
-import Gates.Multiplier;
 import Gates.Nand;
 import Gates.Nor;
-import Gates.Not;
 import Gates.Or;
-import Gates.OutputGate;
-import Gates.Variable;
 import Gates.Xnor;
 import Gates.Xor;
 import javafx.scene.layout.Pane;
@@ -285,8 +277,7 @@ public class Circuit {
     }
     
     private void createGate(String name, int inputsLength, double x, double y){
-        if(selectedGate == null
-        || name.equals("VARIABLE") ||
+        if(name.equals("VARIABLE") ||
         name.equals("OUTPUT") ||
         name.equals("ADDER") ||
         name.equals("MULTIPLIER") ||
@@ -294,7 +285,7 @@ public class Circuit {
         name.equals("EVENPARITY") ||
         name.equals("BASCULE RS")  ||
         name.equals("HORLOGE")) return;
-        Gate gate;
+        Gate gate = null;
         switch (name) {
             case "AND":
                 gate = new And(inputsLength, this, group, x, y);
@@ -328,8 +319,11 @@ public class Circuit {
             
             default:
                 break;
-
             }
+
+        if(gate != null){
+            setSelectedGate(gate);
+        }
     }
 }
 

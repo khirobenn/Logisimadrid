@@ -6,8 +6,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import org.json.simple.parser.ParseException;
-
 import Circuit.Circuit;
 import Circuit.CircuitSaver;
 import Circuit.Gate;
@@ -223,6 +221,14 @@ public class App extends Application{
         Button load = new Button("Load");
         hb.getChildren().add(load);
         load.setOnMouseClicked(e -> AfficherTelechargement());
+
+        Button increaseInput = new Button("+");
+        hb.getChildren().add(load);
+        increaseInput.setOnMouseClicked(e -> circuit.increaseInputs());
+
+        Button decreaseInput = new Button("-");
+        hb.getChildren().add(load);
+        decreaseInput.setOnMouseClicked(e -> circuit.decreaseInputs());
 
         BorderPane border = new BorderPane();
         border.setLeft(hb);

@@ -3,6 +3,20 @@ package Circuit;
 import java.util.HashSet;
 import java.util.Set;
 
+import Gates.Adder;
+import Gates.And;
+import Gates.Bascule_RS;
+import Gates.GateDeNouComp;
+import Gates.Horloge;
+import Gates.Multiplier;
+import Gates.Nand;
+import Gates.Nor;
+import Gates.Not;
+import Gates.Or;
+import Gates.OutputGate;
+import Gates.Variable;
+import Gates.Xnor;
+import Gates.Xor;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -243,6 +257,79 @@ public class Circuit {
         setSelectedGate(null);
         setFilSelected(null);
     }
- 
+
+    public void increaseInputs(){
+        if(selectedGate != null){
+            int previousLength = selectedGate.getInputs().length;
+            if(previousLength < 5){
+                double x = selectedGate.getShape().getLayoutX();
+                double y = selectedGate.getShape().getLayoutY();
+                String name = selectedGate.getName();
+                removeSelectedGate();
+                createGate(name, previousLength+1, x, y);
+            }
+        }
+    }
+
+    public void decreaseInputs(){
+        if(selectedGate != null){
+            int previousLength = selectedGate.getInputs().length;
+            if(previousLength > 2){
+                double x = selectedGate.getShape().getLayoutX();
+                double y = selectedGate.getShape().getLayoutY();
+                String name = selectedGate.getName();
+                removeSelectedGate();
+                createGate(name, previousLength-1, x, y);
+            }
+        }
+    }
+    
+    private void createGate(String name, int inputsLength, double x, double y){
+        if(selectedGate == null
+        || name.equals("VARIABLE") ||
+        name.equals("OUTPUT") ||
+        name.equals("ADDER") ||
+        name.equals("MULTIPLIER") ||
+        name.equals("ODDPARITY") ||
+        name.equals("EVENPARITY") ||
+        name.equals("BASCULE RS")  ||
+        name.equals("HORLOGE")) return;
+        Gate gate;
+        switch (name) {
+            case "AND":
+                gate = new And(inputsLength, this, group, x, y);
+                addGate(gate);
+                break;
+    
+            case "OR":
+                gate = new Or(inputsLength, this, group, x, y);
+                addGate(gate);
+                break;
+
+            case "XOR":
+                gate = new Xor(inputsLength, this, group, x, y);
+                addGate(gate);
+                break;
+            
+            case "NAND":
+                gate = new Nand(inputsLength, this, group, x, y);
+                addGate(gate);
+                break;
+            
+            case "NOR":
+                gate = new Nor(inputsLength, this, group, x, y);
+                addGate(gate);
+                break;
+            
+            case "XNOR":
+                gate = new Xnor(inputsLength, this, group, x, y);
+                addGate(gate);
+                break;
+            
+            default:
+                break;
+
+            }
+    }
 }
 

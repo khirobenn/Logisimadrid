@@ -29,6 +29,11 @@ public class Circuit {
     Scale scale;
 
     public Circuit(Pane group){
+        Rectangle background = new Rectangle(20000, 20000);
+        background.setFill(Color.WHITE);
+        group.getChildren().add(background);
+        background.setOnMouseClicked(e -> resetSelectedItems());
+
         this.group = group;
         fils = new HashSet<Fils>();
         variables = new HashSet<Gate>();
@@ -39,6 +44,7 @@ public class Circuit {
         this.group.getTransforms().add(scale);
         rec1 = new Rectangle(Unity.x/2, Unity.x/2);
         rec2 = new Rectangle(Unity.x/2, Unity.x/2);
+
     }
 
     public void addElement(Fils element){
@@ -327,6 +333,25 @@ public class Circuit {
         if(gate != null){
             setSelectedGate(gate);
         }
+    }
+
+    public void clearAll(){
+        group.getChildren().clear();
+        fils.clear();
+        gates.clear();
+        variables.clear();
+        selectedGate = null;
+        filSelected = null;
+        zoom = 1.;
+        scale = new Scale();
+        scale.setPivotX(0);
+        scale.setPivotY(0);
+        group.getTransforms().add(scale);
+
+        Rectangle background = new Rectangle(20000, 20000);
+        background.setFill(Color.WHITE);
+        group.getChildren().add(background);
+        background.setOnMouseClicked(e -> resetSelectedItems());
     }
 }
 

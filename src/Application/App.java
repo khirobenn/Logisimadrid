@@ -118,32 +118,36 @@ public class App extends Application{
        }
        @Override
     public void start(Stage window) throws Exception {
-    // Étape 1 : Créer la scène avec le logo
-    Image logoImage = new Image(getClass().getResourceAsStream("/pictures/logo.jpeg"));
-    ImageView logoView = new ImageView(logoImage);
-    logoView.setFitHeight(300); // adapte la taille
-    logoView.setPreserveRatio(true);
-    Pane logoPane = new Pane(logoView);
-    logoPane.setStyle("-fx-background-color: white;");
-    logoView.setLayoutX(Unity.width/2 - logoView.getLayoutBounds().getMaxX()/2); // tu peux ajuster le centrage
-    logoView.setLayoutY(Unity.height/2 - logoView.getLayoutBounds().getMaxY()/2);
+        // Ajouter une icone
+        Image icon = new Image(getClass().getResourceAsStream("/pictures/icon.png"));
+        window.getIcons().add(icon);
+    
+        // Étape 1 : Créer la scène avec le logo
+        Image logoImage = new Image(getClass().getResourceAsStream("/pictures/logo.jpeg"));
+        ImageView logoView = new ImageView(logoImage);
+        logoView.setFitHeight(300); // adapte la taille
+        logoView.setPreserveRatio(true);
+        Pane logoPane = new Pane(logoView);
+        logoPane.setStyle("-fx-background-color: white;");
+        logoView.setLayoutX(Unity.width/2 - logoView.getLayoutBounds().getMaxX()/2); // tu peux ajuster le centrage
+        logoView.setLayoutY(Unity.height/2 - logoView.getLayoutBounds().getMaxY()/2);
 
-    Scene splashScene = new Scene(logoPane, Unity.width, Unity.height); // taille de l'écran d'accueil
-    window.setScene(splashScene);
-    window.setTitle("LOGISIM");
-    window.show();
+        Scene splashScene = new Scene(logoPane, Unity.width, Unity.height); // taille de l'écran d'accueil
+        window.setScene(splashScene);
+        window.setTitle("LOGISIM");
+        window.show();
 
-    // Étape 2 : Attendre 3 secondes
-    PauseTransition delay = new PauseTransition(Duration.seconds(3));
-    delay.setOnFinished(event -> {
-        try {
-            // Étape 3 : lancer l'app principale
-            launchMainApp(window); 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        });
-    delay.play();
+        // Étape 2 : Attendre 3 secondes
+        PauseTransition delay = new PauseTransition(Duration.seconds(3));
+        delay.setOnFinished(event -> {
+            try {
+                // Étape 3 : lancer l'app principale
+                launchMainApp(window); 
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            });
+        delay.play();
 
     }
 
@@ -168,11 +172,6 @@ public class App extends Application{
         scroll.setMaxHeight(height);
         scroll.setContent(pane2);
         
-
-        // String enteredByUser = "abcdef";
-        // sp.setStyle("-fx-background-color: #" + enteredByUser);
-
-        // sp.setMinSize(Unity.width - widthOfButton - widthOfShape, Unity.height);
         sp.setMinSize(width - widthOfButton - widthOfShape, height);
         sp.setMaxWidth(Region.USE_PREF_SIZE);
         sp.setMaxHeight(Region.USE_PREF_SIZE);

@@ -120,6 +120,9 @@ public class Circuit {
 
     public void addGate(Gate gate){
         gates.add(gate);
+        gate.searchConnectedFils();
+        eval(null);
+        fixFilsColors();
     }
 
     public void removeSelectedGate(){

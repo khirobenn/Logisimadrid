@@ -274,10 +274,8 @@ public class Fils {
 					}
 					if(!access){
                         createPointOnEachLine(l1);
-                        System.out.println("Created");
 					}
                     else{
-                        System.out.println("Reini");
                         reinitLine(l1);
                     }
 				}
@@ -298,12 +296,9 @@ public class Fils {
 					}
 					if(!access){
                         createPointOnEachLine(l2);
-                        System.out.println("Created 2");
 					}
                     else{
                         reinitLine(l2);
-                        System.out.println("reini 2");
-
                     }
 
 				}
@@ -316,7 +311,7 @@ public class Fils {
 			circuit.fixFilsColors();
 		}
 		else{
-			System.out.println("fil séléctionné");
+			circuit.fixFilsColors();
 			circuit.setFilSelected(getTheFilWithLine());
 			circuit.setSelectedGate(null);
 		}
@@ -491,7 +486,7 @@ public class Fils {
 		}
 	}
 
-	private void searchConnected(){
+	public void searchConnected(){
 		Point2D point = new Point2D(circle.getCenterX(), circle.getCenterY());
 		Set <Fils> list = circuit.getFilsList();
 		for(Fils elem : list){

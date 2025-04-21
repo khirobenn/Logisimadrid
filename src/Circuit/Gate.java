@@ -265,6 +265,7 @@ public abstract class Gate {
             output.swapCircles();
         }
         output.onRelease();
+        searchConnectedFils();
 
         if(inputs != null){
             for(int i = 0; i < inputs.length; i++){
@@ -425,5 +426,14 @@ public abstract class Gate {
     public void hideOutput(){
         output.hide();
         circuit.getFilsList().remove(output);
+    }
+
+    public void searchConnectedFils(){
+        output.searchConnected();
+        if(inputs != null){
+            for(Fils fil: inputs){
+                fil.searchConnected();
+            }
+        }
     }
 }

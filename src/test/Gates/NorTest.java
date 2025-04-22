@@ -25,12 +25,12 @@ public class NorTest {
         norGate = new Nor(2, circuit, layout, 100, 100);
 
         // Créer les fils et les connecter à la porte
-        input1 = new Fils(circuit, null, norGate);
-        input2 = new Fils(circuit, null, norGate);
+	input1 = new Fils(0, 0, circuit, null, norGate, true);
+	input2 = new Fils(0, 0, circuit, null, norGate, true);
 
         // Ajouter les fils comme entrées de la porte
-        norGate.addInput(input1);
-        norGate.addInput(input2);
+	norGate.getInputs()[0] = input1;
+	norGate.getInputs()[1] = input2;
     }
 
     @Test

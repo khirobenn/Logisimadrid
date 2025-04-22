@@ -18,8 +18,8 @@ public class NandTest {
     public void setUp() {
         layout = new Pane();  // Crée un layout pour le test
         circuit = new Circuit(layout);  // Passer le layout lors de la création du Circuit
-        input1 = new Fils(circuit, null, nandGate);  // Utilise le constructeur de Fils avec les arguments nécessaires
-        input2 = new Fils(circuit, null, nandGate);  // Idem pour input2
+	input1 = new Fils(0, 0, circuit, null, nandGate, true);
+	input2 = new Fils(0, 0, circuit, null, nandGate, true);
         nandGate = new Nand(2, circuit, layout, 100, 100);  // Crée une porte NAND avec 2 entrées
     }
 

@@ -46,4 +46,22 @@ public enum QuadBool{
     public static QuadBool xor(QuadBool a, QuadBool b){
         return AndQuad.And(OrQuad.Or(a, b),NotQuad.Not(AndQuad.And(a, b)));
     }
+
+    public String toString() {
+        switch (this) {
+            case TRUE: return "true";
+            case FALSE: return "false";
+            case ERROR: return "error";
+            default: return "nothing";
+        }
+    }
+
+    public static QuadBool stringToQuadBool(String str) {
+        switch (str) {
+            case "true" : return TRUE;
+            case "false" : return FALSE;
+            case "nothing" : return NOTHING;
+        }
+        return ERROR;
+    }
 }

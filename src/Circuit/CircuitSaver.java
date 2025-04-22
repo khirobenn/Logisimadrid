@@ -8,6 +8,7 @@ import org.json.simple.JSONArray ;
 import org.json.simple.parser.JSONParser ;
 import org.json.simple.parser.ParseException ;
 
+import Gates.Variable;
 import javafx.geometry.Point2D;
 
 import org.json.simple.JSONObject ;
@@ -30,7 +31,7 @@ public class CircuitSaver {
         System.out.println("Circuit enregistré avec succés dans " + filename ) ;
         writer.close();
         } catch ( IOException e ) {
-        System.out.println ( "Errzue  pendant l'enregistrement " + e.getMessage() ) ;
+        System.out.println ( "Erreur  pendant l'enregistrement " + e.getMessage() ) ;
         }
     }
 
@@ -41,19 +42,18 @@ public class CircuitSaver {
         JSONObject obj = new JSONObject();
         
         
-        // // remplire le fichier avec toutes les portes creer dans le circuit et aussi avec toutes les outputs
-        // JSONArray gateArray = new JSONArray();
-        // Set<Gate> gates = circuit.getGates();  
-        // for (Gate gate : gates) { 
-        //     JSONObject o = new JSONObject() ;
-        //     o.put("name", gate.getName());
-        //     o.put("value", gate.getText() );
-        //     o.put("inputs_length", gate.getInputs().length);
-        //     o.put("x", gate.getShape().getLayoutX());
-        //     o.put("y", gate.getShape().getLayoutY());
-        //     gateArray.add(o);
-        // }
-        // obj.put("gates", gateArray );
+        // remplire le fichier avec toutes les portes creer dans le circuit et aussi avec toutes les outputs
+        JSONArray gateArray = new JSONArray();
+        Set<Gate> gates = circuit.getGates();  
+        for (Gate gate : gates) { 
+            JSONObject o = new JSONObject() ;
+            o.put("name", gate.getName());
+            o.put("inputs_length", gate.getInputs().length);
+            o.put("x", gate.getShape().getLayoutX());
+            o.put("y", gate.getShape().getLayoutY());
+            gateArray.add(o);
+        }
+        obj.put("gates", gateArray );
 
 
 
@@ -110,21 +110,17 @@ public class CircuitSaver {
         obj.put("fils", filsArray );
 
 
-        // // recuperer toutes les variables : 
-        //     JSONArray VarArray = new JSONArray();
-        // Set<Gate> variable = circuit.getVar(); 
-        // for (Gate var : variable ) { 
-        //     JSONObject o = new JSONObject() ;
-        //     o.put("name", var.getName());
-        //     if ( var.getInputs() != null ) {
-        //         o.put("inputs_length", var.getInputs().length);
-        //     }
-        //     o.put("x", var.getShape().getLayoutX());
-        //     o.put("y", var.getShape().getLayoutY());
-        //     o.put("value", var.getText() );
-        //     VarArray.add(o);
-        // }
-        // obj.put("Variable", VarArray );
+        // recuperer toutes les variables : 
+        JSONArray VarArray = new JSONArray();
+        Set<Gate> variable = circuit.getVar(); 
+        for (Gate var : variable ) { 
+            JSONObject o = new JSONObject() ;
+            o.put("x", var.getShape().getLayoutX());
+            o.put("y", var.getShape().getLayoutY());
+            o.put("value", var.getOutputValue().toString() );
+            VarArray.add(o);
+        }
+        obj.put("Variable", VarArray );
 
 
         return obj.toJSONString();
@@ -137,20 +133,23 @@ public class CircuitSaver {
             Reader reader = new FileReader(filename) ;
             Object jsonObj = parser.parse (reader) ;
 
+            circuit.clearAll();
+
             loadFils(jsonObj);
-            
+            loadGates(jsonObj);
+            loadVariable(jsonObj);
+        
             reader.close();
-            } 
-            catch ( IOException e ) {
+        } 
+        catch ( IOException e ) {
             System.out.println("Erreur lors du chargement de fichier :" + e.getMessage() ) ;
-            }
+        }
     }
 
     private void loadFils(Object jsonObj){
         JSONObject jsonObject = ( JSONObject) jsonObj ;
         JSONArray fils = ( JSONArray) jsonObject.get("fils") ;
         List<Fils> filsArray = new ArrayList<Fils>();
-        circuit.clearAll();
 
         for ( Object fil : fils ) {
             JSONObject jsObj = (JSONObject) fil;
@@ -194,5 +193,41 @@ public class CircuitSaver {
             }
         }
     }
+
+    private void loadGates(Object jsonObj){
+        JSONObject jsonObject = ( JSONObject) jsonObj ;
+        JSONArray gates = ( JSONArray) jsonObject.get("gates") ;
+
+        for ( Object gate : gates ) {
+            JSONObject jsObj = (JSONObject) gate;
+
+            double x = (double) jsObj.get("x");
+            double y = (double) jsObj.get("y");
+
+            String name = (String) jsObj.get("name");
+
+            int inputsLength = ((Number) jsObj.get("inputs_length")).intValue();
+
+            circuit.createGate(name, inputsLength, x, y);
+        }
+    }
+
+    private void loadVariable(Object jsonObj){
+        JSONObject jsonObject = ( JSONObject) jsonObj ;
+        JSONArray variables = ( JSONArray) jsonObject.get("Variable") ;
+
+        for ( Object varia : variables ) {
+            JSONObject jsObj = (JSONObject) varia;
+
+            double x = (double) jsObj.get("x");
+            double y = (double) jsObj.get("y");
+
+            QuadBool value = QuadBool.stringToQuadBool((String)jsObj.get("value"));
+
+            Gate var = new Variable(value, circuit, circuit.getPane(), x, y);
+            circuit.addVariable(var);
+        }
+    }
+
 
 }

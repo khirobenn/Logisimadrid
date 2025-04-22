@@ -3,10 +3,15 @@ package Circuit;
 import java.util.HashSet;
 import java.util.Set;
 
+import Gates.Adder;
 import Gates.And;
+import Gates.Bascule_RS;
+import Gates.Horloge;
+import Gates.Multiplier;
 import Gates.Nand;
 import Gates.Nor;
 import Gates.Or;
+import Gates.OutputGate;
 import Gates.Xnor;
 import Gates.Xor;
 import javafx.scene.layout.Pane;
@@ -122,6 +127,9 @@ public class Circuit {
 
     public void addVariable(Gate var){
         variables.add(var);
+        var.searchConnectedFils();
+        eval(null);
+        fixFilsColors();
     }
 
     public void addGate(Gate gate){
@@ -267,7 +275,7 @@ public class Circuit {
                 double y = selectedGate.getShape().getLayoutY();
                 String name = selectedGate.getName();
                 removeSelectedGate();
-                createGate(name, previousLength+1, x, y);
+                changeGate(name, previousLength+1, x, y);
             }
         }
     }
@@ -280,12 +288,12 @@ public class Circuit {
                 double y = selectedGate.getShape().getLayoutY();
                 String name = selectedGate.getName();
                 removeSelectedGate();
-                createGate(name, previousLength-1, x, y);
+                changeGate(name, previousLength-1, x, y);
             }
         }
     }
     
-    private void createGate(String name, int inputsLength, double x, double y){
+    private void changeGate(String name, int inputsLength, double x, double y){
         if(name.equals("VARIABLE") ||
         name.equals("OUTPUT") ||
         name.equals("ADDER") ||
@@ -333,6 +341,77 @@ public class Circuit {
         if(gate != null){
             setSelectedGate(gate);
         }
+    }
+
+    public void createGate(String name, int inputsLength, double x, double y){
+        Gate gate = null;
+        switch (name) {
+            case "AND":
+                gate = new And(inputsLength, this, group, x, y);
+                addGate(gate);
+                break;
+    
+            case "OR":
+                gate = new Or(inputsLength, this, group, x, y);
+                addGate(gate);
+                break;
+
+            case "XOR":
+                gate = new Xor(inputsLength, this, group, x, y);
+                addGate(gate);
+                break;
+            
+            case "NAND":
+                gate = new Nand(inputsLength, this, group, x, y);
+                addGate(gate);
+                break;
+            
+            case "NOR":
+                gate = new Nor(inputsLength, this, group, x, y);
+                addGate(gate);
+                break;
+            
+            case "XNOR":
+                gate = new Xnor(inputsLength, this, group, x, y);
+                addGate(gate);
+                break;
+            
+            case "OUTPUT":
+                gate = new OutputGate(this, group, x, y);
+                addGate(gate);
+                break;
+
+            case "ADDER":
+                gate = new Adder(this, group, x, y);
+                addGate(gate);
+                break;
+
+            case "MULTIPLIER":
+                gate = new Multiplier(this, group, x, y);
+                addGate(gate);
+                break;
+
+            case "ODDPARITY":
+                gate = new OddParityGate(this, group, x, y, inputsLength);
+                addGate(gate);
+                break;
+            
+            case "EVENPARITY":
+                gate = new EvenParityGate(this, group, x, y, inputsLength);
+                addGate(gate);
+                break;
+
+            case "BASCULE RS":
+                gate = new Bascule_RS(this, group, x, y);
+                addGate(gate);
+                break;
+            case "HORLOGE":
+                gate = new Horloge(this, group, x, y);
+                addGate(gate);
+                break;
+            default:
+                break;
+            }
     }
 
     public void clearAll(){

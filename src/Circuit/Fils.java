@@ -68,6 +68,9 @@ public class Fils {
 		l1 = new Line(10, -200, 10, -200);
 		l2 = new Line(10, -200, 10, -200);
 
+		l1.setMouseTransparent(true);
+		l2.setMouseTransparent(true);
+
 		lp = new HashSet<Line>();
 
 		l1.setStrokeWidth(6);

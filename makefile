@@ -1,7 +1,7 @@
 JAVAC=javac -cp .:json-simple-1.1.1.jar
 JAVA=java
 #Chemin a modifier selon votre repertoire
-MODULE_PATH= /home/amir/Téléchargements/javafx-sdk-23.0.2/lib/
+MODULE_PATH=MODULE_PATH=${PWD}/javafx-sdk-23.0.2/lib/
 MODULES=javafx.controls,javafx.fxml
 SRC=src/**/*.java
 OUT_DIR=out

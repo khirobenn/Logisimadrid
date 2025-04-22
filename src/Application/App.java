@@ -6,6 +6,8 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import org.json.simple.parser.ParseException;
+
 import Circuit.Circuit;
 import Circuit.CircuitSaver;
 import Circuit.Gate;
@@ -35,7 +37,9 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -177,10 +181,10 @@ public class App extends Application{
         Circuit circuit = new Circuit(sp);
         sp.setOnMouseClicked(e -> addItem(e, circuit, sp));
 
-        VBox hb = new VBox();
-        // hb.setStyle("-fx-background-color: black");
-        hb.setPrefWidth(widthOfButton + widthOfShape);
-        hb.setBorder(new Border(new BorderStroke(Color.BLACK,
+        //Pour les bouttons
+        VBox vb = new VBox();
+        vb.setPrefWidth(widthOfButton + widthOfShape);
+        vb.setBorder(new Border(new BorderStroke(Color.BLACK,
             BorderStrokeStyle.SOLID,
             CornerRadii.EMPTY,
             BorderWidths.DEFAULT)));
@@ -188,47 +192,56 @@ public class App extends Application{
         for(Button btn : buttons){
             btn.setOnMouseClicked(e -> setNbOfGateSelected(btn));
             // btn.setPrefWidth(widthOfButton);
-            hb.getChildren().add(btn);
+            vb.getChildren().add(btn);
         }
 
         Button rotate = new Button("Rotate Item");
-        hb.getChildren().add(rotate);
+        vb.getChildren().add(rotate);
         rotate.setOnMouseClicked(e -> circuit.rotateSelectedEement());
 
+        Region filler = new Region();
+        HBox.setHgrow(filler, Priority.ALWAYS);
+        
+        HBox zoomBox = new HBox();
+        Button unScale = new Button("Unzoom");
+        unScale.setOnMouseClicked(e -> circuit.unzoom());
+        
         Button scale = new Button("Zoom");
-        hb.getChildren().add(scale);
         scale.setOnMouseClicked(e -> circuit.zoom());
 
-        Button unScale = new Button("Unzoom");
-        hb.getChildren().add(unScale);
-        unScale.setOnMouseClicked(e -> circuit.unzoom());
+        zoomBox.getChildren().addAll(unScale, filler, scale);
 
+        vb.getChildren().add(zoomBox);
 
         CircuitSaver saver = new CircuitSaver(circuit);
 
         Button save = new Button("Save");
-        hb.getChildren().add(save);
+        vb.getChildren().add(save);
         save.setOnMouseClicked(e -> AfficherFenetreNom(saver));
 
 
         Button load = new Button("Load");
-        hb.getChildren().add(load);
-        load.setOnMouseClicked(e -> AfficherTelechargement());
+        vb.getChildren().add(load);
+        load.setOnMouseClicked(e -> AfficherTelechargement(saver));
 
-        Button increaseInput = new Button("+");
-        hb.getChildren().add(increaseInput);
-        increaseInput.setOnMouseClicked(e -> circuit.increaseInputs());
-
+        HBox hb = new HBox();
+        
         Button decreaseInput = new Button("-");
-        hb.getChildren().add(decreaseInput);
         decreaseInput.setOnMouseClicked(e -> circuit.decreaseInputs());
+        
+        Button increaseInput = new Button("+");
+        increaseInput.setOnMouseClicked(e -> circuit.increaseInputs());
+        
+        hb.getChildren().addAll(decreaseInput, filler, increaseInput);
+
+        vb.getChildren().add(hb);
 
         Button clear = new Button("Clear!");
-        hb.getChildren().add(clear);
+        vb.getChildren().add(clear);
         clear.setOnMouseClicked(e -> circuit.clearAll());
 
         BorderPane border = new BorderPane();
-        border.setLeft(hb);
+        border.setLeft(vb);
         border.setCenter(scroll);
 
         BorderPane.setMargin(scroll, new Insets(Unity.x));
@@ -392,7 +405,7 @@ public class App extends Application{
     }
 
 
-    private void AfficherTelechargement (  ) {
+    private void AfficherTelechargement ( CircuitSaver saver ) {
         Stage pop = new Stage() ;
         pop.initModality(Modality.APPLICATION_MODAL);
         pop.setTitle ("File Name");
@@ -410,6 +423,11 @@ public class App extends Application{
               File fichier = new File(nF) ;
               if ( fichier.exists()) {
                 Alert a = new Alert(Alert.AlertType.INFORMATION,"LE FICHIER EXISTE:"+nF) ;
+                try {
+                    saver.loadCircuit(nF);
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
                 a.showAndWait();
               }
               else {

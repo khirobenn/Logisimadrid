@@ -579,4 +579,42 @@ public class Fils {
 		return this.gate ;
 	}
 
+	public Set<Fils> getConnected(){
+		return connected;
+	}
+
+	public void setL1Coord(Point2D start, Point2D end){
+		l1.setStartX(start.getX());
+		l1.setStartY(start.getY());
+
+		l1.setEndX(end.getX());
+		l1.setEndY(end.getY());
+	}
+
+	public void setL2Coord(Point2D start, Point2D end){
+		l2.setStartX(start.getX());
+		l2.setStartY(start.getY());
+
+		l2.setEndX(end.getX());
+		l2.setEndY(end.getY());
+	}
+
+	public void setCircle1Coord(double x, double y){
+		circle.setCenterX(x);
+		circle.setCenterY(y);
+	}
+
+	public void setCircle2Coord(double x, double y){
+		circle2.setCenterX(x);
+		circle2.setCenterY(y);
+	}
+
+	public void setItemsToTransparent(){
+		circle.setFill(Color.TRANSPARENT);
+		circle2.setFill(Color.TRANSPARENT);
+	}
+
+	public void setParent(Fils parent){
+		this.parent = parent;
+	}
 }

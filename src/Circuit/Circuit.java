@@ -343,6 +343,8 @@ public class Circuit {
         selectedGate = null;
         filSelected = null;
         zoom = 1.;
+        scale.setX(1.);
+        scale.setY(1.);
         scale = new Scale();
         scale.setPivotX(0);
         scale.setPivotY(0);

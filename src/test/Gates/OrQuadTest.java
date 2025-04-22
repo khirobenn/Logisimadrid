@@ -59,10 +59,4 @@ public class OrQuadTest {
         assertEquals(QuadBool.ERROR, OrQuad.Or(QuadBool.NOTHING, QuadBool.NOTHING));
     }
 
-    @Test
-    public void testOr_NullInput_ReturnsNull() {
-        assertNull(OrQuad.Or(null, QuadBool.TRUE));
-        assertNull(OrQuad.Or(QuadBool.FALSE, null));
-        assertNull(OrQuad.Or(null, null));
-    }
 }

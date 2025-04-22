@@ -10,52 +10,65 @@ import javafx.scene.shape.Shape;
 
 public class Bascule_RS extends Gate {
 
-	private QuadBool current = QuadBool.FALSE;  // représente Qn
 
-	public Bascule_RS(Circuit circuit, Pane layout, double x, double y) {
-		super("BASCULE RS", 2, circuit, layout, x, y);
+    private QuadBool current = QuadBool.FALSE;  // représente Qn
 
-		Shape shape = getShape();
+    public Bascule_RS(Circuit circuit, Pane layout, double x, double y) {
+        super("BASCULE RS", 2, circuit, layout, x, y);
+        setOutputValue(QuadBool.FALSE); // Explicitly set initial output
+        
+        Shape shape = getShape();
+        double shapeX = shape.getLayoutX();
+        double shapeY = shape.getLayoutY();
+        double shapeWidth = shape.getLayoutBounds().getWidth();
+        double shapeHeight = shape.getLayoutBounds().getHeight();
 
-		double shapeX = shape.getLayoutX();
-		double shapeY = shape.getLayoutY();
-		double shapeWidth = shape.getLayoutBounds().getWidth();
-		double shapeHeight = shape.getLayoutBounds().getHeight();
+        double centerX = shapeX + shapeWidth / 2 -1;
+        double centerY = shapeY + shapeHeight / 2-1;
 
-		double centerX = shapeX + shapeWidth / 2 -1;
-		double centerY = shapeY + shapeHeight / 2-1;
+        setText("R  S", centerX , centerY);
+    }
 
-	setText("R  S", centerX , centerY);
-}
+    @Override
+    public void evaluateOutput() {
+        Fils[] inputs = getInputs();
+        
+        // Handle case where inputs aren't connected yet
+        if (inputs[0] == null || inputs[1] == null) {
+            setOutput(current);
+            return;
+        }
 
-	@Override
-	public void evaluateOutput() {
-		Fils[] inputs = getInputs();
-		QuadBool R = inputs[0].getOutput();
-		QuadBool S = inputs[1].getOutput();
+        QuadBool R = inputs[0].getOutput();
+        QuadBool S = inputs[1].getOutput();
 
-		QuadBool nextQ;
+        QuadBool nextQ;
 
-		// Propagation d'erreur en priorité
-		if (R == QuadBool.ERROR || S == QuadBool.ERROR) {
-			nextQ = QuadBool.ERROR;
-		} else if (R == QuadBool.TRUE && S == QuadBool.TRUE) {
-			nextQ = QuadBool.ERROR; // état interdit
-		} else if (S == QuadBool.TRUE) {
-			nextQ = QuadBool.TRUE;
-		} else if (R == QuadBool.TRUE) {
-			nextQ = QuadBool.FALSE;
-		} else if (S == QuadBool.NOTHING || R == QuadBool.NOTHING) {
-			nextQ = current; // garder l'état
-		} else {
-			nextQ = current; // aucun changement
-		}
+        // Propagation d'erreur en priorité
+        if (R == QuadBool.ERROR || S == QuadBool.ERROR) {
+            nextQ = QuadBool.ERROR;
+        } 
+        // État interdit
+        else if (R == QuadBool.TRUE && S == QuadBool.TRUE) {
+            nextQ = QuadBool.ERROR;
+        } 
+        // Set state
+        else if (S == QuadBool.TRUE && R != QuadBool.TRUE) {
+            nextQ = QuadBool.TRUE;
+        } 
+        // Reset state
+        else if (R == QuadBool.TRUE && S != QuadBool.TRUE) {
+            nextQ = QuadBool.FALSE;
+        } 
+        // Maintain state for NOTHING inputs or both FALSE
+        else {
+            nextQ = current;
+        }
 
-		setOutput(nextQ);
-		current = nextQ;
-		setIHaveOutput(true);
-	}
-
+        setOutput(nextQ);
+        current = nextQ;
+        setIHaveOutput(true);
+    }
 	@Override
 	public void addPoints(Circuit circuit) {
 		Fils[] inputs = getInputs();

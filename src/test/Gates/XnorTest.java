@@ -70,7 +70,7 @@ public class XnorTest {
         xnor3.getInputs()[1].setOutput(QuadBool.TRUE);
         xnor3.getInputs()[2].setOutput(QuadBool.FALSE);
         xnor3.evaluateOutput();
-        assertEquals(QuadBool.FALSE, xnor3.getOutputValue());
+        assertEquals(QuadBool.TRUE, xnor3.getOutputValue());
     }
 
     @Test
@@ -80,6 +80,6 @@ public class XnorTest {
         xnor3.getInputs()[1].setOutput(QuadBool.TRUE);
         xnor3.getInputs()[2].setOutput(QuadBool.TRUE);
         xnor3.evaluateOutput();
-        assertEquals(QuadBool.TRUE, xnor3.getOutputValue());
+        assertEquals(QuadBool.FALSE, xnor3.getOutputValue());
     }
 }

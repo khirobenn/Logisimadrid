@@ -155,7 +155,7 @@ public class GatesShapes {
     return sh;
 }
 
-    public static Shape multiplier(){
+    public static  Shape multiplier(){
         Shape sh = new Rectangle(0, 0, 4*x, 4*x);
         sh.setFill(Color.TRANSPARENT);
         sh.setStroke(Color.BLACK);

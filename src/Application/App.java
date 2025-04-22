@@ -119,26 +119,25 @@ public class App extends Application{
        }
        @Override
     public void start(Stage window) throws Exception {
-    // Étape 1 : Créer la scène avec le logo
     Image logoImage = new Image(getClass().getResourceAsStream("/pictures/logo.jpeg"));
     ImageView logoView = new ImageView(logoImage);
-    logoView.setFitHeight(300); // adapte la taille
+    logoView.setFitHeight(300);
     logoView.setPreserveRatio(true);
     Pane logoPane = new Pane(logoView);
     logoPane.setStyle("-fx-background-color: white;");
-    logoView.setLayoutX(350); // tu peux ajuster le centrage
+    logoView.setLayoutX(350); 
     logoView.setLayoutY(150);
 
-    Scene splashScene = new Scene(logoPane, 1200, 600); // taille de l'écran d'accueil
+    Scene splashScene = new Scene(logoPane, 1200, 600); 
     window.setScene(splashScene);
     window.setTitle("LOGISIM");
     window.show();
 
-    // Étape 2 : Attendre 3 secondes
+   
     PauseTransition delay = new PauseTransition(Duration.seconds(3));
     delay.setOnFinished(event -> {
         try {
-            // Étape 3 : lancer l'app principale
+            
             launchMainApp(window); 
         } catch (Exception e) {
             e.printStackTrace();

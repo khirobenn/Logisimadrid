@@ -125,26 +125,26 @@ public class App extends Application{
         Image icon = new Image(getClass().getResourceAsStream("/pictures/icon.png"));
         window.getIcons().add(icon);
     
-        // Étape 1 : Créer la scène avec le logo
+        
         Image logoImage = new Image(getClass().getResourceAsStream("/pictures/logo.jpeg"));
         ImageView logoView = new ImageView(logoImage);
-        logoView.setFitHeight(300); // adapte la taille
+        logoView.setFitHeight(300); 
         logoView.setPreserveRatio(true);
         Pane logoPane = new Pane(logoView);
         logoPane.setStyle("-fx-background-color: white;");
-        logoView.setLayoutX(Unity.width/2 - logoView.getLayoutBounds().getMaxX()/2); // tu peux ajuster le centrage
+        logoView.setLayoutX(Unity.width/2 - logoView.getLayoutBounds().getMaxX()/2); 
         logoView.setLayoutY(Unity.height/2 - logoView.getLayoutBounds().getMaxY()/2);
 
-        Scene splashScene = new Scene(logoPane, Unity.width, Unity.height); // taille de l'écran d'accueil
+        Scene splashScene = new Scene(logoPane, Unity.width, Unity.height); 
         window.setScene(splashScene);
         window.setTitle("LOGISIM");
         window.show();
 
-        // Étape 2 : Attendre 3 secondes
+        
         PauseTransition delay = new PauseTransition(Duration.seconds(3));
         delay.setOnFinished(event -> {
             try {
-                // Étape 3 : lancer l'app principale
+                
                 launchMainApp(window); 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -257,12 +257,13 @@ public class App extends Application{
                     AfficherFenetreNom(saver);
                 } else if (key.isControlDown() && key.getCode() == KeyCode.EQUALS) {
                     circuit.zoom(); 
-                    System.out.println("zoom reussi");
-                    
                 } else if (key.isControlDown() && key.getCode() == KeyCode.MINUS) {
                     circuit.unzoom();  
-                    System.out.println("Unzoom reussi");
-                }
+                } else if (key.isControlDown() && key.getCode() == KeyCode.L){
+                    AfficherTelechargement(saver);
+                }else if (key.isControlDown() && key.getCode() == KeyCode.C){
+                    circuit.clearAll();
+                }    
             }
             
         });

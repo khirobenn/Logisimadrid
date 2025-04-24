@@ -272,7 +272,7 @@ public abstract class Gate {
         output.onRelease();
         searchConnectedFils();
         searchConnectedOtherFils();
-
+        
         if(inputs != null){
             for(int i = 0; i < inputs.length; i++){
                 if(isReleasedForInputs[i]){
@@ -288,10 +288,13 @@ public abstract class Gate {
                 isReleasedForInputs[i] = false;
             }
         }
+        
+        circuit.eval(null);
+        circuit.fixFilsColors();
     }
 
     public void searchConnectedOtherFils(){
-        
+
     }
 
     private void dragItem(MouseEvent e){

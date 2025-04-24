@@ -139,6 +139,7 @@ public class Circuit {
     public void addGate(Gate gate){
         gates.add(gate);
         gate.searchConnectedFils();
+        gate.searchConnectedOtherFils();
         eval(null);
         fixFilsColors();
     }

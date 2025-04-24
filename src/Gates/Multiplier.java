@@ -36,6 +36,7 @@ public class Multiplier extends Gate {
 		addFilsToOthers(retenuOut);
 	}
 
+	@Override
 	public void searchConnectedOtherFils(){
 		retenuIn.searchConnected();
 		retenuOut.searchConnected();

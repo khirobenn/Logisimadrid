@@ -35,6 +35,7 @@ public class Adder extends Gate {
 		return retenuOut; 
 	}
 
+	@Override
 	public void searchConnectedOtherFils(){
 		retenuIn.searchConnected();
 		retenuOut.searchConnected();

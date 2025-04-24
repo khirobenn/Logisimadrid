@@ -75,6 +75,7 @@ public class App extends Application{
         createButton("BASCULE RS") ,
         createButton("HORLOGE") ,
         createButton("BASCULE JK"),
+        createButton("BASCULE D"),
         createButton( cmp != null ? cmp.getNameComp().toUpperCase(): "NONE")
     });
 
@@ -355,6 +356,10 @@ public class App extends Application{
                 circuit.addGate(gate);   
                 break;
             case 16:
+                gate = new Bascule_D(circuit, pane, x ,y);
+                circuit.addGate(gate);    
+                break;
+            case 17:
                 System.out.println("porte " + cmp.getNameComp() );
                 gate = new GateDeNouComp(cmp , circuit, pane, x, y) ;
                 circuit.addGate(gate);

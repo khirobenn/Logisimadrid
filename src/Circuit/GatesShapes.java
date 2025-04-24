@@ -154,6 +154,14 @@ public class GatesShapes {
     sh.setStrokeWidth(5);
     return sh;
 }
+public static Shape Bascule_D() {
+    Shape sh = new Rectangle(0, 0, 6 * x, 6 * x);
+    sh.setFill(Color.TRANSPARENT);
+    sh.setStroke(Color.BLACK);
+    sh.setStrokeWidth(5);
+    return sh;
+}
+
     
 public static Shape Bascule_JK() {
     Shape sh = new Rectangle(0, 0, 6 * x, 6 * x);

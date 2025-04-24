@@ -6,6 +6,7 @@ import java.util.Set;
 import Gates.Adder;
 import Gates.And;
 import Gates.Bascule_JK;
+import Gates.Bascule_D;
 import Gates.Bascule_RS;
 import Gates.Horloge;
 import Gates.Multiplier;
@@ -303,7 +304,10 @@ public class Circuit {
         name.equals("EVENPARITY") ||
         name.equals("BASCULE RS")  ||
         name.equals("BASCULE JK") ||
-        name.equals("HORLOGE")) return;
+        name.equals("HORLOGE") ||
+        name.equals("BASCULE D"))
+
+        return;
         Gate gate = null;
         switch (name) {
             case "AND":
@@ -414,7 +418,11 @@ public class Circuit {
             case "BASCULE JK":
                 gate = new Bascule_JK(this, group, x, y);
                 addGate(gate);
-                break;    
+                break;  
+            case "BASCULE D":
+                gate = new Bascule_D(this, group, x, y);
+                addGate(gate);
+                break;      
             default:
                 break;
             }

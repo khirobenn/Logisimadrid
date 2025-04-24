@@ -86,6 +86,8 @@ public abstract class Gate {
             case "Bascule JK" :
             shape = GatesShapes.Bascule_JK();
             break ;
+            case "Bascule D" :
+            shape = GatesShapes.Bascule_D();
 
 	    case "EVENPARITY":
 	    shape = GatesShapes.EvenParityShape();
@@ -144,7 +146,7 @@ public abstract class Gate {
 
     public Shape getShape(){ return shape; }
     private void textChange(QuadBool value){
-        if(text != null && !name.equals("HORLOGE") && !name.equals("BASCULE RS") && !name.equals("Bascule JK") && !name.equals("ADDER")){
+        if(text != null && !name.equals("HORLOGE") && !name.equals("BASCULE RS") && !name.equals("Bascule JK") && !name.equals("ADDER") && !name.equals("Bascule D")){
             if(value == QuadBool.TRUE){
                 text.setText("1");
                 text.setFill(Unity.ON);

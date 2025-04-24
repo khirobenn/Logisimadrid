@@ -1,6 +1,7 @@
 package Circuit;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -92,7 +93,7 @@ public class Circuit {
     }
 
     public void removeElement(Fils element){
-        fils.remove(element);
+        fils.removeAll(Collections.singletonList(element));
     }
 
     public void rotateSelectedEement(){

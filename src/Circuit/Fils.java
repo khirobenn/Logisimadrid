@@ -3,6 +3,7 @@ package Circuit;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
@@ -491,7 +492,7 @@ public class Fils {
 
 	public void searchConnected(){
 		Point2D point = new Point2D(circle.getCenterX(), circle.getCenterY());
-		Set <Fils> list = circuit.getFilsList();
+		List <Fils> list = circuit.getFilsList();
 		for(Fils elem : list){
 			if( elem != this && 
 					!connected.contains(elem) && 

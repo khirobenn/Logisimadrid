@@ -1,6 +1,5 @@
-
-JAVAC = javac
-JAVA = java
+JAVAC=javac
+JAVA=java
 
 
 MODULE_PATH = $(PWD)/javafx-sdk-23.0.2/lib/
@@ -11,8 +10,8 @@ LIB_DIR = lib
 PICTURES_DIR = src/pictures
 
 
-JSON_SIMPLE_JAR = $(LIB_DIR)/json-simple-1.1.1.jar
-JUNIT_JAR = $(LIB_DIR)/junit-platform-console-standalone-1.9.3.jar
+JSON_SIMPLE_JAR = json-simple-1.1.1.jar
+JUNIT_JAR = junit-platform-console-standalone-1.9.3.jar
 CLASSPATH = $(OUT_DIR):$(JSON_SIMPLE_JAR):$(JUNIT_JAR)
 
 

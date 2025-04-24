@@ -11,6 +11,7 @@
         "javafx-sdk-23.0.2/lib/javafx.media.jar",
         "javafx-sdk-23.0.2/lib/javafx.swing.jar",
         "javafx-sdk-23.0.2/lib/javafx.web.jar",
-        "javafx-sdk-23.0.2/lib/javafx-swt.jar"
+        "javafx-sdk-23.0.2/lib/javafx-swt.jar",
+        "junit-platform-console-standalone-1.9.3.jar"
     ]
 }

@@ -1,6 +1,8 @@
 package Circuit;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import Gates.Adder;
@@ -24,7 +26,7 @@ import javafx.scene.transform.Scale;
 public class Circuit {
     
     private Pane group;
-    private Set<Fils> fils;
+    private List<Fils> fils;
     private Set<Gate> variables;
     private Set<Gate> gates;
     private Gate selectedGate;
@@ -42,7 +44,7 @@ public class Circuit {
         background.setOnMouseClicked(e -> resetSelectedItems());
 
         this.group = group;
-        fils = new HashSet<Fils>();
+        fils = new ArrayList<Fils>();
         variables = new HashSet<Gate>();
         gates = new HashSet<Gate>();
         scale = new Scale();
@@ -120,7 +122,7 @@ public class Circuit {
     }
 
     public Pane getPane(){ return group; } 
-    public Set <Fils> getFilsList(){ return fils; }
+    public List <Fils> getFilsList(){ return fils; }
     public void setOutputToFils(){
         for(Fils oi : fils){
             oi.setOutput(QuadBool.FALSE);
@@ -259,7 +261,7 @@ public class Circuit {
         return variables ;
     }
 
-    public Set<Fils> getFils () {
+    public List<Fils> getFils () {
         return fils ;
     }
 

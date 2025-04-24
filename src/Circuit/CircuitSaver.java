@@ -59,9 +59,7 @@ public class CircuitSaver {
 
         // RECUPERER LES FILS
         JSONArray filsArray = new JSONArray();
-        Set<Fils> files = circuit.getFils() ;
-        List<Fils> filesList = new ArrayList<Fils>();
-        filesList.addAll(files);
+        List<Fils> filesList = circuit.getFils() ;
 
         for (int i = 0; i < filesList.size(); i++) {
             // on cree l objet et apres on l ajoute dans le tableau des fils

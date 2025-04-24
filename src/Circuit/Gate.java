@@ -441,4 +441,7 @@ public abstract class Gate {
             }
         }
     }
+    protected boolean isOutputSet() {
+        return this.isOutPutSet;
+    }
 }

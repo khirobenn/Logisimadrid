@@ -20,7 +20,7 @@ public class Horloge extends Gate{
         
         this.circuit = circuit;
         Shape shape = getShape();
-        setText("CLK", shape.getLayoutBounds().getMaxX() / 2 + shape.getLayoutX(),
+        setText("CLK", shape.getLayoutBounds().getMaxX() / 4 + shape.getLayoutX(),
         shape.getLayoutBounds().getMaxY() / 2 + shape.getLayoutY());
    }
    @Override

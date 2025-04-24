@@ -1,5 +1,5 @@
 package Circuit;
- 
+
 import javafx.scene.layout.Pane;
 
 public class GateTestImpl extends Gate {
@@ -12,4 +12,6 @@ public class GateTestImpl extends Gate {
     public void evaluateOutput() {
         
     }
+
+   
 }

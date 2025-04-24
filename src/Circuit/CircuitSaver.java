@@ -97,7 +97,7 @@ public class CircuitSaver {
 
             for(Fils fil : currentFil.getConnected()){
                 int index = filesList.indexOf(fil);
-                if(index < i){
+                if(index < i && index >= 0){
                     connected.add(index);
                 }
             }

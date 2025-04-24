@@ -261,10 +261,7 @@
             "Line2_X_end": 10.0,
             "Line1_X_start": 10.0,
             "Line1_Y_end": -200.0,
-            "connected": [
-                -1,
-                -1
-            ],
+            "connected": [],
             "circle1_Y": 420.0,
             "circle2_X": 400.0,
             "circle1_X": 300.0,
@@ -3537,7 +3534,6 @@
                 71,
                 172,
                 105,
-                -1,
                 109,
                 11,
                 82,

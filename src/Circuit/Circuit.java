@@ -168,6 +168,8 @@ public class Circuit {
                 case QuadBool.ERROR: fil.changeColor(Unity.ERR); break;
             }
         }
+
+        System.out.println("Fix color called");
     }
 
     public void removeGate(Gate gate){
@@ -217,6 +219,13 @@ public class Circuit {
             gate.getOutput();
         }
         
+        System.out.println("");
+        System.out.println("EVAL CALLED");
+    }
+
+    public void evaluation(Gate variableClicked){
+        eval(variableClicked);
+        fixFilsColors();
     }
 
     private void reinitialiseOI(){

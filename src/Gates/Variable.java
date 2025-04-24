@@ -24,8 +24,8 @@ public class Variable extends Gate {
     }
 
     private void evaluate(Circuit circuit){
-        circuit.eval(this);
-        circuit.fixFilsColors();
+        circuit.evaluation(this);
+        circuit.evaluation(null); // Pour bien calculer les états de fils
     }
 
     public Variable(Circuit circuit, Pane layout, double x, double y){

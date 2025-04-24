@@ -289,8 +289,7 @@ public abstract class Gate {
             }
         }
         
-        circuit.eval(null);
-        circuit.fixFilsColors();
+        circuit.evaluation(null);
     }
 
     public void searchConnectedOtherFils(){

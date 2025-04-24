@@ -311,8 +311,7 @@ public class Fils {
 				}
 			}
 			searchConnected();
-			circuit.eval(null);
-			circuit.fixFilsColors();
+			circuit.evaluation(null);
 		}
 		else{
 			circuit.fixFilsColors();

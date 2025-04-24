@@ -35,6 +35,11 @@ public class Adder extends Gate {
 		return retenuOut; 
 	}
 
+	public void searchConnectedOtherFils(){
+		retenuIn.searchConnected();
+		retenuOut.searchConnected();
+	}
+
 	@Override
 	public void evaluateOutput() {
 		Fils[] inputs = getInputs();

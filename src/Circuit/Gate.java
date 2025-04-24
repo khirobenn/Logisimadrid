@@ -271,6 +271,7 @@ public abstract class Gate {
         }
         output.onRelease();
         searchConnectedFils();
+        searchConnectedOtherFils();
 
         if(inputs != null){
             for(int i = 0; i < inputs.length; i++){
@@ -288,6 +289,11 @@ public abstract class Gate {
             }
         }
     }
+
+    public void searchConnectedOtherFils(){
+        
+    }
+
     private void dragItem(MouseEvent e){
         // On convertit les coordonnées de la souris par rapport au parent (la fenetre)
         Point2D mouseCoord = shape.localToParent(e.getX(), e.getY());

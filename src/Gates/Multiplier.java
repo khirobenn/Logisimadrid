@@ -36,6 +36,11 @@ public class Multiplier extends Gate {
 		addFilsToOthers(retenuOut);
 	}
 
+	public void searchConnectedOtherFils(){
+		retenuIn.searchConnected();
+		retenuOut.searchConnected();
+	}
+
 	public Fils getRetenuOut() {
 		return retenuOut;
 	}

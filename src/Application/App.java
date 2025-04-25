@@ -49,6 +49,11 @@ import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 
 public class App extends Application{
+    // Définir des constantes de couleur
+private static final String PRIMARY_COLOR = "#2E7D32"; // Vert foncé
+private static final String SECONDARY_COLOR = "#388E3C"; // Vert moyen
+private static final String ACCENT_COLOR = "#FFC107"; // Jaune or
+private static final String BACKGROUND_COLOR = "#F5F5F5"; // Gris clair
     Scene scene;
     private double widthOfButton = Unity.x*5;
     private double widthOfShape = Unity.x*2;
@@ -123,6 +128,7 @@ public class App extends Application{
        }
        @Override
     public void start(Stage window) throws Exception {
+        
         // Ajouter une icone
         Image icon = new Image(getClass().getResourceAsStream("/pictures/icon.png"));
         window.getIcons().add(icon);
@@ -139,7 +145,7 @@ public class App extends Application{
 
         Scene splashScene = new Scene(logoPane, Unity.width, Unity.height); 
         window.setScene(splashScene);
-        window.setTitle("LOGISIM");
+        window.setTitle("LOGISIMADRID");
         window.show();
 
         
@@ -159,6 +165,8 @@ public class App extends Application{
     
     private void launchMainApp(Stage window) throws Exception {
         Pane sp = new Pane();
+       
+
 
         Pane pane2 = new Pane();
         pane2.setMaxWidth(width);
@@ -181,10 +189,14 @@ public class App extends Application{
         sp.setPrefHeight(height*4);
 
         Circuit circuit = new Circuit(sp);
+        
         sp.setOnMouseClicked(e -> addItem(e, circuit, sp));
 
         //Pour les bouttons
         VBox vb = new VBox();
+        vb.setSpacing(10);
+        vb.setPadding(new Insets(10));
+
         vb.setPrefWidth(widthOfButton + widthOfShape);
         vb.setBorder(new Border(new BorderStroke(Color.BLACK,
             BorderStrokeStyle.SOLID,
@@ -405,7 +417,22 @@ public class App extends Application{
     
             btn.setGraphic(view);
         }
-        btn.setStyle("-fx-background-color: white");
+        btn.setStyle(
+            "-fx-background-color: #E0E0E0;" +
+            "-fx-border-radius: 8px;" +
+            "-fx-background-radius: 8px;" +
+            "-fx-padding: 8 16;" +
+            "-fx-text-fill: #263238;"
+        );
+        btn.setOnMouseEntered(e -> btn.setStyle("-fx-background-color: #B3E5FC; -fx-border-radius: 8px; -fx-background-radius: 8px; -fx-padding: 8 16; -fx-text-fill: #263238;"));
+btn.setOnMouseExited(e -> {
+    if (buttons.indexOf(btn) == nbOfButtonSelected)
+        btn.setStyle("-fx-background-color: #90CAF9; -fx-border-radius: 8px; -fx-background-radius: 8px; -fx-padding: 8 16; -fx-text-fill: #263238;");
+    else
+        btn.setStyle("-fx-background-color: #E0E0E0; -fx-border-radius: 8px; -fx-background-radius: 8px; -fx-padding: 8 16; -fx-text-fill: #263238;");
+});
+
+        
         btn.setMaxWidth(Double.MAX_VALUE);
         btn.setMaxHeight(Double.MAX_VALUE);
         btn.setBorder(new Border(new BorderStroke(Color.BLACK,

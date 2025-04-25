@@ -14,7 +14,7 @@ public class Bascule_JK extends Gate {
     private QuadBool lastClock = QuadBool.FALSE; // front montant
 
     public Bascule_JK(Circuit circuit, Pane layout, double x, double y) {
-        super("Bascule JK", 3, circuit, layout, x, y); //  entrées: J, CLK, K
+        super("BASCULE JK", 3, circuit, layout, x, y); //  entrées: J, CLK, K
         setOutputValue(QuadBool.FALSE); // Initialisation de la sortie
         
         Shape shape = getShape();

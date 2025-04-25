@@ -1,6 +1,7 @@
 package Circuit;
 
 
+import javafx.scene.control.TreeItem;
 import javafx.scene.paint.Color;   
 
 public class Unity {
@@ -17,4 +18,50 @@ public class Unity {
     public static Color OFF = Color.rgb(0, 153, 0);
     public static Color ERR = Color.RED;
     public static Color NOTH = Color.BLUE;
+
+    public static TreeItem<String> portesTree(){
+        TreeItem<String> tvPortes = new TreeItem<String>("Portes");
+        tvPortes.setExpanded(true);
+        tvPortes.getChildren().addAll(
+            new TreeItem<String>("AND"),
+            new TreeItem<String>("OR"),
+            new TreeItem<String>("XOR"),
+            new TreeItem<String>("NAND"),
+            new TreeItem<String>("NOR"),
+            new TreeItem<String>("XNOR"),
+            new TreeItem<String>("NOT")
+        );
+        return tvPortes;
+    }
+
+    public static TreeItem<String> varAndOutTree(){
+        TreeItem<String> tvVarAndOut = new TreeItem<String>("Variable & Output");
+        tvVarAndOut.getChildren().addAll(
+            new TreeItem<String>("VARIABLE"),
+            new TreeItem<String>("OUTPUT")
+        );
+        return tvVarAndOut;
+    }
+
+    public static TreeItem<String> bitABitTree(){
+        TreeItem<String> tvBitaBit = new TreeItem<String>("Bit a bit");
+        tvBitaBit.getChildren().addAll(
+            new TreeItem<String>("ADDER"),
+            new TreeItem<String>("MULTIPLIER"),
+            new TreeItem<String>("ODDPARITY"),
+            new TreeItem<String>("EVENPARITY")
+        );
+        return tvBitaBit;
+    }
+
+    public static TreeItem<String> basculesTree(){
+        TreeItem<String> tvBascule = new TreeItem<String>("Bascules & Horloge");
+        tvBascule.getChildren().addAll(
+            new TreeItem<String>("BASCULE RS") ,
+            new TreeItem<String>("HORLOGE") ,
+            new TreeItem<String>("BASCULE JK"),
+            new TreeItem<String>("BASCULE D")
+        );
+        return tvBascule;
+    }
 }

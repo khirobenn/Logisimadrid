@@ -1,21 +1,14 @@
 package Application;
 
-import Gates.*;
-
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
 import org.json.simple.parser.ParseException;
 
 import Circuit.Circuit;
 import Circuit.CircuitSaver;
-import Circuit.Gate;
 import Circuit.Unity;
 import Circuit.NouveauComposant ;
 import Circuit.ComposantLoad ;
-import Circuit.OddParityGate;
-import Circuit.EvenParityGate;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -24,8 +17,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -51,34 +49,14 @@ import javafx.util.Duration;
 public class App extends Application{
     Scene scene;
     private double widthOfButton = Unity.x*5;
-    private double widthOfShape = Unity.x*2;
+    private double widthOfShape = Unity.x*3;
     // private final int height = Unity.height;
     private final int height = 1080;
     // private final int width = Unity.width;
     private final int width = 1920;
     private final NouveauComposant cmp = ComposantLoad.chargerComp("./Composants_Json/Ajout_Comp.json") ; // on a le chemin de fichier
-    private int nbOfButtonSelected = -1;
-    private List <Button> buttons = Arrays.asList(new Button[]{ 
-        createButton("AND"),
-        createButton("OR"),
-        createButton("XOR"),
-        createButton("NAND"),
-        createButton("NOR"),
-        createButton("XNOR"),
-        createButton("NOT"),
-        createButton("VARIABLE"),
-        createButton("OUTPUT"),
-        createButton("ADDER"),
-        createButton("MULTIPLIER"),
-        createButton("ODDPARITY"),
-        createButton("EVENPARITY"),
-        createButton("BASCULE RS") ,
-        createButton("HORLOGE") ,
-        createButton("BASCULE JK"),
-        createButton("BASCULE D"),
-        createButton( cmp != null ? cmp.getNameComp().toUpperCase(): "NONE")
-    });
-
+    String name;
+    
     public static void main(String[] args) throws Exception {
         launch(args);
     }
@@ -143,6 +121,7 @@ public class App extends Application{
         window.show();
 
         
+        
         PauseTransition delay = new PauseTransition(Duration.seconds(3));
         delay.setOnFinished(event -> {
             try {
@@ -157,6 +136,7 @@ public class App extends Application{
     }
 
     
+    @SuppressWarnings("unchecked")
     private void launchMainApp(Stage window) throws Exception {
         Pane sp = new Pane();
 
@@ -183,6 +163,18 @@ public class App extends Application{
         Circuit circuit = new Circuit(sp);
         sp.setOnMouseClicked(e -> addItem(e, circuit, sp));
 
+
+        // Tree Items
+        TreeItem<String> allTree = new TreeItem<String>();
+        allTree.getChildren().addAll(Unity.portesTree(), Unity.varAndOutTree(), Unity.bitABitTree(), Unity.basculesTree());
+
+        TreeView<String> rootTree = new TreeView<String>(allTree);
+        rootTree.setShowRoot(false);
+        rootTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            setGateName(newValue.getValue());
+        });
+
+        //******************** 
         //Pour les bouttons
         VBox vb = new VBox();
         vb.setPrefWidth(widthOfButton + widthOfShape);
@@ -191,40 +183,16 @@ public class App extends Application{
             CornerRadii.EMPTY,
             BorderWidths.DEFAULT)));
 
-        for(Button btn : buttons){
-            btn.setOnMouseClicked(e -> setNbOfGateSelected(btn));
-            // btn.setPrefWidth(widthOfButton);
-            vb.getChildren().add(btn);
-        }
+        vb.getChildren().addAll(rootTree);
 
-        Button rotate = new Button("Rotate Item");
-        vb.getChildren().add(rotate);
-        rotate.setOnMouseClicked(e -> circuit.rotateSelectedEement());
-
-        Region filler = new Region();
-        HBox.setHgrow(filler, Priority.ALWAYS);
-        
-        HBox zoomBox = new HBox();
-        Button unScale = new Button("Unzoom");
-        unScale.setOnMouseClicked(e -> circuit.unzoom());
-        
-        Button scale = new Button("Zoom");
-        scale.setOnMouseClicked(e -> circuit.zoom());
-
-        zoomBox.getChildren().addAll(unScale, filler, scale);
-
-        vb.getChildren().add(zoomBox);
 
         CircuitSaver saver = new CircuitSaver(circuit);
 
-        Button save = new Button("Save");
-        vb.getChildren().add(save);
-        save.setOnMouseClicked(e -> AfficherFenetreNom(saver));
+        // -----------
 
+        MenuBar menu = createMenu(circuit, saver);
 
-        Button load = new Button("Load");
-        vb.getChildren().add(load);
-        load.setOnMouseClicked(e -> AfficherTelechargement(saver));
+        // -----------
 
         HBox hb = new HBox();
         
@@ -234,17 +202,14 @@ public class App extends Application{
         Button increaseInput = new Button("+");
         increaseInput.setOnMouseClicked(e -> circuit.increaseInputs());
         
-        hb.getChildren().addAll(decreaseInput, filler, increaseInput);
-
+        hb.getChildren().addAll(decreaseInput, increaseInput);
         vb.getChildren().add(hb);
 
-        Button clear = new Button("Clear!");
-        vb.getChildren().add(clear);
-        clear.setOnMouseClicked(e -> circuit.clearAll());
 
         BorderPane border = new BorderPane();
         border.setLeft(vb);
         border.setCenter(scroll);
+        border.setTop(menu);
 
         BorderPane.setMargin(scroll, new Insets(Unity.x));
 
@@ -273,147 +238,37 @@ public class App extends Application{
         window.show();
     }
 
+    private void setGateName(String name){
+        this.name = name;
+    }
+
     private void addItem(MouseEvent e, Circuit circuit, Pane pane){
         double x = Unity.tranformDoubleToInt(e.getX());
         double y = Unity.tranformDoubleToInt(e.getY());
-        Gate gate;
-        switch (nbOfButtonSelected) {
-            case 0:
-                gate = new And(2, circuit, pane, x, y);
-                circuit.addGate(gate);
-                break;
+        if(name != null){
+            circuit.createGate(name.toUpperCase(), 2, x, y);
+        }
+        name = null;
+    }
+
     
-            case 1:
-                gate = new Or(2, circuit, pane, x, y);
-                circuit.addGate(gate);
-                break;
 
-            case 2:
-                gate = new Xor(2, circuit, pane, x, y);
-                circuit.addGate(gate);
-                break;
-            
-            case 3:
-                gate = new Nand(2, circuit, pane, x, y);
-                circuit.addGate(gate);
-                break;
-            
-            case 4:
-                gate = new Nor(2, circuit, pane, x, y);
-                circuit.addGate(gate);
-                break;
-            
-            case 5:
-                gate = new Xnor(2, circuit, pane, x, y);
-                circuit.addGate(gate);
-                break;
-            
-            case 6:
-                gate = new Not(circuit, pane, x, y);
-                circuit.addGate(gate);
-                break;
+    // private void setNbOfGateSelected(Button i){
+    //     int tmp = buttons.indexOf(i);
+    //     if(tmp == nbOfButtonSelected){
+    //         nbOfButtonSelected = -1;
+    //         i.setStyle("-fx-background-color : white;");
 
-            case 7:
-                gate = new Variable(circuit, pane, x, y);
-                circuit.addVariable(gate);
-                break;
-            
-            case 8:
-                gate = new OutputGate(circuit, pane, x, y);
-                circuit.addGate(gate);
-                break;
+    //     }
+    //     else{
+    //         if(nbOfButtonSelected >= 0){
+    //             // buttons.get(nbOfButtonSelected).setStyle("-fx-background-color : white;");
+    //         }
+    //         nbOfButtonSelected = tmp;
+    //         i.setStyle("-fx-background-color : rgb(219, 219, 219);");
+    //     }
+    // }
 
-            case 9:
-                gate = new Adder(circuit, pane, x, y);
-                circuit.addGate(gate);
-	        	break;
-
-            case 11:
-                gate = new OddParityGate(circuit, pane,x,y,3);
-                circuit.addGate(gate);
-                break;
-
-            case 10:
-                gate = new Multiplier(circuit, pane,x,y);
-                circuit.addGate(gate);
-                break;
-
-            case 12:
-                gate = new EvenParityGate(circuit, pane,x,y,3);
-                circuit.addGate(gate);
-                break;
-                
-            case 13:
-                gate = new Bascule_RS(circuit, pane,x,y);
-                circuit.addGate(gate);
-                break;
-            case 14:
-                gate = new Horloge(circuit, pane, x, y);
-                circuit.addGate(gate);
-                break;
-            case 15: 
-                gate = new Bascule_JK(circuit, pane,x,y) ;
-                circuit.addGate(gate);   
-                break;
-            case 16:
-                gate = new Bascule_D(circuit, pane, x ,y);
-                circuit.addGate(gate);    
-                break;
-            case 17:
-                System.out.println("porte " + cmp.getNameComp() );
-                gate = new GateDeNouComp(cmp , circuit, pane, x, y) ;
-                circuit.addGate(gate);
-                break;
-            
-
-
-            default:
-                break;
-
-            }
-
-        if(nbOfButtonSelected >= 0){
-            buttons.get(nbOfButtonSelected).setStyle("-fx-background-color : white;");
-        }
-        nbOfButtonSelected = -1;
-    }
-
-    private void setNbOfGateSelected(Button i){
-        int tmp = buttons.indexOf(i);
-        if(tmp == nbOfButtonSelected){
-            nbOfButtonSelected = -1;
-            i.setStyle("-fx-background-color : white;");
-
-        }
-        else{
-            if(nbOfButtonSelected >= 0){
-                buttons.get(nbOfButtonSelected).setStyle("-fx-background-color : white;");
-            }
-            nbOfButtonSelected = tmp;
-            i.setStyle("-fx-background-color : rgb(219, 219, 219);");
-        }
-    }
-
-    private Button createButton(String str){
-        Button btn = new Button(str);
-
-        if(!str.equals("VARIABLE") && !!str.equals("MULTIPLIER") && str.equals("EvenParityGate") && !str.equals("ADDER") && !str.equals("EVENPARITY")){
-            Image img = new Image(getClass().getResourceAsStream("/pictures/"  + str.toLowerCase() + ".png"));
-            ImageView view = new ImageView(img);
-            view.setFitHeight(widthOfShape);
-            view.setPreserveRatio(true);
-    
-            btn.setGraphic(view);
-        }
-        btn.setStyle("-fx-background-color: white");
-        btn.setMaxWidth(Double.MAX_VALUE);
-        btn.setMaxHeight(Double.MAX_VALUE);
-        btn.setBorder(new Border(new BorderStroke(Color.BLACK,
-            BorderStrokeStyle.SOLID,
-            CornerRadii.EMPTY,
-            BorderWidths.DEFAULT)));
-        return btn;
-    }
 
 
     private void AfficherTelechargement ( CircuitSaver saver ) {
@@ -463,6 +318,35 @@ public class App extends Application{
         pop.showAndWait();
   
        }
+
+    private MenuBar createMenu(Circuit circuit, CircuitSaver saver){
+        MenuBar menu = new MenuBar(); 
+        
+        Menu file = new Menu("File");
+        MenuItem save = new MenuItem("Save");
+        MenuItem load = new MenuItem("Load");
+        MenuItem clear = new MenuItem("Clear");
+
+        file.getItems().addAll(save, load, clear);
+        save.setOnAction(e -> AfficherFenetreNom(saver));
+        load.setOnAction(e -> AfficherTelechargement(saver));
+        clear.setOnAction(e -> circuit.clearAll());
+
+        // ---
+
+        Menu view = new Menu("View");
+
+        MenuItem zoom = new MenuItem("Zoom in");
+        MenuItem zoomOut = new MenuItem("Zoom out");
+
+        view.getItems().addAll(zoom, zoomOut);
+        zoom.setOnAction(e -> circuit.zoom());
+        zoomOut.setOnAction(e -> circuit.unzoom());
+
+
+        menu.getMenus().addAll(file, view);
+        return menu;
+    }
 
 }
 

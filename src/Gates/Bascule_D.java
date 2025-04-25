@@ -14,7 +14,7 @@ public class Bascule_D extends Gate {
     private QuadBool lastClock = QuadBool.FALSE; // Pour détection front montant
 
     public Bascule_D(Circuit circuit, Pane layout, double x, double y) {
-        super("Bascule D", 2, circuit, layout, x, y); //  entrées: La Data, l'horloge 
+        super("BASCULE D", 2, circuit, layout, x, y); //  entrées: La Data, l'horloge 
         setOutputValue(QuadBool.FALSE); // Initialisation de la sortie
         
         Shape shape = getShape();

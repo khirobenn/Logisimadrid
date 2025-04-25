@@ -18,6 +18,7 @@ import Gates.Nor;
 import Gates.Not;
 import Gates.Or;
 import Gates.OutputGate;
+import Gates.Variable;
 import Gates.Xnor;
 import Gates.Xor;
 import javafx.scene.layout.Pane;
@@ -95,12 +96,6 @@ public class Circuit {
 
     public void removeElement(Fils element){
         fils.removeAll(Collections.singletonList(element));
-    }
-
-    public void rotateSelectedEement(){
-        if(selectedGate == null) return;
-        GatesShapes.rotate(selectedGate.getShape());
-        selectedGate.updatePoints();
     }
 
     public void setFilSelected(Fils fil){
@@ -370,6 +365,10 @@ public class Circuit {
                 gate = new Not(this, group, x, y);
                 addGate(gate);
                 break;
+            case "VARIABLE":
+                gate = new Variable(this, group, x, y);
+                addVariable(gate);
+                break;
             case "AND":
                 gate = new And(inputsLength, this, group, x, y);
                 addGate(gate);
@@ -433,11 +432,11 @@ public class Circuit {
                 gate = new Horloge(this, group, x, y);
                 addGate(gate);
                 break;
-            case "Bascule JK":
+            case "BASCULE JK":
                 gate = new Bascule_JK(this, group, x, y);
                 addGate(gate);
                 break;  
-            case "Bascule D":
+            case "BASCULE D":
                 gate = new Bascule_D(this, group, x, y);
                 addGate(gate);
                 break;      

@@ -83,10 +83,10 @@ public abstract class Gate {
             case "HORLOGE" :
             shape = GatesShapes.horloge();
             break ;
-            case "Bascule JK" :
+            case "BASCULE JK" :
             shape = GatesShapes.Bascule_JK();
             break ;
-            case "Bascule D" :
+            case "BASCULE D" :
             shape = GatesShapes.Bascule_D();
 
 	    case "EVENPARITY":

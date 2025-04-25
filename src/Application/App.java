@@ -34,6 +34,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
@@ -129,10 +131,10 @@ public class App extends Application{
         delay.setOnFinished(event -> {
             try {
                 window.close();
+                launchMainApp(window); 
                 window.setResizable(true);
                 window.show();
                 window.setMaximized(true);
-                launchMainApp(window); 
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -191,6 +193,7 @@ public class App extends Application{
         label.setAlignment(Pos.CENTER);
         label.setMaxWidth(Double.MAX_VALUE);
         label.setFont(Unity.fontBold);
+        label.setTextFill(Color.WHITE);
         
         HBox hb = new HBox();
         
@@ -201,7 +204,23 @@ public class App extends Application{
         increaseInput.setOnMouseClicked(e -> currentCircuit.increaseInputs());
         
         hb.getChildren().addAll(decreaseInput, increaseInput);
-        vb.getChildren().addAll(label, hb);
+
+        currentCircuit.getSelectedGateProperty().addListener((observable, oldValue, newValue) ->{
+            if(newValue == null){
+                if(vb.getChildren().contains(label) && vb.getChildren().contains(hb)){
+                    vb.getChildren().removeAll(label, hb);
+                }
+            }
+            else{
+                if(!vb.getChildren().contains(label)){
+                    vb.getChildren().add(label);
+                }
+
+                if(!vb.getChildren().contains(hb)){
+                    vb.getChildren().add(hb);
+                }
+            }
+        });
         
         Slider sliderZoom = new Slider(Unity.minZoom, Unity.maxZoom, 1.);
         sliderZoom.setShowTickLabels(true);
@@ -266,8 +285,13 @@ public class App extends Application{
         
         MenuBar menu = createMenu(bottom, plus, scroll);
 
+        
         sp.getChildren().addAll(scroll, bottom);
         BorderPane border = new BorderPane();
+
+        Image coverImage = new Image("./pictures/cover.jpg");
+        vb.setBackground(new Background(new BackgroundImage(coverImage, null, null, null, null)));
+
         border.setLeft(splitPane);
         border.setCenter(sp);
         border.setTop(menu);

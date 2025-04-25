@@ -21,6 +21,8 @@ import Gates.OutputGate;
 import Gates.Variable;
 import Gates.Xnor;
 import Gates.Xor;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -35,6 +37,8 @@ public class Circuit {
     private Gate selectedGate;
     private Fils filSelected;
     private double zoom = 1.;
+
+    private ObjectProperty<Gate> selectedGateProprety;
 
     private Rectangle rec1;
     private Rectangle rec2;
@@ -56,7 +60,8 @@ public class Circuit {
         this.group.getTransforms().add(scale);
         rec1 = new Rectangle(Unity.x/2, Unity.x/2);
         rec2 = new Rectangle(Unity.x/2, Unity.x/2);
-
+        selectedGateProprety = new SimpleObjectProperty<>();
+        selectedGateProprety.set(null);
     }
 
     public void addElement(Fils element){
@@ -70,10 +75,12 @@ public class Circuit {
                 this.selectedGate.getShape().setFill(Color.TRANSPARENT);
             }
             this.selectedGate = selectedGate;
+            selectedGateProprety.set(null);
         }
         else if(selectedGate == this.selectedGate){
             selectedGate.getShape().setFill(Color.TRANSPARENT);
             this.selectedGate = null;
+            selectedGateProprety.set(null);
         }
         else{
             if(this.selectedGate != null){
@@ -82,8 +89,13 @@ public class Circuit {
             this.selectedGate = selectedGate;
             selectedGate.getShape().setFill(Color.rgb(219, 219, 219));
             setFilSelected(null);
+            selectedGateProprety.set(selectedGate);
         }
 
+    }
+
+    public ObjectProperty<Gate> getSelectedGateProperty(){
+        return selectedGateProprety;
     }
 
     public void removeFilSelected(){

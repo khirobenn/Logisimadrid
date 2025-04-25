@@ -35,8 +35,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
@@ -61,6 +59,8 @@ public class App extends Application{
     private final int height = 1080;
     // private final int width = Unity.width;
     private final int width = 1920;
+
+    private int circuitNb = 1;
     private final NouveauComposant cmp = ComposantLoad.chargerComp("./Composants_Json/Ajout_Comp.json") ; // on a le chemin de fichier
     String name;
 
@@ -84,7 +84,7 @@ public class App extends Application{
         super.init();
     }
 
-    private void AfficherFenetreNom ( CircuitSaver saver ) {
+    private void AfficherFenetreNom () {
         Stage pop = new Stage() ;
         pop.initModality(Modality.APPLICATION_MODAL);
         pop.setTitle ("File Name");
@@ -98,7 +98,7 @@ public class App extends Application{
               if ( !nF.endsWith(".json")) {
                   nF += ".json" ;
               }
-              saver.saveCircuit(nF);
+              currentCircuitSaver.saveCircuit(nF);
               System.out.println("Fichier sauvegarde :"+nF );
               pop.close(); 
           }
@@ -189,9 +189,7 @@ public class App extends Application{
         scroll.setMaxHeight(height);
         scroll.setContent(currentPane);
         
-        
-
-
+    
         // Tree Items
         TreeItem<Label> allTree = new TreeItem<Label>();
         allTree.getChildren().addAll(Unity.portesTree(), Unity.varAndOutTree(), Unity.bitABitTree(), Unity.basculesTree());
@@ -201,22 +199,13 @@ public class App extends Application{
         rootTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             setGateName(newValue.getValue().getText());
         });
-
-
-        CircuitSaver saver = new CircuitSaver(currentCircuit);
-
-        // -----------
-
-        MenuBar menu = createMenu();
-
-        // -----------
-
+        
         VBox vb = new VBox();
         Label label = new Label("Ajout/Suppression d'entrées");
         label.setAlignment(Pos.CENTER);
         label.setMaxWidth(Double.MAX_VALUE);
         label.setFont(Unity.fontBold);
-
+        
         HBox hb = new HBox();
         
         Button decreaseInput = new Button("-");
@@ -227,7 +216,7 @@ public class App extends Application{
         
         hb.getChildren().addAll(decreaseInput, increaseInput);
         vb.getChildren().addAll(label, hb);
-
+        
         Slider sliderZoom = new Slider(Unity.minZoom, Unity.maxZoom, 1.);
         sliderZoom.setShowTickLabels(true);
         sliderZoom.setShowTickMarks(true);
@@ -235,71 +224,70 @@ public class App extends Application{
         sliderZoom.valueProperty().addListener((observable, oldValue, newValue) -> {
             currentCircuit.setZoom(newValue.doubleValue());
         });
-
-
-
-
+        
         SplitPane splitPane = new SplitPane();
         splitPane.setOrientation(Orientation.VERTICAL);
         splitPane.getItems().addAll(rootTree, vb, sliderZoom);
         splitPane.setPrefWidth(widthOfButton + widthOfShape);
         splitPane.setBorder(new Border(new BorderStroke(Color.BLACK,
-            BorderStrokeStyle.SOLID,
-            CornerRadii.EMPTY,
-            BorderWidths.DEFAULT)));
-
+        BorderStrokeStyle.SOLID,
+        CornerRadii.EMPTY,
+        BorderWidths.DEFAULT)));
+        
         HBox bottom = new HBox();
         bottom.setSpacing(Unity.x);
-
-
-        Label firstLabel = new Label("Circuit " + myCircuits.size());
+        
+        
+        Label firstLabel = new Label("Untitled " + myCircuits.size());
         firstLabel.setTextFill(Color.WHITE);
         firstLabel.setStyle("-fx-background-color: black");
         bottom.getChildren().add(firstLabel);
-
+        
         firstLabel.setOnMouseClicked(m -> setSelectedCircuit(bottom, firstLabel, scroll));
-
+        
         firstLabel.setBorder(new Border(new BorderStroke(Color.BLACK,
-            BorderStrokeStyle.SOLID,
-            CornerRadii.EMPTY,
-            BorderWidths.DEFAULT)));
+        BorderStrokeStyle.SOLID,
+        CornerRadii.EMPTY,
+        BorderWidths.DEFAULT)));
         firstLabel.setPadding(new Insets(4));
         firstLabel.setFont(Unity.font);
-
+        
         Label deleteButtonFirst = new Label(" x ");
         deleteButtonFirst.setStyle("-fx-background-color: red");
         bottom.getChildren().add(deleteButtonFirst);
-
+        
         deleteButtonFirst.setOnMouseClicked(m -> deleteSetSelectedCircuit(bottom, firstLabel, scroll));
-
+        
         deleteButtonFirst.setBorder(new Border(new BorderStroke(Color.BLACK,
-            BorderStrokeStyle.SOLID,
-            CornerRadii.EMPTY,
-            BorderWidths.DEFAULT)));
+        BorderStrokeStyle.SOLID,
+        CornerRadii.EMPTY,
+        BorderWidths.DEFAULT)));
         deleteButtonFirst.setPadding(new Insets(4));
         deleteButtonFirst.setFont(Unity.font);
-
-
-
+        
+        
+        
         Label plus = new Label("+");
         plus.setBorder(new Border(new BorderStroke(Color.BLACK,
-            BorderStrokeStyle.SOLID,
-            CornerRadii.EMPTY,
-            BorderWidths.DEFAULT)));
+        BorderStrokeStyle.SOLID,
+        CornerRadii.EMPTY,
+        BorderWidths.DEFAULT)));
         plus.setPadding(new Insets(4));
         plus.setFont(Unity.font);
-
-        plus.setOnMouseClicked(e -> circuitsButtons(bottom, plus, scroll));
+        
+        plus.setOnMouseClicked(e -> circuitsButtons(bottom, plus, scroll, "Untitled" + ++circuitNb));
         bottom.getChildren().add(plus);
+        
+        MenuBar menu = createMenu(bottom, plus, scroll);
 
         sp.getChildren().addAll(scroll, bottom);
         BorderPane border = new BorderPane();
         border.setLeft(splitPane);
         border.setCenter(sp);
         border.setTop(menu);
-
+        
         BorderPane.setMargin(scroll, new Insets(Unity.x));
-
+        
         scene = new Scene(border, Unity.width, Unity.height);
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -307,13 +295,13 @@ public class App extends Application{
                 if(key.getCode() == KeyCode.DELETE){
                     currentCircuit.removeSelectedGate();
                 } else if (key.isControlDown() && key.getCode() == KeyCode.S) {
-                    AfficherFenetreNom(saver);
+                    AfficherFenetreNom();
                 } else if (key.isControlDown() && key.getCode() == KeyCode.EQUALS) {
                     currentCircuit.zoom(); 
                 } else if (key.isControlDown() && key.getCode() == KeyCode.MINUS) {
                     currentCircuit.unzoom();  
                 } else if (key.isControlDown() && key.getCode() == KeyCode.L){
-                    AfficherTelechargement(saver);
+                    AfficherTelechargement(bottom, plus, scroll);
                 }else if (key.isControlDown() && key.getCode() == KeyCode.C){
                     currentCircuit.clearAll();
                 }    
@@ -336,7 +324,7 @@ public class App extends Application{
         name = null;
     }
 
-    private void AfficherTelechargement ( CircuitSaver saver ) {
+    private void AfficherTelechargement (HBox hb, Label plus, ScrollPane scroll) {
         Stage pop = new Stage() ;
         pop.initModality(Modality.APPLICATION_MODAL);
         pop.setTitle ("File Name");
@@ -353,13 +341,12 @@ public class App extends Application{
               //saver.saveCircuit(nF);
               File fichier = new File(nF) ;
               if ( fichier.exists()) {
-                Alert a = new Alert(Alert.AlertType.INFORMATION,"LE FICHIER EXISTE:"+nF) ;
                 try {
-                    saver.loadCircuit(nF);
+                    circuitsButtons(hb, plus, scroll, n.getText());
+                    currentCircuitSaver.loadCircuit(nF);
                 } catch (ParseException e1) {
                     e1.printStackTrace();
                 }
-                a.showAndWait();
               }
               else {
                 Alert a = new Alert(Alert.AlertType.INFORMATION,"LE FICHIER N EXISTE PAS: "+nF) ;
@@ -384,7 +371,7 @@ public class App extends Application{
   
        }
 
-    private MenuBar createMenu(){
+    private MenuBar createMenu(HBox bottom, Label plus, ScrollPane scroll){
         MenuBar menu = new MenuBar(); 
 
         Menu file = new Menu("File");
@@ -393,8 +380,8 @@ public class App extends Application{
         MenuItem clear = new MenuItem("Clear");
 
         file.getItems().addAll(save, load, clear);
-        save.setOnAction(e -> AfficherFenetreNom(currentCircuitSaver));
-        load.setOnAction(e -> AfficherTelechargement(currentCircuitSaver));
+        save.setOnAction(e -> AfficherFenetreNom());
+        load.setOnAction(e -> AfficherTelechargement(bottom, plus, scroll));
         clear.setOnAction(e -> currentCircuit.clearAll());
 
         // ---
@@ -413,13 +400,13 @@ public class App extends Application{
         return menu;
     }
 
-    private void circuitsButtons(HBox bottom, Label plus, ScrollPane scroll){
+    private void circuitsButtons(HBox bottom, Label plus, ScrollPane scroll, String circuitName){
         bottom.getChildren().remove(plus);
         Label olddLabel = (Label) bottom.getChildren().get(myPanes.indexOf(currentPane)*2);
         olddLabel.setStyle("-fx-background-color: white");
         olddLabel.setTextFill(Color.BLACK);
         initCircuitAndPane();
-        Label newLabel = new Label("Circuit " + myCircuits.size());
+        Label newLabel = new Label(circuitName);
         newLabel.setOnMouseClicked(m -> setSelectedCircuit(bottom, newLabel, scroll));
         newLabel.setBorder(new Border(new BorderStroke(Color.BLACK,
             BorderStrokeStyle.SOLID,

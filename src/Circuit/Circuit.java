@@ -469,6 +469,7 @@ public class Circuit {
         scale.setPivotX(0);
         scale.setPivotY(0);
         group.getTransforms().add(scale);
+        selectedGateProprety.set(null);
 
         Rectangle background = new Rectangle(20000, 20000);
         background.setFill(Color.WHITE);

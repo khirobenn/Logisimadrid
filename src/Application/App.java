@@ -13,6 +13,7 @@ import Circuit.ComposantLoad ;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -21,6 +22,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -37,7 +39,6 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -174,17 +175,6 @@ public class App extends Application{
             setGateName(newValue.getValue());
         });
 
-        //******************** 
-        //Pour les bouttons
-        VBox vb = new VBox();
-        vb.setPrefWidth(widthOfButton + widthOfShape);
-        vb.setBorder(new Border(new BorderStroke(Color.BLACK,
-            BorderStrokeStyle.SOLID,
-            CornerRadii.EMPTY,
-            BorderWidths.DEFAULT)));
-
-        vb.getChildren().addAll(rootTree);
-
 
         CircuitSaver saver = new CircuitSaver(circuit);
 
@@ -203,11 +193,19 @@ public class App extends Application{
         increaseInput.setOnMouseClicked(e -> circuit.increaseInputs());
         
         hb.getChildren().addAll(decreaseInput, increaseInput);
-        vb.getChildren().add(hb);
+
+        SplitPane splitPane = new SplitPane();
+        splitPane.setOrientation(Orientation.VERTICAL);
+        splitPane.getItems().addAll(rootTree, hb);
+        splitPane.setPrefWidth(widthOfButton + widthOfShape);
+        splitPane.setBorder(new Border(new BorderStroke(Color.BLACK,
+            BorderStrokeStyle.SOLID,
+            CornerRadii.EMPTY,
+            BorderWidths.DEFAULT)));
 
 
         BorderPane border = new BorderPane();
-        border.setLeft(vb);
+        border.setLeft(splitPane);
         border.setCenter(scroll);
         border.setTop(menu);
 
@@ -250,26 +248,6 @@ public class App extends Application{
         }
         name = null;
     }
-
-    
-
-    // private void setNbOfGateSelected(Button i){
-    //     int tmp = buttons.indexOf(i);
-    //     if(tmp == nbOfButtonSelected){
-    //         nbOfButtonSelected = -1;
-    //         i.setStyle("-fx-background-color : white;");
-
-    //     }
-    //     else{
-    //         if(nbOfButtonSelected >= 0){
-    //             // buttons.get(nbOfButtonSelected).setStyle("-fx-background-color : white;");
-    //         }
-    //         nbOfButtonSelected = tmp;
-    //         i.setStyle("-fx-background-color : rgb(219, 219, 219);");
-    //     }
-    // }
-
-
 
     private void AfficherTelechargement ( CircuitSaver saver ) {
         Stage pop = new Stage() ;

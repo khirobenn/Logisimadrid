@@ -35,6 +35,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
@@ -64,7 +66,13 @@ public class App extends Application{
 
     // -----------
 
-    // List<Circuit> myCircuits = new ArrayList<Circuit>();
+    List<Circuit> myCircuits = new ArrayList<Circuit>();
+    List<Pane> myPanes = new ArrayList<Pane>();
+    List<CircuitSaver> myCircuitSavers = new ArrayList<CircuitSaver>();
+
+    Circuit currentCircuit;
+    Pane currentPane;
+    CircuitSaver currentCircuitSaver;
 
     
     public static void main(String[] args) throws Exception {
@@ -146,15 +154,32 @@ public class App extends Application{
         delay.play();
     }
 
+    private void initCircuitAndPane(){
+        currentPane = new Pane();
+        currentCircuit = new Circuit(currentPane);
+
+        myPanes.add(currentPane);
+        myCircuits.add(currentCircuit);
+
+        currentPane.setMinSize(width - widthOfButton - widthOfShape, height);
+        currentPane.setMaxWidth(Region.USE_PREF_SIZE);
+        currentPane.setMaxHeight(Region.USE_PREF_SIZE);
+
+        currentPane.setPrefWidth(width*4);
+        currentPane.setPrefHeight(height*4);
+
+        currentPane.setOnMouseClicked(e -> addItem(e, currentCircuit, currentPane));
+
+        currentCircuitSaver = new CircuitSaver(currentCircuit);
+
+        myCircuitSavers.add(currentCircuitSaver);
+    }
     
     @SuppressWarnings("unchecked")
     private void launchMainApp(Stage window) throws Exception {
-        Pane sp = new Pane();
+        initCircuitAndPane();
 
-        Pane pane2 = new Pane();
-        pane2.setMaxWidth(width);
-        pane2.setMaxHeight(height);
-        pane2.getChildren().add(sp);
+        VBox sp = new VBox();
 
         ScrollPane scroll = new ScrollPane();
         scroll.setMinHeight(Unity.height/2);
@@ -162,17 +187,9 @@ public class App extends Application{
         
         scroll.setMaxWidth(width);
         scroll.setMaxHeight(height);
-        scroll.setContent(pane2);
+        scroll.setContent(currentPane);
         
-        sp.setMinSize(width - widthOfButton - widthOfShape, height);
-        sp.setMaxWidth(Region.USE_PREF_SIZE);
-        sp.setMaxHeight(Region.USE_PREF_SIZE);
-
-        sp.setPrefWidth(width*4);
-        sp.setPrefHeight(height*4);
-
-        Circuit circuit = new Circuit(sp);
-        sp.setOnMouseClicked(e -> addItem(e, circuit, sp));
+        
 
 
         // Tree Items
@@ -186,11 +203,11 @@ public class App extends Application{
         });
 
 
-        CircuitSaver saver = new CircuitSaver(circuit);
+        CircuitSaver saver = new CircuitSaver(currentCircuit);
 
         // -----------
 
-        MenuBar menu = createMenu(circuit, saver);
+        MenuBar menu = createMenu();
 
         // -----------
 
@@ -203,10 +220,10 @@ public class App extends Application{
         HBox hb = new HBox();
         
         Button decreaseInput = new Button("-");
-        decreaseInput.setOnMouseClicked(e -> circuit.decreaseInputs());
+        decreaseInput.setOnMouseClicked(e -> currentCircuit.decreaseInputs());
         
         Button increaseInput = new Button("+");
-        increaseInput.setOnMouseClicked(e -> circuit.increaseInputs());
+        increaseInput.setOnMouseClicked(e -> currentCircuit.increaseInputs());
         
         hb.getChildren().addAll(decreaseInput, increaseInput);
         vb.getChildren().addAll(label, hb);
@@ -216,7 +233,7 @@ public class App extends Application{
         sliderZoom.setShowTickMarks(true);
         sliderZoom.setBlockIncrement(10.f);
         sliderZoom.valueProperty().addListener((observable, oldValue, newValue) -> {
-            circuit.setZoom(newValue.doubleValue());
+            currentCircuit.setZoom(newValue.doubleValue());
         });
 
 
@@ -231,31 +248,74 @@ public class App extends Application{
             CornerRadii.EMPTY,
             BorderWidths.DEFAULT)));
 
+        HBox bottom = new HBox();
+        bottom.setSpacing(Unity.x);
 
+
+        Label firstLabel = new Label("Circuit " + myCircuits.size());
+        firstLabel.setTextFill(Color.WHITE);
+        firstLabel.setStyle("-fx-background-color: black");
+        bottom.getChildren().add(firstLabel);
+
+        firstLabel.setOnMouseClicked(m -> setSelectedCircuit(bottom, firstLabel, scroll));
+
+        firstLabel.setBorder(new Border(new BorderStroke(Color.BLACK,
+            BorderStrokeStyle.SOLID,
+            CornerRadii.EMPTY,
+            BorderWidths.DEFAULT)));
+        firstLabel.setPadding(new Insets(4));
+        firstLabel.setFont(Unity.font);
+
+        Label deleteButtonFirst = new Label(" x ");
+        deleteButtonFirst.setStyle("-fx-background-color: red");
+        bottom.getChildren().add(deleteButtonFirst);
+
+        deleteButtonFirst.setOnMouseClicked(m -> deleteSetSelectedCircuit(bottom, firstLabel, scroll));
+
+        deleteButtonFirst.setBorder(new Border(new BorderStroke(Color.BLACK,
+            BorderStrokeStyle.SOLID,
+            CornerRadii.EMPTY,
+            BorderWidths.DEFAULT)));
+        deleteButtonFirst.setPadding(new Insets(4));
+        deleteButtonFirst.setFont(Unity.font);
+
+
+
+        Label plus = new Label("+");
+        plus.setBorder(new Border(new BorderStroke(Color.BLACK,
+            BorderStrokeStyle.SOLID,
+            CornerRadii.EMPTY,
+            BorderWidths.DEFAULT)));
+        plus.setPadding(new Insets(4));
+        plus.setFont(Unity.font);
+
+        plus.setOnMouseClicked(e -> circuitsButtons(bottom, plus, scroll));
+        bottom.getChildren().add(plus);
+
+        sp.getChildren().addAll(scroll, bottom);
         BorderPane border = new BorderPane();
         border.setLeft(splitPane);
-        border.setCenter(scroll);
+        border.setCenter(sp);
         border.setTop(menu);
 
         BorderPane.setMargin(scroll, new Insets(Unity.x));
 
         scene = new Scene(border, Unity.width, Unity.height);
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
             @Override
             public void handle(KeyEvent key) {
                 if(key.getCode() == KeyCode.DELETE){
-                    circuit.removeSelectedGate();
+                    currentCircuit.removeSelectedGate();
                 } else if (key.isControlDown() && key.getCode() == KeyCode.S) {
                     AfficherFenetreNom(saver);
                 } else if (key.isControlDown() && key.getCode() == KeyCode.EQUALS) {
-                    circuit.zoom(); 
+                    currentCircuit.zoom(); 
                 } else if (key.isControlDown() && key.getCode() == KeyCode.MINUS) {
-                    circuit.unzoom();  
+                    currentCircuit.unzoom();  
                 } else if (key.isControlDown() && key.getCode() == KeyCode.L){
                     AfficherTelechargement(saver);
                 }else if (key.isControlDown() && key.getCode() == KeyCode.C){
-                    circuit.clearAll();
+                    currentCircuit.clearAll();
                 }    
             }
             
@@ -324,7 +384,7 @@ public class App extends Application{
   
        }
 
-    private MenuBar createMenu(Circuit circuit, CircuitSaver saver){
+    private MenuBar createMenu(){
         MenuBar menu = new MenuBar(); 
 
         Menu file = new Menu("File");
@@ -333,9 +393,9 @@ public class App extends Application{
         MenuItem clear = new MenuItem("Clear");
 
         file.getItems().addAll(save, load, clear);
-        save.setOnAction(e -> AfficherFenetreNom(saver));
-        load.setOnAction(e -> AfficherTelechargement(saver));
-        clear.setOnAction(e -> circuit.clearAll());
+        save.setOnAction(e -> AfficherFenetreNom(currentCircuitSaver));
+        load.setOnAction(e -> AfficherTelechargement(currentCircuitSaver));
+        clear.setOnAction(e -> currentCircuit.clearAll());
 
         // ---
 
@@ -345,15 +405,90 @@ public class App extends Application{
         MenuItem zoomOut = new MenuItem("Zoom out");
 
         view.getItems().addAll(zoom, zoomOut);
-        zoom.setOnAction(e -> circuit.zoom());
-        zoomOut.setOnAction(e -> circuit.unzoom());
+        zoom.setOnAction(e -> currentCircuit.zoom());
+        zoomOut.setOnAction(e -> currentCircuit.unzoom());
 
 
         menu.getMenus().addAll(file, view);
         return menu;
     }
 
+    private void circuitsButtons(HBox bottom, Label plus, ScrollPane scroll){
+        bottom.getChildren().remove(plus);
+        Label olddLabel = (Label) bottom.getChildren().get(myPanes.indexOf(currentPane)*2);
+        olddLabel.setStyle("-fx-background-color: white");
+        olddLabel.setTextFill(Color.BLACK);
+        initCircuitAndPane();
+        Label newLabel = new Label("Circuit " + myCircuits.size());
+        newLabel.setOnMouseClicked(m -> setSelectedCircuit(bottom, newLabel, scroll));
+        newLabel.setBorder(new Border(new BorderStroke(Color.BLACK,
+            BorderStrokeStyle.SOLID,
+            CornerRadii.EMPTY,
+            BorderWidths.DEFAULT)));
+        newLabel.setPadding(new Insets(4));
+        newLabel.setFont(Unity.font);
+        scroll.setContent(currentPane);
+        newLabel.setStyle("-fx-background-color: black");
+        newLabel.setTextFill(Color.WHITE);
+        
+        Label deleteButtonFirst = new Label(" x ");
+        deleteButtonFirst.setStyle("-fx-background-color: red");
+        deleteButtonFirst.setOnMouseClicked(m -> deleteSetSelectedCircuit(bottom, newLabel, scroll));
+        deleteButtonFirst.setBorder(new Border(new BorderStroke(Color.BLACK,
+            BorderStrokeStyle.SOLID,
+            CornerRadii.EMPTY,
+            BorderWidths.DEFAULT)));    
+        deleteButtonFirst.setPadding(new Insets(4));
+        deleteButtonFirst.setFont(Unity.font);
+
+        bottom.getChildren().addAll(newLabel, deleteButtonFirst, plus);
+    }
+
+    private void setSelectedCircuit(HBox bottom, Label button, ScrollPane scroll){
+        if(myPanes.indexOf(currentPane) != bottom.getChildren().indexOf(button)/2){
+            Label oldLabel = (Label) bottom.getChildren().get(myPanes.indexOf(currentPane)*2);
+            oldLabel.setStyle("-fx-background-color: white");
+            oldLabel.setTextFill(Color.BLACK);
+            currentCircuit = myCircuits.get(bottom.getChildren().indexOf(button)/2);
+            currentPane = myPanes.get(bottom.getChildren().indexOf(button)/2);
+            currentCircuitSaver = myCircuitSavers.get(bottom.getChildren().indexOf(button)/2);
+            scroll.setContent(currentPane);
+            button.setStyle("-fx-background-color: black");
+            button.setTextFill(Color.WHITE);
+        }
+        else{
+            scroll.setContent(currentPane);
+            button.setStyle("-fx-background-color: black");
+            button.setTextFill(Color.WHITE);
+        }
+    }
+
+    private void deleteSetSelectedCircuit(HBox bottom, Label button, ScrollPane scroll){
+        if(myCircuits.size() <= 1) return;
+        int index = bottom.getChildren().indexOf(button)/2;
+        int currentIndex = myCircuits.indexOf(currentCircuit);
+        myPanes.remove(index);
+        myCircuits.remove(index);
+        myCircuitSavers.remove(index);
+        bottom.getChildren().remove(index*2);
+        bottom.getChildren().remove(index*2);
+
+        System.out.println(index);
+
+        if(currentIndex == index){
+            if(index != 0){
+                currentCircuit = myCircuits.get(index-1);
+                currentCircuitSaver = myCircuitSavers.get(index-1);
+                currentPane = myPanes.get(index-1);
+                setSelectedCircuit(bottom, (Label)bottom.getChildren().get((index-1)*2), scroll);
+            }
+            else{
+                currentCircuit = myCircuits.get(index);
+                currentCircuitSaver = myCircuitSavers.get(index);
+                currentPane = myPanes.get(index);
+                setSelectedCircuit(bottom, (Label)bottom.getChildren().get(index*2), scroll);
+            }
+        }
+    }
+
 }
-
-
-

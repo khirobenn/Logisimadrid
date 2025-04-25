@@ -15,6 +15,7 @@ import Gates.Horloge;
 import Gates.Multiplier;
 import Gates.Nand;
 import Gates.Nor;
+import Gates.Not;
 import Gates.Or;
 import Gates.OutputGate;
 import Gates.Xnor;
@@ -365,6 +366,10 @@ public class Circuit {
     public void createGate(String name, int inputsLength, double x, double y){
         Gate gate = null;
         switch (name) {
+            case "NOT":
+                gate = new Not(this, group, x, y);
+                addGate(gate);
+                break;
             case "AND":
                 gate = new And(inputsLength, this, group, x, y);
                 addGate(gate);

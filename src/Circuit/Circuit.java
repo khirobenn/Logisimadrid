@@ -433,11 +433,11 @@ public class Circuit {
                 gate = new Horloge(this, group, x, y);
                 addGate(gate);
                 break;
-            case "BASCULE JK":
+            case "Bascule JK":
                 gate = new Bascule_JK(this, group, x, y);
                 addGate(gate);
                 break;  
-            case "BASCULE D":
+            case "Bascule D":
                 gate = new Bascule_D(this, group, x, y);
                 addGate(gate);
                 break;      

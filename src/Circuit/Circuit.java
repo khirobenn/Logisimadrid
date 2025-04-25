@@ -159,6 +159,7 @@ public class Circuit {
         else{
             removeGate(selectedGate);
             selectedGate = null;
+            selectedGateProprety.set(null);
         }
         eval(null);
         fixFilsColors();

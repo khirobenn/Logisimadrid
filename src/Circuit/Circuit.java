@@ -74,7 +74,6 @@ public class Circuit {
         else if(selectedGate == this.selectedGate){
             selectedGate.getShape().setFill(Color.TRANSPARENT);
             this.selectedGate = null;
-            System.out.println("No gate selected");
         }
         else{
             if(this.selectedGate != null){
@@ -82,7 +81,6 @@ public class Circuit {
             }
             this.selectedGate = selectedGate;
             selectedGate.getShape().setFill(Color.rgb(219, 219, 219));
-            System.out.println("Gate selected !!!");
             setFilSelected(null);
         }
 
@@ -164,8 +162,6 @@ public class Circuit {
                 case QuadBool.ERROR: fil.changeColor(Unity.ERR); break;
             }
         }
-
-        System.out.println("Fix color called");
     }
 
     public void removeGate(Gate gate){
@@ -214,9 +210,6 @@ public class Circuit {
         for(Gate gate : gates){
             gate.getOutput();
         }
-        
-        System.out.println("");
-        System.out.println("EVAL CALLED");
     }
 
     public void evaluation(Gate variableClicked){
@@ -243,7 +236,6 @@ public class Circuit {
             zoom += 0.1;
             scale.setX(zoom);
             scale.setY(zoom);
-            System.out.println("Zoom! " + zoom);
         }
     }
 
@@ -252,7 +244,6 @@ public class Circuit {
             zoom -= 0.1;
             scale.setX(zoom);
             scale.setY(zoom);
-            System.out.println("Unzoom! " + zoom);
         }
     }
 

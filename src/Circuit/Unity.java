@@ -12,8 +12,8 @@ public class Unity {
     public static final int height = 800;
     public static final double STROKE_WIDTH = 3.0;
 
-    public static double minZoom = 0.41;
-    public static double maxZoom = 1.5;
+    public static double minZoom = 0.4f;
+    public static double maxZoom = 1.5f;
     public static int tranformDoubleToInt(double xPoint){
         int x = Unity.x;
         return (int) (Math.floor(xPoint) - Math.floor(xPoint)%x);

@@ -27,7 +27,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
@@ -46,7 +45,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
@@ -85,38 +84,21 @@ public class App extends Application{
     }
 
     private void AfficherFenetreNom () {
-        Stage pop = new Stage() ;
-        pop.initModality(Modality.APPLICATION_MODAL);
-        pop.setTitle ("File Name");
-        Label l = new Label("Give a Name :") ;
-        TextField n = new TextField();
-        Button OK = new Button("OK") ;
-        OK.setOnAction( e-> {
-          String nF = n.getText().trim() ;
-          if ( ! nF.isEmpty()  )  {
+        FileChooser fileChooser = new FileChooser();
+        File nf = fileChooser.showSaveDialog(new Stage());
+        String nF = nf.getAbsolutePath().trim() ;
+        if ( ! nF.isEmpty()  )  {
+            if ( !nF.endsWith(".json")) {
+                nF += ".json" ;
+            }
+            currentCircuitSaver.saveCircuit(nF);
+        }
+        else {
+            Alert a = new Alert(Alert.AlertType.WARNING , "You didn't give a name !!") ;
+            a.showAndWait();
+        }
   
-              if ( !nF.endsWith(".json")) {
-                  nF += ".json" ;
-              }
-              currentCircuitSaver.saveCircuit(nF);
-              System.out.println("Fichier sauvegarde :"+nF );
-              pop.close(); 
-          }
-          else {
-              Alert a = new Alert(Alert.AlertType.WARNING , "You didn't give a name !!") ;
-              a.showAndWait();
-          }
-  
-        }); 
-  
-        VBox ly = new VBox(10,l,n,OK) ;
-        ly.setPadding(new Insets(15));
-        Scene scene2 = new Scene(ly,200 , 200 ) ;
-  
-        pop.setScene(scene2);
-        pop.showAndWait();
-  
-       }
+    }
        @Override
     public void start(Stage window) throws Exception {
         // Ajouter une icone
@@ -325,50 +307,34 @@ public class App extends Application{
     }
 
     private void AfficherTelechargement (HBox hb, Label plus, ScrollPane scroll) {
-        Stage pop = new Stage() ;
-        pop.initModality(Modality.APPLICATION_MODAL);
-        pop.setTitle ("File Name");
-        Label l = new Label("Give a Name :") ;
-        TextField n = new TextField();
-        Button OK = new Button("OK") ;
-        OK.setOnAction( e-> {
-          String nF = n.getText().trim() ;
-          if ( ! nF.isEmpty()  )  {
-  
-              if ( !nF.endsWith(".json")) {
-                  nF += ".json" ;
-              }
-              //saver.saveCircuit(nF);
-              File fichier = new File(nF) ;
-              if ( fichier.exists()) {
-                try {
-                    circuitsButtons(hb, plus, scroll, n.getText());
-                    currentCircuitSaver.loadCircuit(nF);
-                } catch (ParseException e1) {
-                    e1.printStackTrace();
-                }
-              }
-              else {
-                Alert a = new Alert(Alert.AlertType.INFORMATION,"LE FICHIER N EXISTE PAS: "+nF) ;
-                a.showAndWait() ;
-              }
-           
-              pop.close(); 
-          }
-          else {
-              Alert a = new Alert(Alert.AlertType.WARNING , "You didn't give a name !!") ;
-              a.showAndWait();
-          }
-  
-        }); 
-  
-        VBox ly = new VBox(10,l,n,OK) ;
-        ly.setPadding(new Insets(15));
-        Scene scene2 = new Scene(ly,200 , 200 ) ;
-  
-        pop.setScene(scene2);
-        pop.showAndWait();
-  
+        FileChooser fileChooser = new FileChooser();
+        File nf = fileChooser.showOpenDialog(new Stage());
+
+        String nF = nf.getAbsolutePath() ;
+        if ( ! nF.isEmpty()  )  {
+
+            if ( !nF.endsWith(".json")) {
+                nF += ".json" ;
+            }
+            //saver.saveCircuit(nF);
+            File fichier = new File(nF) ;
+            if ( fichier.exists()) {
+            try {
+                circuitsButtons(hb, plus, scroll, nf.getName().split(".json")[0]);
+                currentCircuitSaver.loadCircuit(nF);
+            } catch (ParseException e1) {
+                e1.printStackTrace();
+            }
+            }
+            else {
+            Alert a = new Alert(Alert.AlertType.INFORMATION,"LE FICHIER N EXISTE PAS: "+nF) ;
+            a.showAndWait() ;
+            }
+        }
+        else {
+            Alert a = new Alert(Alert.AlertType.WARNING , "You didn't give a name !!") ;
+            a.showAndWait();
+        }
        }
 
     private MenuBar createMenu(HBox bottom, Label plus, ScrollPane scroll){
@@ -459,8 +425,6 @@ public class App extends Application{
         myCircuitSavers.remove(index);
         bottom.getChildren().remove(index*2);
         bottom.getChildren().remove(index*2);
-
-        System.out.println(index);
 
         if(currentIndex == index){
             if(index != 0){

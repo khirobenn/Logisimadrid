@@ -28,10 +28,10 @@ public class CircuitSaver {
     try {
         FileWriter writer = new FileWriter(filename ) ;
         writer.write ( exportCircuit().toCharArray () );
-        System.out.println("Circuit enregistré avec succés dans " + filename ) ;
+            System.out.println("Circuit enregistré avec succés dans " + filename ) ;
         writer.close();
         } catch ( IOException e ) {
-        System.out.println ( "Erreur  pendant l'enregistrement " + e.getMessage() ) ;
+            System.err.println ( "Erreur  pendant l'enregistrement " + e.getMessage() ) ;
         }
     }
 
@@ -140,7 +140,7 @@ public class CircuitSaver {
             reader.close();
         } 
         catch ( IOException e ) {
-            System.out.println("Erreur lors du chargement de fichier :" + e.getMessage() ) ;
+            System.err.println("Erreur lors du chargement de fichier :" + e.getMessage() ) ;
         }
     }
 

@@ -134,9 +134,9 @@ public class CircuitSaver {
             circuit.clearAll();
 
             loadFils(jsonObj);
-            loadGates(jsonObj);
             loadVariable(jsonObj);
-        
+            loadGates(jsonObj);
+            
             reader.close();
         } 
         catch ( IOException e ) {

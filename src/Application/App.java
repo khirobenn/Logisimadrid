@@ -1,6 +1,8 @@
 package Application;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.simple.parser.ParseException;
 
@@ -14,6 +16,7 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -22,6 +25,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
@@ -50,13 +54,18 @@ import javafx.util.Duration;
 public class App extends Application{
     Scene scene;
     private double widthOfButton = Unity.x*5;
-    private double widthOfShape = Unity.x*3;
+    private double widthOfShape = Unity.x*10;
     // private final int height = Unity.height;
     private final int height = 1080;
     // private final int width = Unity.width;
     private final int width = 1920;
     private final NouveauComposant cmp = ComposantLoad.chargerComp("./Composants_Json/Ajout_Comp.json") ; // on a le chemin de fichier
     String name;
+
+    // -----------
+
+    // List<Circuit> myCircuits = new ArrayList<Circuit>();
+
     
     public static void main(String[] args) throws Exception {
         launch(args);
@@ -119,21 +128,22 @@ public class App extends Application{
         Scene splashScene = new Scene(logoPane, Unity.width, Unity.height); 
         window.setScene(splashScene);
         window.setTitle("LOGISIM");
-        window.show();
-
-        
+        window.setResizable(false);
+        window.show();        
         
         PauseTransition delay = new PauseTransition(Duration.seconds(3));
         delay.setOnFinished(event -> {
             try {
-                
+                window.close();
+                window.setResizable(true);
+                window.show();
+                window.setMaximized(true);
                 launchMainApp(window); 
             } catch (Exception e) {
                 e.printStackTrace();
             }
             });
         delay.play();
-
     }
 
     
@@ -166,13 +176,13 @@ public class App extends Application{
 
 
         // Tree Items
-        TreeItem<String> allTree = new TreeItem<String>();
+        TreeItem<Label> allTree = new TreeItem<Label>();
         allTree.getChildren().addAll(Unity.portesTree(), Unity.varAndOutTree(), Unity.bitABitTree(), Unity.basculesTree());
 
-        TreeView<String> rootTree = new TreeView<String>(allTree);
+        TreeView<Label> rootTree = new TreeView<Label>(allTree);
         rootTree.setShowRoot(false);
         rootTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            setGateName(newValue.getValue());
+            setGateName(newValue.getValue().getText());
         });
 
 
@@ -184,6 +194,12 @@ public class App extends Application{
 
         // -----------
 
+        VBox vb = new VBox();
+        Label label = new Label("Ajout/Suppression d'entrées");
+        label.setAlignment(Pos.CENTER);
+        label.setMaxWidth(Double.MAX_VALUE);
+        label.setFont(Unity.fontBold);
+
         HBox hb = new HBox();
         
         Button decreaseInput = new Button("-");
@@ -193,10 +209,22 @@ public class App extends Application{
         increaseInput.setOnMouseClicked(e -> circuit.increaseInputs());
         
         hb.getChildren().addAll(decreaseInput, increaseInput);
+        vb.getChildren().addAll(label, hb);
+
+        Slider sliderZoom = new Slider(Unity.minZoom, Unity.maxZoom, 1.);
+        sliderZoom.setShowTickLabels(true);
+        sliderZoom.setShowTickMarks(true);
+        sliderZoom.setBlockIncrement(10.f);
+        sliderZoom.valueProperty().addListener((observable, oldValue, newValue) -> {
+            circuit.setZoom(newValue.doubleValue());
+        });
+
+
+
 
         SplitPane splitPane = new SplitPane();
         splitPane.setOrientation(Orientation.VERTICAL);
-        splitPane.getItems().addAll(rootTree, hb);
+        splitPane.getItems().addAll(rootTree, vb, sliderZoom);
         splitPane.setPrefWidth(widthOfButton + widthOfShape);
         splitPane.setBorder(new Border(new BorderStroke(Color.BLACK,
             BorderStrokeStyle.SOLID,
@@ -233,7 +261,6 @@ public class App extends Application{
             
         });
         window.setScene(scene);
-        window.show();
     }
 
     private void setGateName(String name){
@@ -299,7 +326,7 @@ public class App extends Application{
 
     private MenuBar createMenu(Circuit circuit, CircuitSaver saver){
         MenuBar menu = new MenuBar(); 
-        
+
         Menu file = new Menu("File");
         MenuItem save = new MenuItem("Save");
         MenuItem load = new MenuItem("Load");

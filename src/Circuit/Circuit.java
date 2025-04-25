@@ -239,7 +239,7 @@ public class Circuit {
     }
 
     public void zoom(){
-        if(zoom < 1.5){
+        if(zoom < Unity.maxZoom){
             zoom += 0.1;
             scale.setX(zoom);
             scale.setY(zoom);
@@ -248,12 +248,18 @@ public class Circuit {
     }
 
     public void unzoom(){
-        if(zoom > 0.41){
+        if(zoom > Unity.minZoom){
             zoom -= 0.1;
             scale.setX(zoom);
             scale.setY(zoom);
             System.out.println("Unzoom! " + zoom);
         }
+    }
+
+    public void setZoom(double zoom){
+        this.zoom = zoom;
+        scale.setX(zoom);
+        scale.setY(zoom);
     }
 
     public double getZoom(){

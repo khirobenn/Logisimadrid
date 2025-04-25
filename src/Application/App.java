@@ -46,6 +46,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
@@ -85,7 +86,10 @@ public class App extends Application{
 
     private void AfficherFenetreNom () {
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Sauvegarder votre Circuit :");
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("json Files", "*.json"));
         File nf = fileChooser.showSaveDialog(new Stage());
+        if(nf == null) return;
         String nF = nf.getAbsolutePath().trim() ;
         if ( ! nF.isEmpty()  )  {
             if ( !nF.endsWith(".json")) {
@@ -308,7 +312,10 @@ public class App extends Application{
 
     private void AfficherTelechargement (HBox hb, Label plus, ScrollPane scroll) {
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Séléctionner le fichier du Circuit :");
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("json Files", "*.json"));
         File nf = fileChooser.showOpenDialog(new Stage());
+        if(nf == null) return;
 
         String nF = nf.getAbsolutePath() ;
         if ( ! nF.isEmpty()  )  {

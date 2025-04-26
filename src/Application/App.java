@@ -64,7 +64,7 @@ public class App extends Application{
 
     private int circuitNb = 1;
     private final NouveauComposant cmp = ComposantLoad.chargerComp("./Composants_Json/Ajout_Comp.json") ; // on a le chemin de fichier
-    String name;
+    private String name;
 
     // -----------
 

@@ -68,13 +68,18 @@ public class App extends Application{
 
     // -----------
 
-    List<Circuit> myCircuits = new ArrayList<Circuit>();
-    List<Pane> myPanes = new ArrayList<Pane>();
-    List<CircuitSaver> myCircuitSavers = new ArrayList<CircuitSaver>();
+    private List<Circuit> myCircuits = new ArrayList<Circuit>();
+    private List<Pane> myPanes = new ArrayList<Pane>();
+    private List<CircuitSaver> myCircuitSavers = new ArrayList<CircuitSaver>();
 
-    Circuit currentCircuit;
-    Pane currentPane;
-    CircuitSaver currentCircuitSaver;
+    private Circuit currentCircuit;
+    private Pane currentPane;
+    private CircuitSaver currentCircuitSaver;
+
+    private VBox vb;
+    private HBox hb;
+    private Label label;
+
 
     
     public static void main(String[] args) throws Exception {
@@ -161,10 +166,44 @@ public class App extends Application{
         currentCircuitSaver = new CircuitSaver(currentCircuit);
 
         myCircuitSavers.add(currentCircuitSaver);
+
+        currentCircuit.getSelectedGateProperty().addListener((observable, oldValue, newValue) ->{
+            if(newValue == null){
+                if(vb.getChildren().contains(label) && vb.getChildren().contains(hb)){
+                    vb.getChildren().removeAll(label, hb);
+                }
+            }
+            else{
+                if(!vb.getChildren().contains(label)){
+                    vb.getChildren().add(label);
+                }
+
+                if(!vb.getChildren().contains(hb)){
+                    vb.getChildren().add(hb);
+                }
+            }
+        });
     }
     
     @SuppressWarnings("unchecked")
     private void launchMainApp(Stage window) throws Exception {
+        vb = new VBox();
+        label = new Label("Ajout/Suppression d'entrées");
+        label.setAlignment(Pos.CENTER);
+        label.setMaxWidth(Double.MAX_VALUE);
+        label.setFont(Unity.fontBold);
+        label.setTextFill(Color.WHITE);
+        
+        hb = new HBox();
+        
+        Button decreaseInput = new Button("-");
+        decreaseInput.setOnMouseClicked(e -> currentCircuit.decreaseInputs());
+        
+        Button increaseInput = new Button("+");
+        increaseInput.setOnMouseClicked(e -> currentCircuit.increaseInputs());
+        
+        hb.getChildren().addAll(decreaseInput, increaseInput);
+
         initCircuitAndPane();
 
         VBox sp = new VBox();
@@ -188,39 +227,9 @@ public class App extends Application{
             setGateName(newValue.getValue().getText());
         });
         
-        VBox vb = new VBox();
-        Label label = new Label("Ajout/Suppression d'entrées");
-        label.setAlignment(Pos.CENTER);
-        label.setMaxWidth(Double.MAX_VALUE);
-        label.setFont(Unity.fontBold);
-        label.setTextFill(Color.WHITE);
         
-        HBox hb = new HBox();
-        
-        Button decreaseInput = new Button("-");
-        decreaseInput.setOnMouseClicked(e -> currentCircuit.decreaseInputs());
-        
-        Button increaseInput = new Button("+");
-        increaseInput.setOnMouseClicked(e -> currentCircuit.increaseInputs());
-        
-        hb.getChildren().addAll(decreaseInput, increaseInput);
 
-        currentCircuit.getSelectedGateProperty().addListener((observable, oldValue, newValue) ->{
-            if(newValue == null){
-                if(vb.getChildren().contains(label) && vb.getChildren().contains(hb)){
-                    vb.getChildren().removeAll(label, hb);
-                }
-            }
-            else{
-                if(!vb.getChildren().contains(label)){
-                    vb.getChildren().add(label);
-                }
-
-                if(!vb.getChildren().contains(hb)){
-                    vb.getChildren().add(hb);
-                }
-            }
-        });
+        
         
         Slider sliderZoom = new Slider(Unity.minZoom, Unity.maxZoom, 1.);
         sliderZoom.setShowTickLabels(true);

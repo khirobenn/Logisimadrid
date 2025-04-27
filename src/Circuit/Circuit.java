@@ -20,6 +20,7 @@ import Gates.Not;
 import Gates.Or;
 import Gates.OutputGate;
 import Gates.Variable;
+import Gates.VoidGate;
 import Gates.Xnor;
 import Gates.Xor;
 import javafx.beans.property.ObjectProperty;
@@ -79,11 +80,13 @@ public class Circuit {
                 this.selectedGate.getShape().setFill(Color.TRANSPARENT);
             }
             this.selectedGate = selectedGate;
+            selectedGateProprety.set(new VoidGate());
             selectedGateProprety.set(null);
         }
         else if(selectedGate == this.selectedGate){
             selectedGate.getShape().setFill(Color.TRANSPARENT);
             this.selectedGate = null;
+            selectedGateProprety.set(new VoidGate());
             selectedGateProprety.set(null);
         }
         else{
@@ -298,7 +301,7 @@ public class Circuit {
 
     public void increaseInputs(){
         if(selectedGate != null){
-            if(toNotIncreaseOrDecrease.contains(selectedGate.getName())) return;
+            // if(toNotIncreaseOrDecrease.contains(selectedGate.getName())) return;
             int previousLength = selectedGate.getInputs().length;
             if(previousLength < 5){
                 double x = selectedGate.getShape().getLayoutX();
@@ -312,7 +315,7 @@ public class Circuit {
 
     public void decreaseInputs(){
         if(selectedGate != null){
-            if(toNotIncreaseOrDecrease.contains(selectedGate.getName())) return;
+            // if(toNotIncreaseOrDecrease.contains(selectedGate.getName())) return;
             int previousLength = selectedGate.getInputs().length;
             if(previousLength > 2){
                 double x = selectedGate.getShape().getLayoutX();

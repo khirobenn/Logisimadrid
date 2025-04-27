@@ -26,6 +26,7 @@ public abstract class Gate {
     private boolean isReleased = false;
     private boolean isReleasedForInputs[];
 
+    public Gate(){};
     public Gate(String name, Circuit circuit, Pane layout){
         this.layout = layout;
         this.name = name;

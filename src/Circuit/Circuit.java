@@ -46,7 +46,7 @@ public class Circuit {
     Scale scale;
 
     private List<String> toNotIncreaseOrDecrease = Arrays.asList("VARIABLE", "OUTPUT", "ADDER",
-        "MULTIPLIER", "ODDPARITY", "EVENPARITY", "BASCULE RS", "BASCULE JK", "HORLOGE", "BASCULE D");
+        "MULTIPLIER", "ODDPARITY", "EVENPARITY", "BASCULE RS", "BASCULE JK", "HORLOGE", "BASCULE D", "NOT");
 
     public Circuit(Pane group){
         Rectangle background = new Rectangle(20000, 20000);
@@ -93,7 +93,12 @@ public class Circuit {
             this.selectedGate = selectedGate;
             selectedGate.getShape().setFill(Color.rgb(219, 219, 219));
             setFilSelected(null);
-            selectedGateProprety.set(selectedGate);
+            if(!toNotIncreaseOrDecrease.contains(selectedGate.getName())){
+                selectedGateProprety.set(selectedGate);
+            }
+            else{
+                selectedGateProprety.set(null);
+            }
         }
 
     }

@@ -563,7 +563,7 @@ public class Fils {
 		}
 	}
 
-	private void delete(){
+	public void delete(){
 		circuit.getPane().getChildren().removeAll(circle, circle2);
 		circuit.getPane().getChildren().remove(l1);
 		circuit.getPane().getChildren().remove(l2);
@@ -619,6 +619,16 @@ public class Fils {
 
 	public void setParent(Fils parent){
 		this.parent = parent;
+	}
+
+	public boolean isFilTransparent(){
+		if(parent == null &&
+		circle.getFill().equals(Color.TRANSPARENT) &&
+		circle2.getFill().equals(Color.TRANSPARENT) && 
+		connected.size() == 0){
+			return true;
+		}
+		return false;
 	}
 }
 

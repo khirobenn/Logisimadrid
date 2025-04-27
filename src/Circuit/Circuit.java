@@ -161,6 +161,8 @@ public class Circuit {
             selectedGate = null;
             selectedGateProprety.set(null);
         }
+
+        deleteTransparentFils();
         eval(null);
         fixFilsColors();
     }
@@ -475,6 +477,14 @@ public class Circuit {
         background.setFill(Color.WHITE);
         group.getChildren().add(background);
         background.setOnMouseClicked(e -> resetSelectedItems());
+    }
+
+    private void deleteTransparentFils(){
+        for(Fils fil : new ArrayList<Fils>(fils)){
+            if(fil.isFilTransparent()){
+                fil.delete();
+            }
+        }
     }
 }
 

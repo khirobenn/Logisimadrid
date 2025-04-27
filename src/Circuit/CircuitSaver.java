@@ -92,7 +92,6 @@ public class CircuitSaver {
                 o.put ("Line2_Y_start" , currentFil.getL2().getStartY()) ;
                 o.put ("Line2_Y_end" , currentFil.getL2().getEndY()) ;
             }
-            o.put("isFilsRelatedToSomething", currentFil.getIsFilsRelatedToSomething());
             JSONArray connected = new JSONArray();
 
             for(Fils fil : currentFil.getConnected()){
@@ -155,7 +154,7 @@ public class CircuitSaver {
             double circle1_x = (double) jsObj.get("circle1_X");
             double circle1_y = (double) jsObj.get("circle1_Y");
 
-            Fils newFil = new Fils(circle1_x, circle1_y, circuit, null, null, (boolean) jsObj.get("isFilsRelatedToSomething"));
+            Fils newFil = new Fils(circle1_x, circle1_y, circuit, null, null, false);
             
             double circle2_x = (double) jsObj.get("circle2_X");
             double circle2_y = (double) jsObj.get("circle2_Y");

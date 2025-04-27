@@ -135,8 +135,14 @@ public class CircuitSaver {
             loadFils(jsonObj);
             loadVariable(jsonObj);
             loadGates(jsonObj);
+
+            for (Fils fil : new ArrayList<>(circuit.getFils())){
+                fil.test();
+            }
             
             reader.close();
+            circuit.eval(null);
+            circuit.fixFilsColors();
         } 
         catch ( IOException e ) {
             System.err.println("Erreur lors du chargement de fichier :" + e.getMessage() ) ;

@@ -9,8 +9,8 @@ import org.json.simple.parser.ParseException;
 import Circuit.Circuit;
 import Circuit.CircuitSaver;
 import Circuit.Unity;
-import Circuit.NouveauComposant ;
-import Circuit.ComposantLoad ;
+// import Circuit.NouveauComposant ;
+// import Circuit.ComposantLoad ;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -63,7 +63,7 @@ public class App extends Application{
     private final int width = 1920;
 
     private int circuitNb = 1;
-    private final NouveauComposant cmp = ComposantLoad.chargerComp("./Composants_Json/Ajout_Comp.json") ; // on a le chemin de fichier
+    // private final NouveauComposant cmp = ComposantLoad.chargerComp("./Composants_Json/Ajout_Comp.json") ; // on a le chemin de fichier
     private String name;
 
     // -----------

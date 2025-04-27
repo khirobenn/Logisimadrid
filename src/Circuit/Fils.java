@@ -630,5 +630,17 @@ public class Fils {
 		}
 		return false;
 	}
+
+	public void test(){
+		if(gate == null && connected.size() == 1){
+			for(Fils filConnected : new HashSet<Fils>(connected)){
+				if(filConnected.isFilsRelatedToSomething == true && filConnected.connected.size() == 1){
+					filConnected.connected.remove(this);
+					connected.remove(filConnected);
+					this.delete();
+				}
+			}
+		}
+	}
 }
 

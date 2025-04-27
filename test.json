@@ -1,0 +1,64 @@
+{
+    "gates": [
+        {
+            "inputs_length": 2,
+            "name": "AND",
+            "x": 560.0,
+            "y": 260.0
+        }
+    ],
+    "Variable": [],
+    "fils": [
+        {
+            "Line2_X_start": 10.0,
+            "Line1_Y_start": -200.0,
+            "Parent": -1,
+            "Line1_X_end": 10.0,
+            "Line2_X_end": 10.0,
+            "Line1_X_start": 10.0,
+            "Line1_Y_end": -200.0,
+            "connected": [],
+            "circle1_Y": 320.0,
+            "circle2_X": 680.0,
+            "circle1_X": 680.0,
+            "circle2_Y": 320.0,
+            "id": 0,
+            "Line2_Y_start": -200.0,
+            "Line2_Y_end": -200.0
+        },
+        {
+            "Line2_X_start": 10.0,
+            "Line1_Y_start": -200.0,
+            "Parent": -1,
+            "Line1_X_end": 10.0,
+            "Line2_X_end": 10.0,
+            "Line1_X_start": 10.0,
+            "Line1_Y_end": -200.0,
+            "connected": [],
+            "circle1_Y": 300.0,
+            "circle2_X": 560.0,
+            "circle1_X": 560.0,
+            "circle2_Y": 300.0,
+            "id": 1,
+            "Line2_Y_start": -200.0,
+            "Line2_Y_end": -200.0
+        },
+        {
+            "Line2_X_start": 10.0,
+            "Line1_Y_start": -200.0,
+            "Parent": -1,
+            "Line1_X_end": 10.0,
+            "Line2_X_end": 10.0,
+            "Line1_X_start": 10.0,
+            "Line1_Y_end": -200.0,
+            "connected": [],
+            "circle1_Y": 340.0,
+            "circle2_X": 560.0,
+            "circle1_X": 560.0,
+            "circle2_Y": 340.0,
+            "id": 2,
+            "Line2_Y_start": -200.0,
+            "Line2_Y_end": -200.0
+        }
+    ]
+}

@@ -448,6 +448,7 @@ public class App extends Application{
             scroll.setContent(currentPane);
             button.setStyle("-fx-background-color: black");
             button.setTextFill(Color.WHITE);
+            currentCircuit.setSelectedGate(null);
         }
         else{
             scroll.setContent(currentPane);

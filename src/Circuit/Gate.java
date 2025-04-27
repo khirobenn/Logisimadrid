@@ -16,15 +16,15 @@ public abstract class Gate {
     private Fils[] inputs;
     private Fils output;
     private boolean isOutPutSet;
-    protected Shape shape;
+    private  Shape shape;
     private Text text;
-    Circuit circuit;
-    Pane layout;
+    private Circuit circuit;
+    private Pane layout;
 
-    Set<Fils> otherFils;
+    private Set<Fils> otherFils;
 
-    boolean isReleased = false;
-    boolean isReleasedForInputs[];
+    private boolean isReleased = false;
+    private boolean isReleasedForInputs[];
 
     public Gate(String name, Circuit circuit, Pane layout){
         this.layout = layout;

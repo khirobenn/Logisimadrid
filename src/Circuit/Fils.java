@@ -31,9 +31,9 @@ public class Fils {
 
 
 	//used as the end point of Fils
-	public Circle circle;
+	private Circle circle;
 	//used as the start point of Fils
-	public Circle circle2;
+	private Circle circle2;
 
 	private boolean dx, dy;
 

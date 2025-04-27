@@ -1,6 +1,7 @@
 package Circuit;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -43,6 +44,9 @@ public class Circuit {
     private Rectangle rec1;
     private Rectangle rec2;
     Scale scale;
+
+    private List<String> toNotIncreaseOrDecrease = Arrays.asList("VARIABLE", "OUTPUT", "ADDER",
+        "MULTIPLIER", "ODDPARITY", "EVENPARITY", "BASCULE RS", "BASCULE JK", "HORLOGE", "BASCULE D");
 
     public Circuit(Pane group){
         Rectangle background = new Rectangle(20000, 20000);
@@ -292,6 +296,7 @@ public class Circuit {
 
     public void increaseInputs(){
         if(selectedGate != null){
+            if(toNotIncreaseOrDecrease.contains(selectedGate.getName())) return;
             int previousLength = selectedGate.getInputs().length;
             if(previousLength < 5){
                 double x = selectedGate.getShape().getLayoutX();
@@ -305,6 +310,7 @@ public class Circuit {
 
     public void decreaseInputs(){
         if(selectedGate != null){
+            if(toNotIncreaseOrDecrease.contains(selectedGate.getName())) return;
             int previousLength = selectedGate.getInputs().length;
             if(previousLength > 2){
                 double x = selectedGate.getShape().getLayoutX();
@@ -327,7 +333,6 @@ public class Circuit {
         name.equals("BASCULE JK") ||
         name.equals("HORLOGE") ||
         name.equals("BASCULE D"))
-
         return;
         Gate gate = null;
         switch (name) {

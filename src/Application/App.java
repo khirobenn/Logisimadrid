@@ -34,8 +34,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
@@ -80,7 +78,7 @@ public class App extends Application{
     private HBox hb;
     private Label label;
 
-
+    private TreeView<Label> rootView;
     
     public static void main(String[] args) throws Exception {
         launch(args);
@@ -160,9 +158,7 @@ public class App extends Application{
 
         currentPane.setPrefWidth(width*4);
         currentPane.setPrefHeight(height*4);
-
         currentPane.setOnMouseClicked(e -> addItem(e, currentCircuit, currentPane));
-
         currentCircuitSaver = new CircuitSaver(currentCircuit);
 
         myCircuitSavers.add(currentCircuitSaver);
@@ -187,12 +183,14 @@ public class App extends Application{
     
     @SuppressWarnings("unchecked")
     private void launchMainApp(Stage window) throws Exception {
+        createTreeView();
+
         vb = new VBox();
         label = new Label("Ajout/Suppression d'entrées");
         label.setAlignment(Pos.CENTER);
         label.setMaxWidth(Double.MAX_VALUE);
         label.setFont(Unity.fontBold);
-        label.setTextFill(Color.WHITE);
+        // label.setTextFill(Color.WHITE);
         
         hb = new HBox();
         
@@ -215,22 +213,7 @@ public class App extends Application{
         scroll.setMaxWidth(width);
         scroll.setMaxHeight(height);
         scroll.setContent(currentPane);
-        
-    
-        // Tree Items
-        TreeItem<Label> allTree = new TreeItem<Label>();
-        allTree.getChildren().addAll(Unity.portesTree(), Unity.varAndOutTree(), Unity.bitABitTree(), Unity.basculesTree());
 
-        TreeView<Label> rootTree = new TreeView<Label>(allTree);
-        rootTree.setShowRoot(false);
-        rootTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            setGateName(newValue.getValue().getText());
-        });
-        
-        
-
-        
-        
         Slider sliderZoom = new Slider(Unity.minZoom, Unity.maxZoom, 1.);
         sliderZoom.setShowTickLabels(true);
         sliderZoom.setShowTickMarks(true);
@@ -241,7 +224,7 @@ public class App extends Application{
         
         SplitPane splitPane = new SplitPane();
         splitPane.setOrientation(Orientation.VERTICAL);
-        splitPane.getItems().addAll(rootTree, vb, sliderZoom);
+        splitPane.getItems().addAll(rootView, vb, sliderZoom);
         splitPane.setPrefWidth(widthOfButton + widthOfShape);
         splitPane.setBorder(new Border(new BorderStroke(Color.BLACK,
         BorderStrokeStyle.SOLID,
@@ -279,8 +262,6 @@ public class App extends Application{
         deleteButtonFirst.setPadding(new Insets(4));
         deleteButtonFirst.setFont(Unity.font);
         
-        
-        
         Label plus = new Label("+");
         plus.setBorder(new Border(new BorderStroke(Color.BLACK,
         BorderStrokeStyle.SOLID,
@@ -297,9 +278,6 @@ public class App extends Application{
         
         sp.getChildren().addAll(scroll, bottom);
         BorderPane border = new BorderPane();
-
-        Image coverImage = new Image("./pictures/cover.jpg");
-        vb.setBackground(new Background(new BackgroundImage(coverImage, null, null, null, null)));
 
         border.setLeft(splitPane);
         border.setCenter(sp);
@@ -345,6 +323,7 @@ public class App extends Application{
             circuit.createGate(name.toUpperCase(), 2, x, y);
         }
         name = null;
+        rootView.getSelectionModel().select(null);
     }
 
     private void AfficherTelechargement (HBox hb, Label plus, ScrollPane scroll) {
@@ -487,4 +466,16 @@ public class App extends Application{
         }
     }
 
+    private void createTreeView(){
+        TreeItem<Label> allTree = new TreeItem<Label>();
+        allTree.getChildren().addAll(Unity.portesTree(), Unity.varAndOutTree(), Unity.bitABitTree(), Unity.basculesTree());
+
+        rootView = new TreeView<Label>(allTree);
+        rootView.setShowRoot(false);
+        rootView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue != null){
+                setGateName(newValue.getValue().getText());
+            }
+        });
+    }
 }

@@ -141,11 +141,6 @@ public class Circuit {
 
     public Pane getPane(){ return group; } 
     public List <Fils> getFilsList(){ return fils; }
-    public void setOutputToFils(){
-        for(Fils oi : fils){
-            oi.setOutput(QuadBool.FALSE);
-        }
-    }
 
     public void addVariable(Gate var){
         variables.add(var);
@@ -299,6 +294,8 @@ public class Circuit {
     public void resetSelectedItems(){
         setSelectedGate(null);
         setFilSelected(null);
+        selectedGateProprety.set(new VoidGate());
+        selectedGateProprety.set(null);
     }
 
     public void increaseInputs(){
@@ -474,16 +471,10 @@ public class Circuit {
         fils.clear();
         gates.clear();
         variables.clear();
-        selectedGate = null;
-        filSelected = null;
+        resetSelectedItems();
         zoom = 1.;
         scale.setX(1.);
         scale.setY(1.);
-        scale = new Scale();
-        scale.setPivotX(0);
-        scale.setPivotY(0);
-        group.getTransforms().add(scale);
-        selectedGateProprety.set(null);
 
         group.getChildren().add(background);
     }

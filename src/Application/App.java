@@ -319,11 +319,15 @@ public class App extends Application{
                     currentCircuit.zoom(); 
                 } else if (key.isControlDown() && key.getCode() == KeyCode.MINUS) {
                     currentCircuit.unzoom();  
-                } else if (key.isControlDown() && key.getCode() == KeyCode.L){
+                } else if (key.isControlDown() && key.getCode() == KeyCode.N){
                     AfficherTelechargement(bottom, plus, scroll);
-                }else if (key.isControlDown() && key.getCode() == KeyCode.C){
+                }else if (key.isControlDown() && key.getCode() == KeyCode.L){
                     currentCircuit.clearAll();
-                }    
+                }else if (key.isControlDown() && key.getCode() == KeyCode.C){
+                    circuitsButtons(bottom, plus, scroll, "Untitled" + ++circuitNb);
+                } else if (key.isControlDown() && key.getCode() == KeyCode.D){
+                    deleteSetSelectedCircuit(bottom, firstLabel, scroll);
+                } 
             }
             
         });

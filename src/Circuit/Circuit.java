@@ -46,11 +46,13 @@ public class Circuit {
     private Rectangle rec2;
     private Scale scale;
 
+    private Rectangle background;
+
     private List<String> toNotIncreaseOrDecrease = Arrays.asList("VARIABLE", "OUTPUT", "ADDER",
         "MULTIPLIER", "ODDPARITY", "EVENPARITY", "BASCULE RS", "BASCULE JK", "HORLOGE", "BASCULE D", "NOT");
 
     public Circuit(Pane group){
-        Rectangle background = new Rectangle(20000, 20000);
+        background = new Rectangle(20000, 20000);
         background.setFill(Color.WHITE);
         group.getChildren().add(background);
         background.setOnMouseClicked(e -> resetSelectedItems());
@@ -483,10 +485,7 @@ public class Circuit {
         group.getTransforms().add(scale);
         selectedGateProprety.set(null);
 
-        Rectangle background = new Rectangle(20000, 20000);
-        background.setFill(Color.WHITE);
         group.getChildren().add(background);
-        background.setOnMouseClicked(e -> resetSelectedItems());
     }
 
     private void deleteTransparentFils(){

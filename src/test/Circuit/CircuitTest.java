@@ -1,6 +1,5 @@
 package test.Circuit;
 
-import javafx.embed.swing.JFXPanel;
 import javafx.scene.layout.Pane;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,8 +15,6 @@ public class CircuitTest {
 
     @BeforeEach
     public void setUp() {
-        
-        new JFXPanel();
         pane = new Pane();
         circuit = new Circuit(pane);
     }

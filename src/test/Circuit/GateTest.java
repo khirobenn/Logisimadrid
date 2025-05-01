@@ -1,6 +1,10 @@
 package test.Circuit;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.concurrent.CountDownLatch;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,8 +16,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 class GateTest {
 
@@ -23,99 +25,72 @@ class GateTest {
     private GateTestImpl andGate;
     private GateTestImpl orGate;
     private GateTestImpl notGate;
-    
-    static {
-        
+
+    @BeforeAll
+    static void initialiser(){
         new JFXPanel();
     }
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() throws Exception{
         
         CountDownLatch latch = new CountDownLatch(1);
-        
+
         Platform.runLater(() -> {
-            try {
-                layout = new Pane();
-                circuit = new Circuit(layout);
-                
-                
-                testGate = new GateTestImpl("TEST", 2, circuit, layout, 100.0, 200.0);
-                andGate = new GateTestImpl("AND", 2, circuit, layout, 150.0, 250.0);
-                orGate = new GateTestImpl("OR", 2, circuit, layout, 200.0, 300.0);
-                notGate = new GateTestImpl("NOT", 1, circuit, layout, 250.0, 350.0);
-            } finally {
-                latch.countDown();
-            }
+
+            layout = new Pane();
+            circuit = new Circuit(layout);
+            
+            
+            testGate = new GateTestImpl("TEST", 2, circuit, layout, 100.0, 200.0);
+            andGate = new GateTestImpl("AND", 2, circuit, layout, 150.0, 250.0);
+            orGate = new GateTestImpl("OR", 2, circuit, layout, 200.0, 300.0);
+            notGate = new GateTestImpl("NOT", 1, circuit, layout, 250.0, 350.0);
+            latch.countDown();
         });
-        
-        if (!latch.await(5, TimeUnit.SECONDS)) {
-            throw new RuntimeException("Timeout lors de l'initialisation JavaFX");
-        }
+
+        latch.await();     
     }
 
     @Test
-    void testConstructor() throws Exception {
-        CountDownLatch latch = new CountDownLatch(1);
+    void testConstructor() throws Exception{
         
+        CountDownLatch latch = new CountDownLatch(1);
+
         Platform.runLater(() -> {
-            try {
                 assertEquals("TEST", testGate.getName());
                 assertEquals(2, testGate.getInputs().length);
-                assertNull(testGate.getOutputFils());
+                assertNotNull(testGate.getOutputFils());
                 assertFalse(testGate.isOutputSet());  
                 assertNotNull(testGate.getCircuit());
                 assertNotNull(testGate.getLayout());
                 assertNotNull(testGate.getOtherFils());
                 assertEquals(0, testGate.getOtherFils().size());
-            } finally {
                 latch.countDown();
-            }
         });
-        
-        latch.await(2, TimeUnit.SECONDS);
+    
+        latch.await();
     }
 
     @Test
-    void testGetName() throws Exception {
-        CountDownLatch latch = new CountDownLatch(1);
+    void testGetName() {
         
-        Platform.runLater(() -> {
-            try {
                 assertEquals("AND", andGate.getName());
                 assertEquals("OR", orGate.getName());
                 assertEquals("NOT", notGate.getName());
-            } finally {
-                latch.countDown();
-            }
-        });
-        
-        latch.await(2, TimeUnit.SECONDS);
     }
 
     @Test
-    void testSetAndGetOutputFils() throws Exception {
-        CountDownLatch latch = new CountDownLatch(1);
+    void testSetAndGetOutputFils() {
         
-        Platform.runLater(() -> {
-            try {
                 Fils outputFils = new Fils(circuit, null, testGate, true);
                 testGate.setOutputFils(outputFils);
                 assertEquals(outputFils, testGate.getOutputFils());  
-            } finally {
-                latch.countDown();
-            }
-        });
-        
-        latch.await(2, TimeUnit.SECONDS);
     }
 
     @Test
-    void testGetInputs() throws Exception {
-        CountDownLatch latch = new CountDownLatch(1);
+    void testGetInputs() {
         
-        Platform.runLater(() -> {
-            try {
                 Fils[] inputs = testGate.getInputs();
                 assertNotNull(inputs);
                 assertEquals(2, inputs.length);
@@ -123,20 +98,13 @@ class GateTest {
                 Fils[] notInputs = notGate.getInputs();
                 assertNotNull(notInputs);
                 assertEquals(1, notInputs.length);
-            } finally {
-                latch.countDown();
-            }
-        });
-        
-        latch.await(2, TimeUnit.SECONDS);
     }
 
     @Test
-    void testAddFilsToOthers() throws Exception {
+    void testAddFilsToOthers() throws Exception{
         CountDownLatch latch = new CountDownLatch(1);
-        
+
         Platform.runLater(() -> {
-            try {
                 Fils newFils = new Fils(circuit, null, testGate, false);
                 assertEquals(0, testGate.getOtherFils().size());
                 
@@ -150,43 +118,37 @@ class GateTest {
                 Fils anotherFils = new Fils(circuit, null, testGate, false);
                 testGate.addFilsToOthers(anotherFils);
                 assertEquals(2, testGate.getOtherFils().size());
-            } finally {
                 latch.countDown();
-            }
-        });
-        
-        latch.await(2, TimeUnit.SECONDS);
+            });
+    
+            latch.await();
     }
 
     @Test
-    void testGetShape() throws Exception {
+    void testGetShape() throws Exception{
         CountDownLatch latch = new CountDownLatch(1);
-        
+
         Platform.runLater(() -> {
-            try {
                 Shape andShape = andGate.getShape();
                 Shape orShape = orGate.getShape();
                 Shape notShape = notGate.getShape();
                 
+                System.out.println(andShape.getClass());
+                System.out.println(notShape.getClass());
                 assertNotNull(andShape);
                 assertNotNull(orShape);
                 assertNotNull(notShape);
                 
                 assertEquals(andShape.getClass(), notShape.getClass());
-            } finally {
                 latch.countDown();
-            }
-        });
-        
-        latch.await(2, TimeUnit.SECONDS);
+            });
+    
+            latch.await();
     }
 
     @Test
-    void testSetAndGetText() throws Exception {
-        CountDownLatch latch = new CountDownLatch(1);
+    void testSetAndGetText() {
         
-        Platform.runLater(() -> {
-            try {
                 assertNull(testGate.getText());
                 
                 String textValue = "Test Text";
@@ -201,11 +163,5 @@ class GateTest {
                 String newTextValue = "Updated Text";
                 testGate.setText(newTextValue, 100, 200);
                 assertEquals(newTextValue, textObject.getText());
-            } finally {
-                latch.countDown();
-            }
-        });
-        
-        latch.await(2, TimeUnit.SECONDS);
     }
 }

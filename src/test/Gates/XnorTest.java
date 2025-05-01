@@ -1,7 +1,8 @@
-package Gates;
+package test.Gates;
 
 import Circuit.Circuit;
 import Circuit.QuadBool;
+import Gates.Xnor;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.layout.Pane;
 import org.junit.jupiter.api.BeforeEach;

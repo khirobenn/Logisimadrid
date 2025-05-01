@@ -1,11 +1,11 @@
-package Circuit;
+package test.Circuit;
 
-import Gates.And;
-import Gates.OutputGate;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.layout.Pane;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import Circuit.Circuit;
 
 import static org.junit.jupiter.api.Assertions.*;
 

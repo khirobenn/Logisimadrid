@@ -1,5 +1,7 @@
-package Circuit;
+package test.Circuit;
 
+import Circuit.Circuit;
+import Circuit.Gate;
 import javafx.scene.layout.Pane;
 
 public class GateTestImpl extends Gate {

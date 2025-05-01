@@ -1,9 +1,13 @@
-package Circuit;
+package test.Circuit;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import Circuit.Circuit;
+import Circuit.Fils;
+import Circuit.Gate;
+import Circuit.QuadBool;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.geometry.Point2D;

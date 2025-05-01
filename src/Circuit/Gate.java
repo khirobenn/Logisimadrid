@@ -48,6 +48,18 @@ public abstract class Gate {
         otherFils.add(fil);
     }
 
+    public Set<Fils> getOtherFils(){
+        return otherFils;
+    }
+
+    public Circuit getCircuit(){
+        return circuit;
+    }
+
+    public Pane getLayout(){
+        return layout;
+    }
+
     private void initShape(double x, double y){
         switch (name) {
             case "AND":
@@ -454,7 +466,8 @@ public abstract class Gate {
             }
         }
     }
-    protected boolean isOutputSet() {
+
+    public boolean isOutputSet() {
         return this.isOutPutSet;
     }
 }

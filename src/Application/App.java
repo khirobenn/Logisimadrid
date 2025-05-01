@@ -181,7 +181,6 @@ public class App extends Application{
         });
     }
     
-    @SuppressWarnings("unchecked")
     private void launchMainApp(Stage window) throws Exception {
         createTreeView();
 

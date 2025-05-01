@@ -1,6 +1,8 @@
-package Gates;
+package test.Gates;
 
 import Circuit.QuadBool;
+import Gates.AndQuad;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

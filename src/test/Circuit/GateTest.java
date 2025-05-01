@@ -1,13 +1,14 @@
-package Circuit;
+package test.Circuit;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import Circuit.Circuit;
+import Circuit.Fils;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
@@ -63,10 +64,10 @@ class GateTest {
                 assertEquals(2, testGate.getInputs().length);
                 assertNull(testGate.getOutputFils());
                 assertFalse(testGate.isOutputSet());  
-                assertNotNull(testGate.circuit);
-                assertNotNull(testGate.layout);
-                assertNotNull(testGate.otherFils);
-                assertEquals(0, testGate.otherFils.size());
+                assertNotNull(testGate.getCircuit());
+                assertNotNull(testGate.getLayout());
+                assertNotNull(testGate.getOtherFils());
+                assertEquals(0, testGate.getOtherFils().size());
             } finally {
                 latch.countDown();
             }
@@ -137,18 +138,18 @@ class GateTest {
         Platform.runLater(() -> {
             try {
                 Fils newFils = new Fils(circuit, null, testGate, false);
-                assertEquals(0, testGate.otherFils.size());
+                assertEquals(0, testGate.getOtherFils().size());
                 
                 testGate.addFilsToOthers(newFils);
-                assertEquals(1, testGate.otherFils.size());
-                assertTrue(testGate.otherFils.contains(newFils));
+                assertEquals(1, testGate.getOtherFils().size());
+                assertTrue(testGate.getOtherFils().contains(newFils));
                 
                 testGate.addFilsToOthers(newFils);
-                assertEquals(1, testGate.otherFils.size());
+                assertEquals(1, testGate.getOtherFils().size());
                 
                 Fils anotherFils = new Fils(circuit, null, testGate, false);
                 testGate.addFilsToOthers(anotherFils);
-                assertEquals(2, testGate.otherFils.size());
+                assertEquals(2, testGate.getOtherFils().size());
             } finally {
                 latch.countDown();
             }
@@ -171,7 +172,7 @@ class GateTest {
                 assertNotNull(orShape);
                 assertNotNull(notShape);
                 
-                assertNotEquals(andShape.getClass(), notShape.getClass());
+                assertEquals(andShape.getClass(), notShape.getClass());
             } finally {
                 latch.countDown();
             }

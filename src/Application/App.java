@@ -9,9 +9,6 @@ import org.json.simple.parser.ParseException;
 import Circuit.Circuit;
 import Circuit.CircuitSaver;
 import Circuit.Unity;
-// import Circuit.NouveauComposant ;
-// import Circuit.ComposantLoad ;
-
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -55,13 +52,10 @@ public class App extends Application{
     Scene scene;
     private double widthOfButton = Unity.x*5;
     private double widthOfShape = Unity.x*10;
-    // private final int height = Unity.height;
     private final int height = 1080;
-    // private final int width = Unity.width;
     private final int width = 1920;
 
     private int circuitNb = 1;
-    // private final NouveauComposant cmp = ComposantLoad.chargerComp("./Composants_Json/Ajout_Comp.json") ; // on a le chemin de fichier
     private String name;
 
     // -----------
@@ -189,7 +183,6 @@ public class App extends Application{
         label.setAlignment(Pos.CENTER);
         label.setMaxWidth(Double.MAX_VALUE);
         label.setFont(Unity.fontBold);
-        // label.setTextFill(Color.WHITE);
         
         hb = new HBox();
         
@@ -338,7 +331,6 @@ public class App extends Application{
             if ( !nF.endsWith(".json")) {
                 nF += ".json" ;
             }
-            //saver.saveCircuit(nF);
             File fichier = new File(nF) ;
             if ( fichier.exists()) {
             try {

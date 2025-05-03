@@ -7,6 +7,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -274,9 +276,13 @@ public abstract class Gate {
     }
     
     public void addShapeToGroup(){
+        if(shape == null){
+            shape = Shape.union(new Rectangle(20, 20), new Circle(10));
+        }
         layout.getChildren().add(shape);
         shape.setOnMouseDragged(e -> dragItem(e));
         shape.setOnMouseReleased(e -> onRelease());
+
     }
 
     public void onRelease(){

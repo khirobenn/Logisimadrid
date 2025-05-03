@@ -179,7 +179,7 @@ public static Shape Bascule_JK() {
         sh.setStroke(Color.BLACK);
         sh.setStrokeWidth(3);
         return sh;
-    }
+    }0
     public static Shape horloge (){
 
         Shape sh = new Rectangle(0, 0, 4*x, 4*x);

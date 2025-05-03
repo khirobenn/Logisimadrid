@@ -1,5 +1,4 @@
 package Gates;
-
 import Circuit.Circuit;
 import Circuit.Fils;
 import Circuit.Gate;
@@ -11,8 +10,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 import javafx.scene.paint.Color;
-import java.util.ArrayDeque;
-import java.util.Deque;
+
 
 public class Horloge extends Gate {
 
@@ -28,63 +26,36 @@ public class Horloge extends Gate {
         setText("CLK", shape.getLayoutBounds().getMaxX() / 4 + shape.getLayoutX(),
                 shape.getLayoutBounds().getMaxY() / 2 + shape.getLayoutY());
 
-        // Timer plus rapide pour meilleur feedback visuel
-        toggleTimer = new Timeline(new KeyFrame(Duration.millis(500), event -> {
+        // Timer pour alternance automatique
+        toggleTimer = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             toggleClock();
         }));
         toggleTimer.setCycleCount(Timeline.INDEFINITE);
-        
-        // Démarrer immédiatement pour le test
-        startToggle();
     }
 
     private void toggleClock() {
         current = NotQuad.Not(current);
         setOutput(current);
         setIHaveOutput(true);
-        propagateSignal();
+        updateConnectedComponents();
     }
 
-    private void propagateSignal() {
+    private void updateConnectedComponents() {
         if (getOutputFils() != null) {
-            Deque<Fils> visited = new ArrayDeque<>();
-            recursivePropagate(visited, getOutputFils(), current);
-        }
-    }
-
-    private void recursivePropagate(Deque<Fils> visited, Fils currentFil, QuadBool value) {
-        if (visited.contains(currentFil)) {
-            return;
-        }
-        
-        visited.add(currentFil);
-        
-        // Mettre à jour le fil courant
-        currentFil.setOutputValue(value);
-        currentFil.changeColor(getColorForQuadBool(value));
-        
-        // Propager aux composants connectés
-        for (Fils connectedFil : currentFil.getConnected()) {
-            // Mettre à jour le fil connecté
-            connectedFil.setOutputValue(value);
-            connectedFil.changeColor(getColorForQuadBool(value));
-            
-            // Si connecté à une porte, évaluer sa sortie
-            if (connectedFil.getGate() != null) {
-                connectedFil.getGate().evaluateOutput();
-                
-                // Propager récursivement la nouvelle sortie
-                if (connectedFil.getGate().getOutputFils() != null) {
-                    recursivePropagate(visited, 
-                                     connectedFil.getGate().getOutputFils(), 
-                                     connectedFil.getGate().getOutput());
+            getOutputFils().setOutputValue(current);
+            getOutputFils().changeColor(getColorForQuadBool(current));
+    
+            for (Fils connectedFil : getOutputFils().getConnected()) {
+                connectedFil.setOutputValue(current);
+                connectedFil.changeColor(getColorForQuadBool(current));
+    
+                if (connectedFil.getGate() != null) {
+                    connectedFil.getGate().evaluateOutput();
                 }
             }
-            
-            // Continuer la propagation
-            recursivePropagate(visited, connectedFil, value);
         }
     }
+    
 
     private Color getColorForQuadBool(QuadBool value) {
         switch (value) {
@@ -113,7 +84,6 @@ public class Horloge extends Gate {
         if (!isAutoToggling) {
             toggleTimer.play();
             isAutoToggling = true;
-            propagateSignal(); // Propager l'état initial
         }
     }
 
@@ -137,15 +107,14 @@ public class Horloge extends Gate {
         setOutputFils(output);
 
         // Création des fils d'entrée
-        if (inputs != null && inputs.length > 0) {
-            inputs[0] = new Fils(Unity.tranformDoubleToInt(shape.getLayoutX() + distance / 2),
-                    Unity.tranformDoubleToInt(shape.getLayoutY()),
-                    circuit, null, null, true);
+        if (inputs != null) {
+            distance /= (inputs.length + 1);
+            for (int i = 1; i < inputs.length + 1; i++) {
+                inputs[i - 1] = new Fils(Unity.tranformDoubleToInt(shape.getLayoutX() + i * distance),
+                        Unity.tranformDoubleToInt(shape.getLayoutY()), circuit, null, null, true);
+            }
         }
     }
-
-  
-
 
     @Override
     public void updatePoints() {

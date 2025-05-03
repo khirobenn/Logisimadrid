@@ -101,6 +101,7 @@ public abstract class Gate {
             break ;
             case "BASCULE D" :
             shape = GatesShapes.Bascule_D();
+            break;
 
 	    case "EVENPARITY":
 	    shape = GatesShapes.EvenParityShape();

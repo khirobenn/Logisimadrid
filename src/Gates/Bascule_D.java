@@ -26,7 +26,7 @@ public class Bascule_D extends Gate {
         double centerX = shapeX + shapeWidth / 2 - 1;
         double centerY = shapeY + shapeHeight / 2 - 1;
 
-        setText("D ", centerX, centerY);
+        setText("  D ", centerX, centerY);
     }
 
     @Override

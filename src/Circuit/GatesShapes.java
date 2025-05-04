@@ -171,15 +171,14 @@ public static Shape Bascule_JK() {
     return sh;
 }
 
-    
-
     public static  Shape multiplier() {
         Shape sh = new Rectangle(0, 0, 4*x, 4*x);
         sh.setFill(Color.TRANSPARENT);
         sh.setStroke(Color.BLACK);
         sh.setStrokeWidth(3);
         return sh;
-    }0
+    }
+
     public static Shape horloge (){
 
         Shape sh = new Rectangle(0, 0, 4*x, 4*x);
@@ -189,8 +188,6 @@ public static Shape Bascule_JK() {
         return sh;
 
     }
-
-
 
     public static Shape variable(){
         Polygon sh = new Polygon();

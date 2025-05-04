@@ -11,13 +11,13 @@
 ## Compilation
 
 - Cloner le projet.
-- Télécharger la bibliothèque [JavaFX 23.0.2 ](https://download2.gluonhq.com/openjfx/23.0.2/openjfx-23.0.2_linux-x64_bin-sdk.zip) x64 SDK.
-- Extraire l’archive ZIP téléchargée dans le dossier où vous avez cloné le projet.
+- Télécharger la bibliothèque [JavaFX 23.0.2 ](https://download2.gluonhq.com/openjfx/23.0.2/openjfx-23.0.2_linux-x64_bin-sdk.zip) x64 SDK (`wget https://download2.gluonhq.com/openjfx/23.0.2/openjfx-23.0.2_linux-x64_bin-sdk.ZIP`).
+- Extraire l’archive ZIP téléchargée dans le dossier où vous avez cloné le projet (`unzip openjfx-23.0.2_linux-x64_bin-sdk.zip`).
 - Exécuter la commande `make`.
 - C'est bon!! Construisez votre circuit.
 
 ## Test
 
--Si vous voulez exécuter les classes de test, commencez par télécharger les bibliothèques nécessaires avec ces deux commandes : `wget https://repo1.maven.org/maven2/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar -P lib/` et `wget https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/1.9.3/junit-platform-console-standalone-1.9.3.jar -P lib/`
+-Si vous voulez exécuter les classes de test exécutez la commande suivante : `make test`.
 
--Exécuter la commande `make test`.
+## À vous de jouer!

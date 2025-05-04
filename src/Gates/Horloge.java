@@ -72,6 +72,10 @@ public class Horloge extends Gate {
         if (inputs == null || inputs.length == 0) return;
 
         QuadBool in0 = inputs[0].getOutput();
+        if ( in0 == QuadBool.FALSE ){
+            setOutput(current);
+        setIHaveOutput(true);
+        }
 
         if (in0 == QuadBool.TRUE) {
             startToggle();

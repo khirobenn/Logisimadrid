@@ -120,7 +120,7 @@ public class App extends Application{
 
         Scene splashScene = new Scene(logoPane, Unity.width, Unity.height); 
         window.setScene(splashScene);
-        window.setTitle("LOGISIM");
+        window.setTitle("LOGISIMADRID");
         window.setResizable(false);
         window.show();        
         

@@ -31,6 +31,7 @@ public class Horloge extends Gate {
             toggleClock();
         }));
         toggleTimer.setCycleCount(Timeline.INDEFINITE);
+        startToggle();          
     }
 
     private void toggleClock() {
